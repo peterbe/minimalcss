@@ -1,0 +1,14 @@
+{
+  "name": "minimalcss",
+  "version": "0.0.1",
+  "description": "replace all linked styles with the DOM-based minimal",
+  "main": "index.js",
+  "author": "Peter Bengtsson",
+  "license": "MIT",
+  "dependencies": {
+    "css": "^2.2.1",
+    "performance-now": "^2.1.0",
+    "puppeteer": "^0.9.0",
+    "uglify-js": "3"
+  }
+}
