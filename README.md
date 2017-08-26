@@ -59,7 +59,7 @@ it should process.
 and you have to prepare the CSS files too.
 
 * [UnCSS](https://github.com/giakki/uncss) - uses [jsdom](https://github.com/tmpvar/jsdom)
-to render and execute JavaScript. Supports suppling multiple URLs but still
+to render and execute JavaScript. Supports supplying multiple URLs but still
 requires to manually supply the CSS files to process.
 
 * [mincss](https://github.com/peterbe/mincss) - Python project that uses
