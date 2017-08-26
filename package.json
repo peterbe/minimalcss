@@ -11,19 +11,19 @@
     "cssnano": "^3.10.0",
     "csso": "^3.1.1",
     "performance-now": "^2.1.0",
-    "postcss-cli": "^4.1.0",
-    "puppeteer": "^0.9.0",
-    "uglify-js": "^3.0.28",
-    "uncss": "^0.15.0"
+    "puppeteer": "^0.10.0"
   },
-  "cssnano": {
-    "preset": [
-      "default",
-      {
-        "discardComments": {
-          "removeAll": true
-        }
-      }
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.4"
+  },
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.(js,css)": [
+      "prettier --single-quote --no-semi --write",
+      "git add"
     ]
   }
 }

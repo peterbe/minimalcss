@@ -1,0 +1,15 @@
+TODO
+====
+* Make it into a proper command AND as a lib
+* Resolve all XXX comments
+* Deal with URLs that don't 200 OK
+* Deal with CSS URLs that don't 200 OK
+* Use `page.$(selector)` instead of document.querySelector
+  https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pageselector
+
+DONE
+====
+
+* Support multiple URLs
+* Merge CSS from multiple link sources
+* Remove sourcemap comments
