@@ -6,7 +6,6 @@
   "author": "Peter Bengtsson",
   "license": "MIT",
   "dependencies": {
-    "css": "^2.2.1",
     "css-tree": "^1.0.0-alpha19",
     "csso": "^3.1.1",
     "puppeteer": "^0.10.0"
