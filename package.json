@@ -1,16 +1,14 @@
 {
   "name": "minimalcss",
   "version": "0.0.1",
-  "description": "replace all linked styles with the DOM-based minimal",
+  "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "index.js",
   "author": "Peter Bengtsson",
   "license": "MIT",
   "dependencies": {
     "css": "^2.2.1",
     "css-tree": "^1.0.0-alpha19",
-    "cssnano": "^3.10.0",
     "csso": "^3.1.1",
-    "performance-now": "^2.1.0",
     "puppeteer": "^0.10.0"
   },
   "devDependencies": {
