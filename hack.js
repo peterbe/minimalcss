@@ -1,6 +1,10 @@
 const now = require('performance-now')
 const puppeteer = require('puppeteer')
-const css = require('css')
+// const css = require('css')
+const UglifyJS = require('uglify-js')
+const csstree = require('css-tree')
+
+// const cleaner = require('./cleaner2')
 
 if (process.argv.length <= 2) {
   console.log('Usage: ' + __filename + ' URL [URL2]')
@@ -39,70 +43,131 @@ if (urls.length > 1) {
   const stylesheetsContents = {}
   // To build up a map of all downloaded CSS
   page.on('response', response => {
-    if (/\.css$/i.test(response.url)) {
+    const url = response.url
+    if (/\.css$/i.test(url)) {
       response.text().then(text => {
-        // https://github.com/reworkcss/css#cssparsecode-options
-        stylesheetsContents[response.url] = css.parse(text)
+        const ast = csstree.parse(text, { parseValue: false })
+        const obj = csstree.toPlainObject(ast)
+        stylesheetsContents[url] = obj
       })
     }
-    // console.log(response.text());
   })
 
   // await page.goto('https://symbols.prod.mozaws.net')
   // await page.screenshot({ path: 'example.png' })
   // await page.goto('https://www.peterbe.com')
   // await page.screenshot({ path: 'example2.png' })
-  const selectorsToKeep = {}
 
   const t0 = now()
-  await page.goto(url)
-  // await page.goto('https://songsear.ch', { waitUntil: 'networkidle' })
+  // await page.goto(url)
+  await page.goto(url, { waitUntil: 'networkidle' })
   const t1 = now()
-  console.log('TOOK', (t1 - t0).toFixed() + 's')
+  // console.log('TOOK', (t1 - t0).toFixed() + 's')
 
   const cleaned = await page.evaluate(stylesheetsContents => {
-    const clean = (rules, dom) => {
-      return rules.filter(rule => {
-        // console.log('RULE', rule);
-        if (rule.type === 'rule') {
-          // console.dir(rule.selectors[0]);
-          // decide which selectors to keep
-          rule.selectors = rule.selectors.filter(selector => {
-            // Here's the crucial part. Decide whether to keep the selector
-            try {
-              // console.log('SELECTOR', selector, !!dom.querySelector(selector));
-              return !!dom.querySelector(selector)
-            } catch(ex) {
-              console.error("EXCEPTION!!!!", selector, ex.toString());
-              return true
-            }
 
-            // if (selector === 'p' || selector === '.keep') {
-            //   return true
-            // } else {
-            //   return false
-            // }
-          })
-          if (!rule.selectors.length) {
-            // Do not keep this rule!
-            return false
+    const cleaner = (obj, callback) => {
+
+      const selectorToString = children => {
+        let str = ''
+        children.forEach(child => {
+          if (child.type === 'IdSelector') {
+            str += '#' + child.name
+          } else if (child.type === 'ClassSelector') {
+            str += '.' + child.name
+          } else if (child.type === 'TypeSelector') {
+            str += child.name
+          } else if (child.type === 'WhiteSpace') {
+            str += ' '
+          } else if (child.type === 'Combinator') {
+            str += ` ${child.name} `
+          } else if (child.type === 'AttributeSelector') {
+            if (child.value === null) {
+              str += `[${child.name.name}]`
+            } else if (child.value.value) {
+              str += `[${child.name.name}${child.operator}${child.value.value}]`
+            } else {
+              str += `[${child.name.name}${child.operator}${child.value.name}]`
+            }
+          } else if (child.type === 'PseudoElementSelector') {
+            str += `::${child.name}`
+            if (child.children) {
+              str += selectorToString(child.children)
+            }
+          } else if (child.type === 'PseudoClassSelector') {
+            str += `:${child.name}`
+            if (child.children) {
+              str += selectorToString(child.children)
+            }
+          } else if (child.type === 'SelectorList') {
+            str += selectorToString(child.children)
+          } else if (child.type === 'Selector') {
+            str += `(${selectorToString(child.children)})`
+          } else if (child.type === 'Nth') {
+            str += `(${child.nth.name})`
+          } else if (child.type === 'Identifier') {
+            str += `(${child.name})`
+          } else {
+            // console.error(child);
+            // console.error(children);
+            console.log('TYPE??', child.type, child)
+            console.log(child);
+            console.dir(children)
+            throw new Error(child.type)
           }
-        } else if (rule.type === 'media') {
-          // maybe keep
-          rule.rules = clean(rule.rules, dom)
-          return rule.rules.length > 0
-        } else if (['keyframes', 'comment', 'font-face'].includes(rule.type)) {
-          // keep
-          return true
-        } else {
-          console.warn('TYPE', rule.type)
-          console.dir(rule)
+        })
+        if (str.indexOf('[object Object]') > -1) {
+          console.log(str);
+          console.log(children);
+          throw new Error('selector string became [object Object]!')
         }
-        return true
-      })
+        if (str === '') {
+          console.log(children);
+          throw new Error('selector string became an empty string!')
+        }
+        return str
+      }
+
+      const decisionsCache = {}
+
+      const clean = (children, callback) => {
+        return children.filter(child => {
+          if (child.type === 'Rule') {
+            child.selector.children = child.selector.children.filter(
+              selectorChild => {
+                // console.dir(selectorChild);
+                const selectorString = selectorToString(selectorChild.children)
+                if (decisionsCache[selectorString] !== undefined) {
+                  return decisionsCache[selectorString]
+                }
+                const keep = callback(selectorString)
+                decisionsCache[selectorString] = keep
+                return keep
+              }
+            )
+            return child.selector.children.length > 0
+          } else if (
+            child.type === 'Atrule' &&
+            child.expression &&
+            child.expression.type === 'MediaQueryList'
+          ) {
+            // recurse
+            child.block.children = clean(child.block.children, callback)
+            return child.block.children.length > 0
+          } else {
+            // console.log(child.type);
+            // console.dir(child)
+          }
+          return true
+        })
+      }
+
+      obj.children = clean(obj.children, callback)
+      return obj
+
     }
 
-    const astsCleaned = {}
+    const objsCleaned = {}
 
     // console.log("X",Object.keys(stylesheetsContents));
     // return Array.from(document.querySelectorAll('link'))
@@ -116,47 +181,51 @@ if (urls.length > 1) {
         )
       })
       .forEach(stylesheet => {
+        // console.log(`STYLESHEET ${stylesheet.href}`);
+        // console.log(`stylesheetsContents keys ${Object.keys(stylesheetsContents)}`);
         // For this specific stylesheet, let's look up what's actually needed
         // based on what's actually in the DOM.
         // XXX Need to make sure 'stylesheet.href' is a absolute full URL
-        const ast = stylesheetsContents[stylesheet.href]
-        ast.stylesheet.rules = clean(ast.stylesheet.rules, document)
-        astsCleaned[stylesheet.href] = ast
-        // console.log('URL', stylesheet.href)
-        // const result = css.stringify(ast)
-        // console.log(result)
+        const obj = stylesheetsContents[stylesheet.href]
+        // if (typeof ast === 'undefined') {
+        //   throw new Error(
+        //     `Unable to find ${stylesheet.href} in stylesheetsContents`
+        //   )
+        // }
+        // ast.stylesheet.rules = clean(ast.stylesheet.rules, document)
+        objsCleaned[stylesheet.href] = cleaner(obj, selector => {
+          // console.log(`selector '${selector}'`);
+          // Here's the crucial part. Decide whether to keep the selector
 
-        // console.log(cssAST.stylesheet.rules);
+          // Avoid doing a querySelector on hacks that will fail
+          if (/:-(ms|moz)-/.test(selector)) {  // '.form-control:-ms-input-placeholder'
+            return true
+          }
+
+          try {
+            const keep = !!document.querySelector(selector)
+            // if (keep) {
+            //   console.log(`KEEP '${selector}'`);
+            // } else {
+            //   console.log(`DISCARD '${selector}'`);
+            // }
+            return keep
+          } catch (ex) {
+            console.error("EXCEPTION!!!!", selector, ex.toString());
+            return true
+          }
+        })
       })
-    // console.log(Object.keys(stylesheetsContents));
-    return Promise.resolve(astsCleaned)
+    return Promise.resolve(objsCleaned)
   }, stylesheetsContents)
 
-  // console.log('ASTS CLEANED');
-  // console.log(cleaned);
   Object.keys(cleaned).forEach(url => {
-    console.log('For URL', url);
-    const ast = cleaned[url]
-    const result = css.stringify(ast)
-    console.log(result)
-
+    // console.log('For URL', url);
+    const obj = cleaned[url]
+    const cleanedAst = csstree.fromPlainObject(obj)
+    const cleanedCSS = csstree.translate(cleanedAst)
+    console.log(cleanedCSS);
   })
-  // cleaned.(result => {
-  //   console.log();
-  // })
-  // const foo = stylesheets.filter(link => {
-  //   console.log('LINK', typeof link)
-  //   console.dir(link)
-  //   return true
-  // })
-  //
-  // console.log('STYLESHEETS', stylesheets)
-
-  // const stylesheets = Array.from(document.querySelectorAll('link'))
-  // stylesheets.forEach(stylesheet => {
-  //   console.log('stylesheet:', stylesheet)
-  // })
-  // await page.screenshot({ path: 'example.png', fullPage: true })
 
   browser.close()
 })(urls[0])
