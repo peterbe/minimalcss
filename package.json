@@ -8,6 +8,14 @@
   "bin": {
     "minimalcss": "./bin/minimalcss.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peterbe/minimalcss.git"
+  },
+  "keywords": ["css", "web-perf", "web-performance", "optimizer"],
+  "bugs": {
+    "url": "https://github.com/peterbe/minimalcss/issues"
+  },
   "dependencies": {
     "css-tree": "^1.0.0-alpha19",
     "csso": "^3.1.1",
@@ -23,9 +31,6 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.(js,css)": [
-      "prettier --single-quote --no-semi --write",
-      "git add"
-    ]
+    "*.(js,css)": ["prettier --single-quote --no-semi --write", "git add"]
   }
 }
