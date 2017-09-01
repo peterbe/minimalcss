@@ -46,44 +46,11 @@ if (argv['help']) {
     'Usage: minimalcss [opts] url [url2 ...]\n\n' +
       'Available options:\n' +
       '  --output <path>          Path to write the final CSS to.\n' +
-      // "  --write                  Edit the file in-place. (Beware!)\n" +
-      // "  --list-different or -l   Print filenames of files that are different from Prettier formatting.\n" +
-      // "  --config                 Path to a prettier configuration file (.prettierrc, package.json, prettier.config.js).\n" +
-      // "  --no-config              Do not look for a configuration file.\n" +
-      // "  --find-config-path <path>\n" +
-      // "                           Finds and prints the path to a configuration file for a given input file.\n" +
-      // "  --ignore-path <path>     Path to a file containing patterns that describe files to ignore.\n" +
-      // "                           Defaults to ./.prettierignore.\n" +
-      // "  --stdin                  Read input from stdin.\n" +
-      // "  --stdin-filepath         Path to the file used to read from stdin.\n" +
-      // "  --print-width <int>      Specify the length of line that the printer will wrap on. Defaults to 80.\n" +
-      // "  --tab-width <int>        Specify the number of spaces per indentation-level. Defaults to 2.\n" +
-      // "  --use-tabs               Indent lines with tabs instead of spaces.\n" +
-      // "  --no-semi                Do not print semicolons, except at the beginning of lines which may need them.\n" +
-      // "  --single-quote           Use single quotes instead of double quotes.\n" +
-      // "  --no-bracket-spacing     Do not print spaces between brackets.\n" +
-      // "  --jsx-bracket-same-line  Put > on the last line instead of at a new line.\n" +
-      // "  --trailing-comma <none|es5|all>\n" +
-      // "                           Print trailing commas wherever possible when multi-line. Defaults to none.\n" +
-      // "  --parser <flow|babylon|typescript|postcss|json|graphql>\n" +
-      // "                           Specify which parse to use. Defaults to babylon.\n" +
-      // "  --cursor-offset <int>    Print (to stderr) where a cursor at the given position would move to after formatting.\n" +
-      // "                           This option cannot be used with --range-start and --range-end\n" +
-      // "  --range-start <int>      Format code starting at a given character offset.\n" +
-      // "                           The range will extend backwards to the start of the first line containing the selected statement.\n" +
-      // "                           This option cannot be used with --cursor-offset.\n" +
-      // "                           Defaults to 0.\n" +
-      // "  --range-end <int>        Format code ending at a given character offset (exclusive).\n" +
-      // "                           The range will extend forwards to the end of the selected statement.\n" +
-      // "                           This option cannot be used with --cursor-offset.\n" +
-      // "                           Defaults to Infinity.\n" +
-      // "  --no-color               Do not colorize error messages.\n" +
-      // "  --with-node-modules      Process files inside `node_modules` directory.\n" +
       '  --verbose                Include a comment about the options and the date it was generated.\n' +
       '  --version or -v          Print minimalcss version.\n' +
-      '\n'
+      ''
   )
-  process.exit(argv['help'] ? 0 : 1)
+  process.exit(0)
 }
 
 const urls = argv['_']
@@ -127,4 +94,7 @@ minimalcss.minimize(options).then(output => {
   } else {
     console.log(output)
   }
+}).catch(error => {
+  console.error(error)
+  process.exit(3)
 })

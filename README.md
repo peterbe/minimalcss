@@ -1,5 +1,6 @@
 # minimalcss
 
+[![NPM version](https://img.shields.io/npm/v/minimalcss.svg)](https://www.npmjs.com/package/minimalcss)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
 
 A Node library to extract the minimal CSS used in a set of URLs with puppeteer.
@@ -35,12 +36,28 @@ together with a callback that compares with the DOM and then each minimal CSS
 payload is concatenated into one big string which then CSSO compresses into
 one "merged" and minified CSS payload.
 
-## How to use it
+## Usage
 
-XXX Needs npm/yarn instructions.
+Install:
+
+```
+yarn add minimalcss --dev
+```
+
+You can install it globally if you like:
+
+```
+yarn global add minimalcss
+```
+
+```
+npm install [--save-dev|--global] minimalcss
+```
+
+Now you can run it:
 
 ```shell
-$ node cli.js https://example.com/ https://example.com/aboutus > minimal.min.css
+$ ./node_modules/./bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
 ```
 
 ## Prior art
