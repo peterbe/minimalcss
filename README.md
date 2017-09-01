@@ -122,7 +122,9 @@ minimalcss
   .minimize({ urls: ['http://peterbecom.dev/css-blocking/ultra-basic.html'] })
   .then(output => {
     console.log('OUTPUT', output.length, output)
-  })
+}).catch(error => {
+    console.error(`Failed the minimize CSS: ${error}`)
+})
 
 ```
 
