@@ -1,20 +1,12 @@
 'use strict'
 
-const minimalcss = require('./index')
+const puppeteer = require('puppeteer')
+const csso = require('csso')
+const csstree = require('css-tree')
 
-if (process.argv.length <= 2) {
-  console.log('Usage: ' + __filename + ' URL [URL2]')
-  process.exit(-1) // Why -1? Why not 1?
-}
 
-const urls = process.argv.slice(2)
-
-// XXX Once this is turned into a lib, we can split this out and make a
-// dedicated cli.
-// When it's available as a lib instead, someone might want to invoke it
-// with a callback that gets the `page` object and can chose to do things
-// with it.
-const output = (async urls => {
+const minimalcss = (async options => {
+  const { urls } = options
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
   const browser = await puppeteer.launch({})
@@ -219,6 +211,11 @@ const output = (async urls => {
     allCleaned.push(cleaned)
   }
 
+  // We can close the browser now that all URLs have been opened.
+  browser.close()
+
+  // The rest is post-processing all the CSS that was cleaned.
+
   const allCombinedCss = allCleaned
     .map(cleaned => {
       const combinedCss = Object.keys(cleaned)
@@ -232,9 +229,18 @@ const output = (async urls => {
       return combinedCss
     })
     .join('\n')
+
+  // Why not just allow the return of the "unminified" CSS (in case
+  // some odd ball wants it)?
+  // Because, the 'allCombinedCss' is a string that concatenates multiple
+  // payloads of CSS. It only contains the selectors that are supposedly
+  // in the DOM. However it does contain *duplicate* selectors.
+  // E.g. `p { color: blue; } p { font-weight: bold; }`
+  // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
+  // The csso.minify() function will solve this, *and* whitespace minify
+  // it too.
   const minifiedCss = csso.minify(allCombinedCss).css
-  browser.close()
   return Promise.resolve(minifiedCss)
-})(urls).then(minifiedCss => {
-  console.log(minifiedCss);
 })
+
+module.exports = {run: minimalcss}

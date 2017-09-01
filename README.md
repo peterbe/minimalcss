@@ -86,6 +86,29 @@ Let's make this a thriving community project!
 Help needed with features, tooling, and much testing in real web performance
 optimization work.
 
+## API
+
+```javascript
+const minimalcss = require('minimalcss')
+```
+
+### Get version `minimalcss.version`
+
+Just prints out the current version.
+
+### Run a minimization `minimalcss.run(options)`
+
+Returns a promise. The promise returns the minified minimal CSS as a string.
+For example:
+```javascript
+minimalcss
+  .minimize({ urls: ['http://peterbecom.dev/css-blocking/ultra-basic.html'] })
+  .then(output => {
+    console.log('OUTPUT', output.length, output)
+  })
+
+```
+
 ## License
 
 Copyright (c) 2017 [Peter Bengtsson](https://www.peterbe.com).
