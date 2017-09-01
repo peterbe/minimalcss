@@ -79,7 +79,7 @@ if (argv['help']) {
       // "                           Defaults to Infinity.\n" +
       // "  --no-color               Do not colorize error messages.\n" +
       // "  --with-node-modules      Process files inside `node_modules` directory.\n" +
-      "  --verbose                Include a comment about the options and the date it was generated.\n" +
+      '  --verbose                Include a comment about the options and the date it was generated.\n' +
       '  --version or -v          Print minimalcss version.\n' +
       '\n'
   )
@@ -117,7 +117,7 @@ minimalcss.minimize(options).then(output => {
     output = `${comment}\n${output}`
   }
   if (argv['output']) {
-    const filename = argv["output"]
+    const filename = argv['output']
     try {
       fs.writeFileSync(filename, output + '\n', 'utf8')
     } catch (err) {
