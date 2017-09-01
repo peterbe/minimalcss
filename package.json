@@ -8,6 +8,7 @@
   "bin": {
     "minimalcss": "./bin/minimalcss.js"
   },
+  "homepage": "https://github.com/peterbe/minimalcss",
   "repository": {
     "type": "git",
     "url": "https://github.com/peterbe/minimalcss.git"
