@@ -3,6 +3,7 @@
 const puppeteer = require('puppeteer')
 const csso = require('csso')
 const csstree = require('css-tree')
+const cleanRepeatedComments = require('./utils').cleanRepeatedComments
 
 
 const minimalcss = (async options => {
@@ -240,7 +241,8 @@ const minimalcss = (async options => {
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
   const minifiedCss = csso.minify(allCombinedCss).css
-  return Promise.resolve(minifiedCss)
+  const cleanMinifiedCss = cleanRepeatedComments(minifiedCss)
+  return Promise.resolve(cleanMinifiedCss)
 })
 
 module.exports = {run: minimalcss}
