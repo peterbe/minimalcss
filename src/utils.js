@@ -1,17 +1,29 @@
-/* Replace repeated important comments and leave the first behind.
-This is useful when you have concatenated multiple pages' CSS and they
-each have a licence comment, for example, in the beginning. In that
-case we only want to keep the first of each.
+/* Take call "important comments" and extract them all to the
+beginning of the CSS string.
+This makes it possible to merge when minifying across blocks of CSS.
+For example, if you have (ignore the escaping for the sake of demonstration):
+
+    /*! important 1 *\/
+    p { color: red; }
+    /*! important 2 *\/
+    p { background-color: red; }
+
+You can then instead get:
+
+    /*! important 1 *\/
+    /*! important 2 *\/
+    p { color: red; background-color: red; }
+
 */
-const cleanRepeatedComments = css => {
-  const once = {}
-  return css.replace(/\/\*\![\s\S]*?\*\/\n*/gm, match => {
-    if (once[match]) {
-      return ''
-    }
-    once[match] = true
-    return match
+const collectImportantComments = css => {
+  const once = new Set()
+  let cleaned = css.replace(/\/\*\![\s\S]*?\*\/\n*/gm, match => {
+    once.add(match)
+    return ''
   })
+  let combined = Array.from(once)
+  combined.push(cleaned)
+  return combined.join('\n')
 }
 
-module.exports = {cleanRepeatedComments}
+module.exports = {collectImportantComments}

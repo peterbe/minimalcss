@@ -3,7 +3,7 @@
 const puppeteer = require('puppeteer')
 const csso = require('csso')
 const csstree = require('css-tree')
-const cleanRepeatedComments = require('./utils').cleanRepeatedComments
+const collectImportantComments = require('./utils').collectImportantComments
 
 
 const minimalcss = (async options => {
@@ -240,9 +240,9 @@ const minimalcss = (async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  const minifiedCss = csso.minify(allCombinedCss).css
-  const cleanMinifiedCss = cleanRepeatedComments(minifiedCss)
-  return Promise.resolve(cleanMinifiedCss)
+  let finalCss = collectImportantComments(allCombinedCss)
+  finalCss = csso.minify(finalCss).css
+  return Promise.resolve(finalCss)
 })
 
 module.exports = {run: minimalcss}
