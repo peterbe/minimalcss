@@ -158,8 +158,6 @@ const minimalcss = async options => {
               child.expression &&
               child.expression.type === 'MediaQueryList'
             ) {
-              console.dir(child)
-              console.log(`CHILD.EXPRESSION '${child.expression}'`)
               // recurse
               child.block.children = clean(child.block.children, callback)
               return child.block.children.length > 0
