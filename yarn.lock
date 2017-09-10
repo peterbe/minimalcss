@@ -12,13 +12,19 @@ ansi-escapes@^1.0.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-1.4.0.tgz#d3a8a83b319aa67793662b13e761c7911422306e"
 
-ansi-regex@^2.0.0:
+ansi-regex@^2.0.0, ansi-regex@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
 
 ansi-styles@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
+
+ansi-styles@^3.0.0, ansi-styles@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.0.tgz#c159b8d5be0f9e5a6f346dab94f16ce022161b88"
+  dependencies:
+    color-convert "^1.9.0"
 
 app-root-path@^2.0.0:
   version "2.0.1"
@@ -51,9 +57,17 @@ chalk@^1.0.0, chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
+chalk@^2.0.1, chalk@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.1.0.tgz#ac5becf14fa21b99c6c92ca7a7d7cfd5b17e743e"
+  dependencies:
+    ansi-styles "^3.1.0"
+    escape-string-regexp "^1.0.5"
+    supports-color "^4.0.0"
+
 ci-info@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.0.0.tgz#dc5285f2b4e251821683681c381c3388f46ec534"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.1.1.tgz#47b44df118c48d2597b56d342e7e25791060171a"
 
 cli-cursor@^1.0.2:
   version "1.0.2"
@@ -75,6 +89,16 @@ cli-truncate@^0.2.1:
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
+
+color-convert@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.0.tgz#1accf97dd739b983bf994d56fec8f95853641b7a"
+  dependencies:
+    color-name "^1.1.1"
+
+color-name@^1.1.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
 
 commander@^2.9.0:
   version "2.11.0"
@@ -117,7 +141,7 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-css-tree@1.0.0-alpha19, css-tree@^1.0.0-alpha19:
+css-tree@1.0.0-alpha19:
   version "1.0.0-alpha19"
   resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha19.tgz#949aa846c2c15b3979792e8fce05f6b6e3ebcad4"
   dependencies:
@@ -219,6 +243,10 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
+get-own-enumerable-property-symbols@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-1.0.1.tgz#f1d4e3ad1402e039898e56d1e9b9aa924c26e484"
+
 get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
@@ -243,6 +271,10 @@ has-ansi@^2.0.0:
   resolved "https://registry.yarnpkg.com/has-ansi/-/has-ansi-2.0.0.tgz#34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
   dependencies:
     ansi-regex "^2.0.0"
+
+has-flag@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
 
 https-proxy-agent@^2.1.0:
   version "2.1.0"
@@ -290,6 +322,10 @@ is-ci@^1.0.10:
   dependencies:
     ci-info "^1.0.0"
 
+is-extglob@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/is-extglob/-/is-extglob-2.1.1.tgz#a88c02535791f02ed37c76a1b9ea9773c833f8c2"
+
 is-finite@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-finite/-/is-finite-1.0.2.tgz#cc6677695602be550ef11e8b4aa6305342b6d0aa"
@@ -302,9 +338,23 @@ is-fullwidth-code-point@^1.0.0:
   dependencies:
     number-is-nan "^1.0.0"
 
+is-glob@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.0.tgz#9521c76845cc2610a85203ddf080a958c2ffabc0"
+  dependencies:
+    is-extglob "^2.1.1"
+
+is-obj@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-1.0.1.tgz#3e4729ac1f5fde025cd7d83a896dab9f4f67db0f"
+
 is-promise@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"
+
+is-regexp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-regexp/-/is-regexp-1.0.0.tgz#fd2d883545c46bac5a633e7b9a09e87fa2cb5069"
 
 is-stream@^1.1.0:
   version "1.1.0"
@@ -318,6 +368,22 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
 
+jest-matcher-utils@^20.0.3:
+  version "20.0.3"
+  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-20.0.3.tgz#b3a6b8e37ca577803b0832a98b164f44b7815612"
+  dependencies:
+    chalk "^1.1.3"
+    pretty-format "^20.0.3"
+
+jest-validate@^20.0.3:
+  version "20.0.3"
+  resolved "https://registry.yarnpkg.com/jest-validate/-/jest-validate-20.0.3.tgz#d0cfd1de4f579f298484925c280f8f1d94ec3cab"
+  dependencies:
+    chalk "^1.1.3"
+    jest-matcher-utils "^20.0.3"
+    leven "^2.1.0"
+    pretty-format "^20.0.3"
+
 js-yaml@^3.4.3:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.9.1.tgz#08775cebdfdd359209f0d2acd383c8f86a6904a0"
@@ -325,19 +391,28 @@ js-yaml@^3.4.3:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-lint-staged@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-4.0.4.tgz#9ca6968b30dfbfe81365b7a763cd4f4992896553"
+leven@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/leven/-/leven-2.1.0.tgz#c2e7a9f772094dee9d34202ae8acce4687875580"
+
+lint-staged@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-4.1.3.tgz#07c592e4b8dee914450a183c761187dc53d079e2"
   dependencies:
     app-root-path "^2.0.0"
+    chalk "^2.1.0"
     cosmiconfig "^1.1.0"
     execa "^0.8.0"
+    is-glob "^4.0.0"
+    jest-validate "^20.0.3"
     listr "^0.12.0"
-    lodash.chunk "^4.2.0"
+    lodash "^4.17.4"
+    log-symbols "^2.0.0"
     minimatch "^3.0.0"
     npm-which "^3.0.1"
     p-map "^1.1.1"
     staged-git-files "0.0.4"
+    stringify-object "^3.2.0"
 
 listr-silent-renderer@^1.1.1:
   version "1.1.1"
@@ -386,15 +461,21 @@ listr@^0.12.0:
     stream-to-observable "^0.1.0"
     strip-ansi "^3.0.1"
 
-lodash.chunk@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/lodash.chunk/-/lodash.chunk-4.2.0.tgz#66e5ce1f76ed27b4303d8c6512e8d1216e8106bc"
+lodash@^4.17.4:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
   dependencies:
     chalk "^1.0.0"
+
+log-symbols@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-2.0.0.tgz#595e63be4d5c8cbf294a9e09e0d5629f5913fc0c"
+  dependencies:
+    chalk "^2.0.1"
 
 log-update@^1.0.2:
   version "1.0.2"
@@ -411,8 +492,8 @@ lru-cache@^4.0.1:
     yallist "^2.1.2"
 
 mime@^1.3.4:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-1.3.6.tgz#591d84d3653a6b0b4a3b9df8de5aa8108e72e5e0"
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.0.tgz#69e9e0db51d44f2a3b56e48b7817d7d137f1a343"
 
 minimatch@^3.0.0, minimatch@^3.0.4:
   version "3.0.4"
@@ -533,6 +614,13 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
+pretty-format@^20.0.3:
+  version "20.0.3"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-20.0.3.tgz#020e350a560a1fe1a98dc3beb6ccffb386de8b14"
+  dependencies:
+    ansi-regex "^2.1.1"
+    ansi-styles "^3.0.0"
+
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
@@ -549,9 +637,9 @@ pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
 
-puppeteer@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-0.10.0.tgz#f0a95de4b2660608fa9dbc54f525d013ef6262e7"
+puppeteer@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-0.10.2.tgz#b4a959a722bf626ca481f2aeba11fdb810f2c98f"
   dependencies:
     debug "^2.6.8"
     extract-zip "^1.6.5"
@@ -626,8 +714,8 @@ slice-ansi@0.0.4:
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
 source-map@^0.5.3:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
@@ -655,6 +743,14 @@ string_decoder@~1.0.3:
   dependencies:
     safe-buffer "~5.1.0"
 
+stringify-object@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-3.2.0.tgz#94370a135e41bc048358813bf99481f1315c6aa6"
+  dependencies:
+    get-own-enumerable-property-symbols "^1.0.1"
+    is-obj "^1.0.1"
+    is-regexp "^1.0.0"
+
 strip-ansi@^3.0.0, strip-ansi@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-3.0.1.tgz#6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
@@ -672,6 +768,12 @@ strip-indent@^2.0.0:
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
+
+supports-color@^4.0.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.4.0.tgz#883f7ddabc165142b2a61427f3352ded195d1a3e"
+  dependencies:
+    has-flag "^2.0.0"
 
 symbol-observable@^1.0.1:
   version "1.0.4"

@@ -5,9 +5,9 @@ const csso = require('csso')
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
 
-
-const minimalcss = (async options => {
+const minimalcss = async options => {
   const { urls } = options
+  // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
   const browser = await puppeteer.launch({})
@@ -23,10 +23,11 @@ const minimalcss = (async options => {
 
     // A must or else you can't do console.log from within page.evaluate()
     page.on('console', (...args) => {
+      console.log(...args)
       // XXX Should we install just call console.log(...args)?
-      for (let i = 0; i < args.length; ++i) {
-        console.log(`${i}: ${args[i]}`)
-      }
+      // for (let i = 0; i < args.length; ++i) {
+      //   // console.log(`${i}: ${args[i]}`)
+      // }
     })
 
     // XXX Isn't there a better way to enable options like this?
@@ -135,9 +136,7 @@ const minimalcss = (async options => {
         const clean = (children, callback) => {
           return children.filter(child => {
             if (child.type === 'Rule') {
-              const values = child.selector.value
-                .split(',')
-                .map(x => x.trim())
+              const values = child.selector.value.split(',').map(x => x.trim())
               // console.log(`VALUES ${values} ${values.length}`);
               const keepValues = values.filter(selectorString => {
                 if (decisionsCache[selectorString] !== undefined) {
@@ -159,6 +158,8 @@ const minimalcss = (async options => {
               child.expression &&
               child.expression.type === 'MediaQueryList'
             ) {
+              console.dir(child)
+              console.log(`CHILD.EXPRESSION '${child.expression}'`)
               // recurse
               child.block.children = clean(child.block.children, callback)
               return child.block.children.length > 0
@@ -176,6 +177,8 @@ const minimalcss = (async options => {
 
       const objsCleaned = {}
 
+      const DEAD_OBVIOUS = new Set(['*', 'body', 'html'])
+
       const links = Array.from(document.querySelectorAll('link'))
       links
         .filter(link => {
@@ -191,11 +194,17 @@ const minimalcss = (async options => {
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {
             // Here's the crucial part. Decide whether to keep the selector
 
+            if (DEAD_OBVIOUS.has(selector)) {
+              // low hanging fruit easy ones
+              return true
+            }
+
             // Avoid doing a querySelector on hacks that will fail
             if (/:-(ms|moz)-/.test(selector)) {
               // eg. '.form-control:-ms-input-placeholder'
               return true
             }
+
             try {
               const keep = !!document.querySelector(selector)
               return keep
@@ -243,6 +252,6 @@ const minimalcss = (async options => {
   let finalCss = collectImportantComments(allCombinedCss)
   finalCss = csso.minify(finalCss).css
   return Promise.resolve(finalCss)
-})
+}
 
-module.exports = {run: minimalcss}
+module.exports = { run: minimalcss }
