@@ -50,11 +50,12 @@ const minimalcss = async options => {
     // To build up a map of all downloaded CSS
     page.on('response', response => {
       const url = response.url
-      if (/\.css$/i.test(url)) {
+      const ct = response.headers['content-type'] || ''
+      if (ct.indexOf('text/css') > -1 || /\.css$/i.test(url)) {
         response.text().then(text => {
           const ast = csstree.parse(text, {
             parseValue: false,
-            parseSelector: false
+            parseRulePrelude: false
           })
           stylesheetsContents[url] = csstree.toPlainObject(ast)
         })
@@ -136,8 +137,7 @@ const minimalcss = async options => {
         const clean = (children, callback) => {
           return children.filter(child => {
             if (child.type === 'Rule') {
-              const values = child.selector.value.split(',').map(x => x.trim())
-              // console.log(`VALUES ${values} ${values.length}`);
+              const values = child.prelude.value.split(',').map(x => x.trim())
               const keepValues = values.filter(selectorString => {
                 if (decisionsCache[selectorString] !== undefined) {
                   return decisionsCache[selectorString]
@@ -148,7 +148,7 @@ const minimalcss = async options => {
               })
               if (keepValues.length) {
                 // re-write the selector value
-                child.selector.value = keepValues.join(', ')
+                child.prelude.value = keepValues.join(', ')
                 return true
               } else {
                 return false
@@ -188,6 +188,9 @@ const minimalcss = async options => {
           )
         })
         .forEach(stylesheet => {
+          if (!stylesheetsContents[stylesheet.href]) {
+            throw new Error(`${stylesheet.href} not in stylesheetsContents!`)
+          }
           const obj = stylesheetsContents[stylesheet.href]
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {
             // Here's the crucial part. Decide whether to keep the selector
