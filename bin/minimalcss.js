@@ -16,7 +16,8 @@ const argv = minimist(args, {
     // "stdin",
     'help',
     'version',
-    'verbose'
+    'verbose',
+    'debug'
   ],
   string: ['output'],
   default: {
@@ -24,6 +25,7 @@ const argv = minimist(args, {
     // "ignore-path": ".prettierignore"
   },
   alias: {
+    debug: 'd',
     help: 'h',
     version: 'v',
     output: 'o'
@@ -47,6 +49,7 @@ if (argv['help']) {
       'Available options:\n' +
       '  --output <path>          Path to write the final CSS to.\n' +
       '  --verbose                Include a comment about the options and the date it was generated.\n' +
+      '  --debug or -d            Print all console logging during page rendering to stdout.\n' +
       '  --version or -v          Print minimalcss version.\n' +
       ''
   )
@@ -54,7 +57,6 @@ if (argv['help']) {
 }
 
 const urls = argv['_']
-// console.log("URLS", urls);
 
 urls.forEach(url => {
   try {
@@ -66,35 +68,39 @@ urls.forEach(url => {
 })
 
 const options = {
-  urls: urls
+  urls: urls,
+  debug: argv['debug']
 }
 
 const start = Date.now()
 
-minimalcss.minimize(options).then(output => {
-  const end = Date.now()
-  if (argv['verbose']) {
-    const now = new Date().toISOString()
-    let comment = `/*\nGenerated ${now} by minimalcss.\n`
-    const seconds = ((end - start) / 1000).toFixed(2)
-    const bytesHuman = filesize(output.length)
-    comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`
-    comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n'
-    comment += '*/'
-    output = `${comment}\n${output}`
-  }
-  if (argv['output']) {
-    const filename = argv['output']
-    try {
-      fs.writeFileSync(filename, output + '\n', 'utf8')
-    } catch (err) {
-      console.error('Unable to write file: ' + filename + '\n' + err)
-      process.exit(2)
+minimalcss
+  .minimize(options)
+  .then(output => {
+    const end = Date.now()
+    if (argv['verbose']) {
+      const now = new Date().toISOString()
+      let comment = `/*\nGenerated ${now} by minimalcss.\n`
+      const seconds = ((end - start) / 1000).toFixed(2)
+      const bytesHuman = filesize(output.length)
+      comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`
+      comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n'
+      comment += '*/'
+      output = `${comment}\n${output}`
     }
-  } else {
-    console.log(output)
-  }
-}).catch(error => {
-  console.error(error)
-  process.exit(3)
-})
+    if (argv['output']) {
+      const filename = argv['output']
+      try {
+        fs.writeFileSync(filename, output + '\n', 'utf8')
+      } catch (err) {
+        console.error('Unable to write file: ' + filename + '\n' + err)
+        process.exit(2)
+      }
+    } else {
+      console.log(output)
+    }
+  })
+  .catch(error => {
+    console.error(error)
+    process.exit(3)
+  })

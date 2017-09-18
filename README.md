@@ -125,8 +125,16 @@ minimalcss
 }).catch(error => {
     console.error(`Failed the minimize CSS: ${error}`)
 })
-
 ```
+
+## API Options
+
+Calling `minimalcss.run(options)` takes an object whose only mandatory
+key is `urls`. Other optional options are:
+
+* `debug` - all console logging during page rendering are included in the
+  stdout.
+
 
 ## License
 

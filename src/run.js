@@ -7,6 +7,7 @@ const collectImportantComments = require('./utils').collectImportantComments
 
 const minimalcss = async options => {
   const { urls } = options
+  const debug = options.debug || false
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
@@ -23,11 +24,9 @@ const minimalcss = async options => {
 
     // A must or else you can't do console.log from within page.evaluate()
     page.on('console', (...args) => {
-      console.log(...args)
-      // XXX Should we install just call console.log(...args)?
-      // for (let i = 0; i < args.length; ++i) {
-      //   // console.log(`${i}: ${args[i]}`)
-      // }
+      if (debug) {
+        console.log(...args)
+      }
     })
 
     // XXX Isn't there a better way to enable options like this?
