@@ -76,14 +76,24 @@ const start = Date.now()
 
 minimalcss
   .minimize(options)
-  .then(output => {
+  .then(result => {
+    let output = result.finalCss
     const end = Date.now()
     if (argv['verbose']) {
       const now = new Date().toISOString()
       let comment = `/*\nGenerated ${now} by minimalcss.\n`
       const seconds = ((end - start) / 1000).toFixed(2)
       const bytesHuman = filesize(output.length)
+      const stylesheetContents = result.stylesheetContents
+      const stylesheets = Object.keys(stylesheetContents)
+      const totalSizeBefore = stylesheets.reduce(
+        (acc, key) => acc + stylesheetContents[key].length,
+        0
+      )
+      const totalSizeBeforeHuman = filesize(totalSizeBefore)
       comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`
+      comment += `Based on ${Object.keys(stylesheetContents).length} stylesheets `
+      comment += `totalling ${totalSizeBeforeHuman}.\n`
       comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n'
       comment += '*/'
       output = `${comment}\n${output}`

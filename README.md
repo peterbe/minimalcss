@@ -115,17 +115,26 @@ Just prints out the current version.
 
 ### Run a minimization `minimalcss.run(options)`
 
-Returns a promise. The promise returns the minified minimal CSS as a string.
+Returns a promise. The promise returns an object containing, amongst
+other things, the minified minimal CSS as a string.
 For example:
 ```javascript
 minimalcss
   .minimize({ urls: ['http://peterbecom.dev/css-blocking/ultra-basic.html'] })
-  .then(output => {
-    console.log('OUTPUT', output.length, output)
+  .then(result => {
+    console.log('OUTPUT', result.finalCss.length, result.finalCss)
 }).catch(error => {
     console.error(`Failed the minimize CSS: ${error}`)
 })
 ```
+
+That `result` object that is returned by the `minimize` function contains:
+
+* `finalCss` - the minified minimal CSS as a string.
+* `stylesheetContents` - an object of stylesheet URLs as keys and their
+  content as text.
+* `stylesheetAstObjects` - an object of stylesheet URLs as keys and their
+  AST as a plain object.
 
 ## API Options
 

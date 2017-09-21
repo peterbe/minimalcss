@@ -14,7 +14,8 @@ const minimalcss = async options => {
   const browser = await puppeteer.launch({})
   // const page = await browser.newPage()
 
-  const stylesheetsContents = {}
+  const stylesheetAstObjects = {}
+  const stylesheetContents = {}
   const allCleaned = []
   // Note! This opens one URL at a time synchronous
   for (let i = 0; i < urls.length; i++) {
@@ -37,7 +38,7 @@ const minimalcss = async options => {
         request.abort()
       } else if (/\.(png|jpg|jpeg$)/.test(request.url)) {
         request.abort()
-      } else if (stylesheetsContents[request.url]) {
+      } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
         request.abort()
       } else {
@@ -56,7 +57,8 @@ const minimalcss = async options => {
             parseValue: false,
             parseRulePrelude: false
           })
-          stylesheetsContents[url] = csstree.toPlainObject(ast)
+          stylesheetAstObjects[url] = csstree.toPlainObject(ast)
+          stylesheetContents[url] = text
         })
       }
     })
@@ -67,7 +69,7 @@ const minimalcss = async options => {
       throw new Error(`${response.status} on ${url}`)
     }
 
-    const cleaned = await page.evaluate(stylesheetsContents => {
+    const cleaned = await page.evaluate(stylesheetAstObjects => {
       const cleaner = (ast, callback) => {
         const selectorToString = children => {
           let str = ''
@@ -187,10 +189,10 @@ const minimalcss = async options => {
           )
         })
         .forEach(stylesheet => {
-          if (!stylesheetsContents[stylesheet.href]) {
-            throw new Error(`${stylesheet.href} not in stylesheetsContents!`)
+          if (!stylesheetAstObjects[stylesheet.href]) {
+            throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
           }
-          const obj = stylesheetsContents[stylesheet.href]
+          const obj = stylesheetAstObjects[stylesheet.href]
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {
             // Here's the crucial part. Decide whether to keep the selector
 
@@ -217,7 +219,7 @@ const minimalcss = async options => {
           })
         })
       return Promise.resolve(objsCleaned)
-    }, stylesheetsContents)
+    }, stylesheetAstObjects)
     allCleaned.push(cleaned)
   }
 
@@ -251,7 +253,8 @@ const minimalcss = async options => {
   // it too.
   let finalCss = collectImportantComments(allCombinedCss)
   finalCss = csso.minify(finalCss).css
-  return Promise.resolve(finalCss)
+  const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
+  return Promise.resolve(returned)
 }
 
 module.exports = { run: minimalcss }
