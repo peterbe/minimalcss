@@ -88,8 +88,7 @@ It can optionally use `PhantomJS` to extract the HTML.
 
 ## State of the project
 
-This is highly experimental. And currently only works as a rough cli.
-Not packaged as an executable NPM package yet.
+This is highly experimental.
 
 The goal is to expand the tooling with all the bells and whistles that
 `penthouse` and `critical` etc. has. Including NPM packaging, split between
