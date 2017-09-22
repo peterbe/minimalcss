@@ -154,18 +154,21 @@ const minimalcss = async options => {
               } else {
                 return false
               }
-            } else if (
-              child.type === 'Atrule' &&
-              child.expression &&
-              child.expression.type === 'MediaQueryList'
-            ) {
+            // } else if (
+            //   child.type === 'Atrule' &&
+            //   child.prelude &&
+            //   child.expression.type === 'MediaQueryList'
+            // ) {
+            } else if (child.type === 'Atrule' && child.name === 'media') {
               // recurse
               child.block.children = clean(child.block.children, callback)
               return child.block.children.length > 0
             } else {
+              // Things like comments
               // console.log(child.type);
               // console.dir(child)
             }
+            // The default is to keep it.
             return true
           })
         }
@@ -209,12 +212,17 @@ const minimalcss = async options => {
 
             try {
               const keep = !!document.querySelector(selector)
+              // console.log(keep ? 'KEEP' : 'SKIP', selector);
+              // if (keep) {
+              //   console.log('KEEP', selector)
+              // }
               return keep
             } catch (ex) {
-              const exception = es.toString()
-              throw new Error(
-                `Unable to querySelector('${selector}') [${exception}]`
-              )
+              const exception = ex.toString()
+              // console.log('EXCEPTION', exception);
+              // throw new Error(
+              //   `Unable to querySelector('${selector}') [${exception}]`
+              // )
             }
           })
         })

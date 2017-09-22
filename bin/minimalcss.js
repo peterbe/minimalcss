@@ -47,10 +47,10 @@ if (argv['help']) {
   console.log(
     'Usage: minimalcss [opts] url [url2 ...]\n\n' +
       'Available options:\n' +
-      '  --output <path>          Path to write the final CSS to.\n' +
-      '  --verbose                Include a comment about the options and the date it was generated.\n' +
-      '  --debug or -d            Print all console logging during page rendering to stdout.\n' +
-      '  --version or -v          Print minimalcss version.\n' +
+      '  --output <path> or -o <path>  Path to write the final CSS to.\n' +
+      '  --verbose                     Include a comment about the options and the date it was generated.\n' +
+      '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
+      '  --version or -v               Print minimalcss version.\n' +
       ''
   )
   process.exit(0)
@@ -92,7 +92,7 @@ minimalcss
       )
       const totalSizeBeforeHuman = filesize(totalSizeBefore)
       comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`
-      comment += `Based on ${Object.keys(stylesheetContents).length} stylesheets `
+      comment += `Based on ${stylesheets.length} stylesheets `
       comment += `totalling ${totalSizeBeforeHuman}.\n`
       comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n'
       comment += '*/'
