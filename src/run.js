@@ -154,11 +154,11 @@ const minimalcss = async options => {
               } else {
                 return false
               }
-            // } else if (
-            //   child.type === 'Atrule' &&
-            //   child.prelude &&
-            //   child.expression.type === 'MediaQueryList'
-            // ) {
+              // } else if (
+              //   child.type === 'Atrule' &&
+              //   child.prelude &&
+              //   child.expression.type === 'MediaQueryList'
+              // ) {
             } else if (child.type === 'Atrule' && child.name === 'media') {
               // recurse
               child.block.children = clean(child.block.children, callback)
