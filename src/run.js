@@ -220,9 +220,9 @@ const minimalcss = async options => {
             } catch (ex) {
               const exception = ex.toString()
               // console.log('EXCEPTION', exception);
-              // throw new Error(
-              //   `Unable to querySelector('${selector}') [${exception}]`
-              // )
+              throw new Error(
+                `Unable to querySelector('${selector}') [${exception}]`
+              )
             }
           })
         })
