@@ -6,6 +6,7 @@ const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
+const isInBlacklist = require('./blacklist.js').isInBlacklist
 
 /**
  *
@@ -47,8 +48,9 @@ const minimalcss = async options => {
       } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
         request.abort()
+      } else if (isInBlacklist(request.url)) {
+        request.abort()
       } else {
-        // XXX could do things like NOT download from domains like www.google-analytics.com
         request.continue()
       }
     })
