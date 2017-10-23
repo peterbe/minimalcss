@@ -1,7 +1,9 @@
 'use strict'
 
 const puppeteer = require('puppeteer')
+// @ts-ignore
 const csso = require('csso')
+// @ts-ignore
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
 
