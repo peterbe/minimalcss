@@ -199,7 +199,12 @@ const minimalcss = async options => {
         })
         .forEach(stylesheet => {
           if (!stylesheetAstObjects[stylesheet.href]) {
-            throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
+            if (stylesheet.href.startsWith('blob:')) {
+              // TODO: do we need to do something here?
+              return;
+            } else {
+              throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
+            }
           }
           const obj = stylesheetAstObjects[stylesheet.href]
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {

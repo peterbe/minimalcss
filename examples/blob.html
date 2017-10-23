@@ -1,0 +1,14 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var blob = new Blob(['p{color:#000}'], { type: 'text/stylesheet' });
+      var url = URL.createObjectURL(blob);
+      var linkTag = document.createElement("link");
+      linkTag.setAttribute("rel", "stylesheet");
+      linkTag.setAttribute("href", url);
+      document.body.appendChild(linkTag);
+    </script>
+  </body>
+</html>
