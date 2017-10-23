@@ -6,7 +6,6 @@ const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
-const isInBlacklist = require('./blacklist.js').isInBlacklist
 
 /**
  *
@@ -48,7 +47,7 @@ const minimalcss = async options => {
       } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
         request.abort()
-      } else if (isInBlacklist(request.url)) {
+      } else if (options.skippable && options.skippable(request)) {
         request.abort()
       } else {
         request.continue()
