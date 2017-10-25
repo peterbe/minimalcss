@@ -194,17 +194,13 @@ const minimalcss = async options => {
             link.href &&
             (link.rel === 'stylesheet' ||
               link.href.toLowerCase().endsWith('.css')) &&
+            !link.href.toLowerCase().startsWith('blob:') &&
             link.media !== 'print'
           )
         })
         .forEach(stylesheet => {
           if (!stylesheetAstObjects[stylesheet.href]) {
-            if (stylesheet.href.startsWith('blob:')) {
-              // TODO: do we need to do something here?
-              return;
-            } else {
-              throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
-            }
+            throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
           }
           const obj = stylesheetAstObjects[stylesheet.href]
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {
