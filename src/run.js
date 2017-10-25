@@ -36,7 +36,7 @@ const minimalcss = async options => {
       if (/data:image\//.test(request.url)) {
         // don't need to download those
         request.abort()
-      } else if (/\.(png|jpg|jpeg$)/.test(request.url)) {
+      } else if (/\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])) {
         request.abort()
       } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again

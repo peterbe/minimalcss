@@ -1,0 +1,4 @@
+img { border: 1px solid #ccc; }
+p { color: maroon; }
+ol, li { color: blue; }
+li, p { text-style: italic; }
