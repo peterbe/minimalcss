@@ -6,10 +6,11 @@ const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
+const url = require('url')
 
 /**
  *
- * @param {{ urls:Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
@@ -26,7 +27,7 @@ const minimalcss = async options => {
   const allCleaned = []
   // Note! This opens one URL at a time synchronous
   for (let i = 0; i < urls.length; i++) {
-    const url = urls[i]
+    const pageUrl = urls[i]
     // console.log(url, i);
     const page = await browser.newPage()
 
@@ -69,19 +70,46 @@ const minimalcss = async options => {
 
     // To build up a map of all downloaded CSS
     page.on('response', response => {
-      const url = response.url
+      const responseUrl = response.url
       const ct = response.headers['content-type'] || ''
       if (!response.ok) {
-        throw new Error(`${response.status} on ${url}`)
+        throw new Error(`${response.status} on ${responseUrl}`)
       }
-      if (ct.indexOf('text/css') > -1 || /\.css$/i.test(url)) {
+      if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
         response.text().then(text => {
           const ast = csstree.parse(text, {
-            parseValue: false,
+            parseValue: true,
             parseRulePrelude: false
           })
-          stylesheetAstObjects[url] = csstree.toPlainObject(ast)
-          stylesheetContents[url] = text
+          stylesheetAstObjects[responseUrl] = csstree.toPlainObject(ast)
+          try {
+            csstree.walk(stylesheetAstObjects[responseUrl], (node) => {
+              if (node.type === 'Url') {
+                let value = node.value;
+                let path
+                if (value.type === 'Raw') {
+                  path = value.value;
+                } else {
+                  path = value.value.substr(1, value.value.length - 2);
+                }
+                const absolute = /^https?:\/\/|^\/\//i
+                const root = /^\//
+                const responseHost = url.parse(responseUrl).host
+                const pageHost = url.parse(pageUrl).host
+                if (absolute.test(path)) {
+                  // do nothing
+                } else if (root.test(path) && responseHost === pageHost) {
+                  // do nothing
+                } else {
+                  path = url.resolve(responseUrl, path)
+                }
+                value.value = path
+              }
+            })
+          } catch (e) {
+            console.log(e)
+          }
+          stylesheetContents[responseUrl] = text
         })
       }
     })
@@ -90,9 +118,9 @@ const minimalcss = async options => {
       throw error
     })
 
-    const response = await page.goto(url, { waitUntil: 'networkidle' })
+    const response = await page.goto(pageUrl, { waitUntil: 'networkidle' })
     if (!response.ok) {
-      throw new Error(`${response.status} on ${url}`)
+      throw new Error(`${response.status} on ${pageUrl}`)
     }
 
     const cleaned = await page.evaluate(stylesheetAstObjects => {
