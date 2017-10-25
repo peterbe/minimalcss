@@ -143,6 +143,15 @@ key is `urls`. Other optional options are:
 * `debug` - all console logging during page rendering are included in the
   stdout.
 
+## Development
+
+We use ES6+ with jsdoc comments and TypeScript to do static type checking, like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).
+
+Run `tsc` to check types.
+
+```sh
+yarn run tsc
+```
 
 ## License
 
