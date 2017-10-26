@@ -20,7 +20,7 @@ const argv = minimist(args, {
     'debug',
     'loadimages'
   ],
-  string: ['output'],
+  string: ['output', 'skip'],
   default: {
     // color: true,
     // "ignore-path": ".prettierignore"
@@ -52,6 +52,7 @@ if (argv['help']) {
       '  --verbose                     Include a comment about the options and the date it was generated.\n' +
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
       '  --loadimages                  By default, all images are NOT downloaded. This reverses that.\n' +
+      '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
@@ -73,6 +74,16 @@ const options = {
   urls: urls,
   debug: argv['debug'],
   loadimages: argv['loadimages'],
+  skippable: request => {
+    let skips = argv['skip']
+    if (!skips) {
+      return false
+    }
+    if (!Array.isArray(skips)) {
+      skips = [skips]
+    }
+    return skips.some(skip => !!request.url.match(skip))
+  }
 }
 
 const start = Date.now()

@@ -1,3 +1,6 @@
+* New repeatable string argument `--skip` to cli to selectively skip
+  downloading certain URLs. [pull#31](https://github.com/peterbe/minimalcss/pull/31)
+
 # 0.2.4
 
 * Ability to pass a function `skippable` which can help cancel certain
