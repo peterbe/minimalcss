@@ -1,3 +1,8 @@
+# dev
+
+* Option to actually load images if you need it to.
+  [#26](https://github.com/peterbe/minimalcss/issues/26)
+
 # 0.2.3
 
 [compare](https://github.com/peterbe/minimalcss/compare/v0.2.2...v0.2.3)

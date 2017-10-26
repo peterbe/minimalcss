@@ -9,12 +9,13 @@ const collectImportantComments = require('./utils').collectImportantComments
 
 /**
  *
- * @param {{urls:Array<string>, debug: boolean}} options
+ * @param {{urls:Array<string>, debug: boolean, loadimages: boolean}} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects:{*}, stylesheetContents: string }>
  */
 const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
+  const loadimages = options.loadimages || false
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
@@ -42,7 +43,10 @@ const minimalcss = async options => {
       if (/data:image\//.test(request.url)) {
         // don't need to download those
         request.abort()
-      } else if (/\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])) {
+      } else if (
+        !loadimages &&
+        /\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])
+      ) {
         request.abort()
       } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
