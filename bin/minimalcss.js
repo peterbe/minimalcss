@@ -17,7 +17,8 @@ const argv = minimist(args, {
     'help',
     'version',
     'verbose',
-    'debug'
+    'debug',
+    'loadimages'
   ],
   string: ['output'],
   default: {
@@ -50,6 +51,7 @@ if (argv['help']) {
       '  --output <path> or -o <path>  Path to write the final CSS to.\n' +
       '  --verbose                     Include a comment about the options and the date it was generated.\n' +
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
+      '  --loadimages                  By default, all images are NOT downloaded. This reversed that.\n' +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
@@ -69,7 +71,8 @@ urls.forEach(url => {
 
 const options = {
   urls: urls,
-  debug: argv['debug']
+  debug: argv['debug'],
+  loadimages: argv['loadimages'],
 }
 
 const start = Date.now()
