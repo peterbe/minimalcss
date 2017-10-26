@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "css-tree": "1.0.0-alpha25",
-    "csso": "^3.2.0",
+    "csso": "3.3.1",
     "filesize": "^3.5.10",
     "minimist": "^1.2.0",
     "puppeteer": "^0.10.2"
