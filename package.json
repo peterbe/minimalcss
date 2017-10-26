@@ -23,7 +23,7 @@
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
   "dependencies": {
-    "css-tree": "1.0.0-alpha24",
+    "css-tree": "1.0.0-alpha25",
     "csso": "^3.2.0",
     "filesize": "^3.5.10",
     "minimist": "^1.2.0",
