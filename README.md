@@ -142,6 +142,7 @@ key is `urls`. Other optional options are:
 
 * `debug` - all console logging during page rendering are included in the
   stdout.
+* `skippable` - function wich takes [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request) as an argument and returns boolean. If it returns true then given request will be aborted (skipped). Can be used to block requests to Google Analytics etc.
 
 ## Development
 

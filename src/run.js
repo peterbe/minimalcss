@@ -47,8 +47,9 @@ const minimalcss = async options => {
       } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
         request.abort()
+      } else if (options.skippable && options.skippable(request)) {
+        request.abort()
       } else {
-        // XXX could do things like NOT download from domains like www.google-analytics.com
         request.continue()
       }
     })
