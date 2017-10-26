@@ -82,11 +82,7 @@ const options = {
     if (!Array.isArray(skips)) {
       skips = [skips]
     }
-    return skips.some(skip => {
-      return request.url.match(
-        new RegExp(skip.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1'), 'i')
-      )
-    })
+    return skips.some(skip => !!request.url.match(skip))
   }
 }
 

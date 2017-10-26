@@ -52,6 +52,15 @@ const minimalcss = async options => {
         // no point downloading this again
         request.abort()
       } else if (options.skippable && options.skippable(request)) {
+        // If the URL of the request that got skipped is a CSS file
+        // not having it in stylesheetAstObjects is going to cause a
+        // problem later when we loop through all <link ref="stylesheet">
+        // tags.
+        // So put in an empty (but not falsy!) object for this URL.
+        if (request.url.match(/\.css/i)) {
+          stylesheetAstObjects[request.url] = {}
+          stylesheetContents[request.url] = ''
+        }
         request.abort()
       } else {
         request.continue()
@@ -206,6 +215,11 @@ const minimalcss = async options => {
         .forEach(stylesheet => {
           if (!stylesheetAstObjects[stylesheet.href]) {
             throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
+          }
+          if (!Object.keys(stylesheetAstObjects[stylesheet.href]).length) {
+            // If the 'stylesheetAstObjects[stylesheet.href]' thing is an
+            // empty object, simply skip this link.
+            return
           }
           const obj = stylesheetAstObjects[stylesheet.href]
           objsCleaned[stylesheet.href] = cleaner(obj, selector => {
