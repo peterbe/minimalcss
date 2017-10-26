@@ -1,4 +1,8 @@
-# dev
+# 0.2.4
+
+* Ability to pass a function `skippable` which can help cancel certain
+  network request. [pull#20](https://github.com/peterbe/minimalcss/pull/20)
+  Thanks @stereobooster
 
 * Option to actually load images if you need it to.
   [#26](https://github.com/peterbe/minimalcss/issues/26)
