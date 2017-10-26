@@ -152,6 +152,11 @@ Run `tsc` to check types.
 ```sh
 yarn run tsc
 ```
+## Caveats
+
+### A Warning About Blobs
+
+If your document uses `Blob` to create injectable stylesheets into the DOM, `minimalcss` will *not* be able to optimize that. It will be not be included in the final CSS.
 
 ## License
 

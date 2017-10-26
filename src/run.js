@@ -194,6 +194,7 @@ const minimalcss = async options => {
             link.href &&
             (link.rel === 'stylesheet' ||
               link.href.toLowerCase().endsWith('.css')) &&
+            !link.href.toLowerCase().startsWith('blob:') &&
             link.media !== 'print'
           )
         })
