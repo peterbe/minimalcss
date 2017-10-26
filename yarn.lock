@@ -158,9 +158,9 @@ css-tree@1.0.0-alpha23:
     mdn-data "^1.0.0"
     source-map "^0.5.3"
 
-css-tree@1.0.0-alpha24:
-  version "1.0.0-alpha24"
-  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha24.tgz#869911837755e8b81c48efb4359a7f88521127fe"
+css-tree@1.0.0-alpha25:
+  version "1.0.0-alpha25"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha25.tgz#1bbfabfbf6eeef4f01d9108ff2edd0be2fe35597"
   dependencies:
     mdn-data "^1.0.0"
     source-map "^0.5.3"
