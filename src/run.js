@@ -1,10 +1,17 @@
 'use strict'
 
 const puppeteer = require('puppeteer')
+// @ts-ignore
 const csso = require('csso')
+// @ts-ignore
 const csstree = require('css-tree')
 const collectImportantComments = require('./utils').collectImportantComments
 
+/**
+ *
+ * @param {{urls:Array<string>, debug: boolean}} options
+ * @return Promise<{ finalCss: string, stylesheetAstObjects:{*}, stylesheetContents: string }>
+ */
 const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
@@ -12,7 +19,6 @@ const minimalcss = async options => {
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
   const browser = await puppeteer.launch({})
-  // const page = await browser.newPage()
 
   const stylesheetAstObjects = {}
   const stylesheetContents = {}

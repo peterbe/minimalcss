@@ -2,6 +2,16 @@
 # yarn lockfile v1
 
 
+"@types/node@*", "@types/node@^8.0.46":
+  version "8.0.46"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.46.tgz#6e1766b2d0ed06631d5b5f87bb8e72c8dbb6888e"
+
+"@types/puppeteer@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-0.12.0.tgz#ba48be19d08abf7774192304a5cae5ce8e519481"
+  dependencies:
+    "@types/node" "*"
+
 agent-base@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.1.1.tgz#92d8a4fc2524a3b09b3666a33b6c97960f23d6a4"
@@ -798,6 +808,10 @@ symbol-observable@^1.0.1:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typescript@^2.7.0-dev.20171025:
+  version "2.7.0-dev.20171025"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.0-dev.20171025.tgz#111f4617d164df470594f22f9d4a7cf8fceb9d5d"
 
 ultron@~1.1.0:
   version "1.1.0"
