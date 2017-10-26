@@ -51,7 +51,7 @@ if (argv['help']) {
       '  --output <path> or -o <path>  Path to write the final CSS to.\n' +
       '  --verbose                     Include a comment about the options and the date it was generated.\n' +
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
-      '  --loadimages                  By default, all images are NOT downloaded. This reversed that.\n' +
+      '  --loadimages                  By default, all images are NOT downloaded. This reverses that.\n' +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
