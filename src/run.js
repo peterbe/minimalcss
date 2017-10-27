@@ -71,6 +71,9 @@ const minimalcss = async options => {
     page.on('response', response => {
       const url = response.url
       const ct = response.headers['content-type'] || ''
+      if (!response.ok) {
+        throw new Error(`${response.status} on ${url}`)
+      }
       if (ct.indexOf('text/css') > -1 || /\.css$/i.test(url)) {
         response.text().then(text => {
           const ast = csstree.parse(text, {
@@ -83,7 +86,10 @@ const minimalcss = async options => {
       }
     })
 
-    // await page.goto(url)
+    page.on('pageerror', error => {
+      throw error
+    })
+
     const response = await page.goto(url, { waitUntil: 'networkidle' })
     if (!response.ok) {
       throw new Error(`${response.status} on ${url}`)
