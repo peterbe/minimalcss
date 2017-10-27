@@ -1,3 +1,6 @@
+* Errors thrown if any necessary `.css` download can't be found. [pull#27](https://github.com/peterbe/minimalcss/pull/27)
+  Thanks @stereobooster
+
 * New repeatable string argument `--skip` to cli to selectively skip
   downloading certain URLs. [pull#31](https://github.com/peterbe/minimalcss/pull/31)
 
