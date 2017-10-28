@@ -3,6 +3,7 @@
   "version": "0.2.4",
   "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "./index.js",
+  "types": "./out/types.d.ts",
   "author": "Peter Bengtsson",
   "license": "MIT",
   "bin": {
@@ -33,12 +34,16 @@
     "@types/node": "^8.0.46",
     "@types/puppeteer": "^0.12.0",
     "husky": "^0.14.3",
+    "jsdoc": "^3.5.5",
     "lint-staged": "^4.2.1",
     "prettier": "^1.7.4",
+    "tsd-jsdoc": "^2.0.0-beta.3",
     "typescript": "^2.7.0-dev.20171025"
   },
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "tsc": "tsc -p .",
+    "ts-definitions": "jsdoc -t node_modules/tsd-jsdoc -r src"
   },
   "lint-staged": {
     "**/*.(js,css)": [

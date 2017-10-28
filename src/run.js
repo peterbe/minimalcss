@@ -9,8 +9,8 @@ const collectImportantComments = require('./utils').collectImportantComments
 
 /**
  *
- * @param {{urls:Array<string>, debug: boolean, loadimages: boolean}} options
- * @return Promise<{ finalCss: string, stylesheetAstObjects:{*}, stylesheetContents: string }>
+ * @param {{urls:Array<string>, debug: boolean, loadimages: boolean, skippable: function}} options
+ * @return {Promise<{ finalCss: string, stylesheetAstObjects:any, stylesheetContents: any }>}
  */
 const minimalcss = async options => {
   const { urls } = options
