@@ -81,34 +81,30 @@ const minimalcss = async options => {
             parseValue: true,
             parseRulePrelude: false
           })
-          stylesheetAstObjects[responseUrl] = csstree.toPlainObject(ast)
-          try {
-            csstree.walk(stylesheetAstObjects[responseUrl], (node) => {
-              if (node.type === 'Url') {
-                let value = node.value;
-                let path
-                if (value.type === 'Raw') {
-                  path = value.value;
-                } else {
-                  path = value.value.substr(1, value.value.length - 2);
-                }
-                const absolute = /^https?:\/\/|^\/\//i
-                const root = /^\//
-                const responseHost = url.parse(responseUrl).host
-                const pageHost = url.parse(pageUrl).host
-                if (absolute.test(path)) {
-                  // do nothing
-                } else if (root.test(path) && responseHost === pageHost) {
-                  // do nothing
-                } else {
-                  path = url.resolve(responseUrl, path)
-                }
-                value.value = path
+          csstree.walk(ast, (node) => {
+            if (node.type === 'Url') {
+              let value = node.value;
+              let path
+              if (value.type === 'Raw') {
+                path = value.value;
+              } else {
+                path = value.value.substr(1, value.value.length - 2);
               }
-            })
-          } catch (e) {
-            console.log(e)
-          }
+              const absolute = /^https?:\/\/|^\/\//i
+              const root = /^\//
+              const responseHost = url.parse(responseUrl).host
+              const pageHost = url.parse(pageUrl).host
+              if (absolute.test(path)) {
+                // do nothing
+              } else if (root.test(path) && responseHost === pageHost) {
+                // do nothing
+              } else {
+                path = url.resolve(responseUrl, path)
+              }
+              value.value = path
+            }
+          })
+          stylesheetAstObjects[responseUrl] = csstree.toPlainObject(ast)
           stylesheetContents[responseUrl] = text
         })
       }
