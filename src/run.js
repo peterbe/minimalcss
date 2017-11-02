@@ -20,7 +20,7 @@ const minimalcss = async options => {
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
-  const browser = options.browser || await puppeteer.launch({})
+  const browser = options.browser || (await puppeteer.launch({}))
 
   const stylesheetAstObjects = {}
   const stylesheetContents = {}
@@ -81,16 +81,17 @@ const minimalcss = async options => {
             parseValue: true,
             parseRulePrelude: false
           })
-          csstree.walk(ast, (node) => {
+          csstree.walk(ast, node => {
             if (node.type === 'Url') {
-              let value = node.value;
+              let value = node.value
               let path
               if (value.type === 'Raw') {
-                path = value.value;
+                path = value.value
               } else {
-                path = value.value.substr(1, value.value.length - 2);
+                path = value.value.substr(1, value.value.length - 2)
               }
-              const sameHost = url.parse(responseUrl).host === url.parse(pageUrl).host
+              const sameHost =
+                url.parse(responseUrl).host === url.parse(pageUrl).host
               if (/^https?:\/\/|^\/\//i.test(path)) {
                 // do nothing
               } else if (/^\//.test(path) && sameHost) {
@@ -290,7 +291,9 @@ const minimalcss = async options => {
   }
 
   // We can close the browser now that all URLs have been opened.
-  if (!options.browser) { browser.close() }
+  if (!options.browser) {
+    browser.close()
+  }
 
   // The rest is post-processing all the CSS that was cleaned.
 

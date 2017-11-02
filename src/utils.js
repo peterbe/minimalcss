@@ -29,4 +29,4 @@ const collectImportantComments = css => {
   return combined.join('\n')
 }
 
-module.exports = {collectImportantComments}
+module.exports = { collectImportantComments }
