@@ -9,8 +9,8 @@ const collectImportantComments = require('./utils').collectImportantComments
 
 /**
  *
- * @param {{urls:Array<string>, debug: boolean, loadimages: boolean}} options
- * @return Promise<{ finalCss: string, stylesheetAstObjects:{*}, stylesheetContents: string }>
+ * @param {{ urls:Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any }} options
+ * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
   const { urls } = options
@@ -19,7 +19,7 @@ const minimalcss = async options => {
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
-  const browser = await puppeteer.launch({})
+  const browser = options.browser || await puppeteer.launch({})
 
   const stylesheetAstObjects = {}
   const stylesheetContents = {}
@@ -264,7 +264,7 @@ const minimalcss = async options => {
   }
 
   // We can close the browser now that all URLs have been opened.
-  browser.close()
+  if (!options.browser) { browser.close() }
 
   // The rest is post-processing all the CSS that was cleaned.
 
