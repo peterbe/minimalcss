@@ -1,3 +1,7 @@
+* New option `browser` if you already have a puppeteer `Browser` instance
+  you can pass that in. [pull#36](https://github.com/peterbe/minimalcss/pull/36)
+  Thanks @stereobooster
+
 * Errors thrown if any necessary `.css` download can't be found. [pull#27](https://github.com/peterbe/minimalcss/pull/27)
   Thanks @stereobooster
 
