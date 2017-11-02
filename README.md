@@ -147,7 +147,8 @@ key is `urls`. Other optional options are:
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
 * `loadimages` - If set to true, images will actually load.
-* `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one
+* `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
+* `userAgent` - specific user agent to use (string)
 
 ## Development
 

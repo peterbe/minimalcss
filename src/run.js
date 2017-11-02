@@ -10,7 +10,7 @@ const url = require('url')
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
@@ -30,6 +30,9 @@ const minimalcss = async options => {
     const pageUrl = urls[i]
     // console.log(url, i);
     const page = await browser.newPage()
+    if (options.userAgent) {
+      await page.setUserAgent(options.userAgent)
+    }
 
     // A must or else you can't do console.log from within page.evaluate()
     page.on('console', (...args) => {
