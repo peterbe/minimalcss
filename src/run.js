@@ -90,17 +90,14 @@ const minimalcss = async options => {
               } else {
                 path = value.value.substr(1, value.value.length - 2);
               }
-              const absolute = /^https?:\/\/|^\/\//i
-              const root = /^\//
-              const responseHost = url.parse(responseUrl).host
-              const pageHost = url.parse(pageUrl).host
-              if (absolute.test(path)) {
+              const sameHost = url.parse(responseUrl).host === url.parse(pageUrl).host
+              if (/^https?:\/\/|^\/\//i.test(path)) {
                 // do nothing
-              } else if (root.test(path) && responseHost === pageHost) {
+              } else if (/^\//.test(path) && sameHost) {
                 // do nothing
               } else {
                 const resolved = new url.URL(path, responseUrl)
-                if (responseHost === pageHost) {
+                if (sameHost) {
                   path = resolved.pathname
                 } else {
                   path = resolved.href
