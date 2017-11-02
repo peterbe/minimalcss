@@ -1,3 +1,8 @@
+* Correction of relative URLs in CSS fixed. E.g. `url(images/img.png)` in
+  `/styles/main.css` now becomes `url(/styles/images/img.png)`
+  [pull#28](https://github.com/peterbe/minimalcss/pull/28)
+  Thanks @stereobooster
+
 * New option `browser` if you already have a puppeteer `Browser` instance
   you can pass that in. [pull#36](https://github.com/peterbe/minimalcss/pull/36)
   Thanks @stereobooster
