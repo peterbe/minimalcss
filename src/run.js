@@ -99,7 +99,12 @@ const minimalcss = async options => {
               } else if (root.test(path) && responseHost === pageHost) {
                 // do nothing
               } else {
-                path = url.resolve(responseUrl, path)
+                const resolved = new url.URL(path, responseUrl)
+                if (responseHost === pageHost) {
+                  path = resolved.pathname
+                } else {
+                  path = resolved.href
+                }
               }
               value.value = path
             }
