@@ -91,8 +91,7 @@ It can optionally use `PhantomJS` to extract the HTML.
 This is highly experimental.
 
 The goal is to expand the tooling with all the bells and whistles that
-`penthouse` and `critical` etc. has. Including NPM packaging, split between
-lib and cli, unit tests, documentation, maturity.
+`penthouse` and `critical` etc. has.
 
 
 ## Help needed
@@ -159,6 +158,16 @@ Run `tsc` to check types.
 ```sh
 yarn run tsc
 ```
+
+### Prettier
+
+All code is expected to conform with [Prettier](https://prettier.io/) according
+to the the `.prettierrc` file in the root of the project.
+
+To check that all your code conforms, run:
+
+    yarn lintcheck
+
 ## Caveats
 
 ### A Warning About Blobs
