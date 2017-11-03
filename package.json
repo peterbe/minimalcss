@@ -35,7 +35,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "tsc": "tsc -p .",
-    "lintcheck": "prettier --list-different \"src/*.js\" \"bin/*.js\""
+    "lintcheck": "scripts/lintcheck.sh"
   },
   "lint-staged": {
     "**/*.js": ["prettier --write", "git add"]
