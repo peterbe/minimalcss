@@ -1,3 +1,9 @@
+# 0.3.0
+
+* Option to override user agent used by `puppeteer`.
+  [pull#37](https://github.com/peterbe/minimalcss/pull/37)
+  Thanks @stereobooster
+
 * Correction of relative URLs in CSS fixed. E.g. `url(images/img.png)` in
   `/styles/main.css` now becomes `url(/styles/images/img.png)`
   [pull#28](https://github.com/peterbe/minimalcss/pull/28)
