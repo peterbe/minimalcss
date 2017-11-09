@@ -1,3 +1,9 @@
+# 0.3.1
+
+* Any errors raised internally by `document.querySelector()` are not
+  swallowed unless run with `options.debug == true`
+  [pull#40](https://github.com/peterbe/minimalcss/pull/40)
+
 # 0.3.0
 
 * Option to override user agent used by `puppeteer`.
