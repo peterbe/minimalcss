@@ -140,7 +140,8 @@ Calling `minimalcss.run(options)` takes an object whose only mandatory
 key is `urls`. Other optional options are:
 
 * `debug` - all console logging during page rendering are included in the
-  stdout.
+  stdout. Also, any malformed selector that cause errors in `document.querySelector`
+  will be raised as new errors.
 * `skippable` - function wich takes
   [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request)
   as an argument and returns boolean. If it returns true then given request
