@@ -27,7 +27,7 @@
     "csso": "3.3.1",
     "filesize": "^3.5.10",
     "minimist": "^1.2.0",
-    "puppeteer": "^0.10.2"
+    "puppeteer": "^0.13.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.46",
