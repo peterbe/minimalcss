@@ -158,7 +158,7 @@ We use ES6+ with jsdoc comments and TypeScript to do static type checking, like 
 Run `tsc` to check types.
 
 ```sh
-yarn run tsc
+yarn tsc
 ```
 
 ### Prettier
