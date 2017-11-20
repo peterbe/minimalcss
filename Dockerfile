@@ -14,9 +14,9 @@ ENV NODE_PATH=/node_modules
 ENV PATH=$PATH:/node_modules/.bin
 RUN yarn
 
-# I don't know why, but unless you do this npm install, Chromium
+# I don't know why, but unless you do this 'yarn add puppeteer', Chromium
 # won't be installed.
-# Why isn't that taken care of why the `yarn` install later??
+# Why isn't that taken care of why the 'yarn' above?
 RUN yarn add puppeteer
 
 
