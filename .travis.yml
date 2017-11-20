@@ -1,19 +1,20 @@
 ---
 language: node_js
 node_js:
-  - stable
+  - 8
+  - 7
+  - 6
 dist: precise
 cache:
   yarn: true
   directories:
   - node_modules
-env:
-  - NODE_ENV=development
-  - NODE_ENV=production
+branches:
+  only:
+  - master
 install:
-  - NODE_ENV=development yarn install
+  - yarn install
 script:
-  - yarn lint
   #- AST_COMPARE=1 yarn test -- --runInBand
   - yarn lintcheck
   #- if [ "${NODE_ENV}" = "development" ]; then yarn codecov; fi
