@@ -10,14 +10,15 @@ ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils 
 ADD yarn.lock /yarn.lock
 ADD package.json /package.json
 
+ENV NODE_PATH=/node_modules
+ENV PATH=$PATH:/node_modules/.bin
+RUN yarn
+
 # I don't know why, but unless you do this npm install, Chromium
 # won't be installed.
 # Why isn't that taken care of why the `yarn` install later??
 RUN npm install puppeteer
 
-ENV NODE_PATH=/node_modules
-ENV PATH=$PATH:/node_modules/.bin
-RUN yarn
 
 WORKDIR /app
 ADD . /app
