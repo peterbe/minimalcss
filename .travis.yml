@@ -1,6 +1,7 @@
 ---
 language: node_js
 node_js:
+  - stable
   - 8
   - 7
   - 6
@@ -12,9 +13,12 @@ cache:
 branches:
   only:
   - master
+before_install:
+  - ./tests/travis/install.sh
 install:
   - yarn install
 script:
   - yarn tsc
   - yarn lintcheck
   #- if [ "${NODE_ENV}" = "development" ]; then yarn codecov; fi
+  - ./tests/e2e.sh
