@@ -1,6 +1,7 @@
 ---
 language: node_js
 node_js:
+  - stable
   - 8
   - 7
   - 6
@@ -18,3 +19,4 @@ script:
   - yarn tsc
   - yarn lintcheck
   #- if [ "${NODE_ENV}" = "development" ]; then yarn codecov; fi
+  - ./tests/e2e.sh
