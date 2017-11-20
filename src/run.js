@@ -41,8 +41,7 @@ const minimalcss = async options => {
       }
     })
 
-    // XXX Isn't there a better way to enable options like this?
-    await page.setRequestInterceptionEnabled(true)
+    await page.setRequestInterception(true)
     page.on('request', request => {
       if (/data:image\//.test(request.url)) {
         // don't need to download those
@@ -120,7 +119,7 @@ const minimalcss = async options => {
       throw error
     })
 
-    const response = await page.goto(pageUrl, { waitUntil: 'networkidle' })
+    const response = await page.goto(pageUrl, { waitUntil: 'networkidle2' })
     if (!response.ok) {
       throw new Error(`${response.status} on ${pageUrl}`)
     }
