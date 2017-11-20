@@ -13,6 +13,8 @@ cache:
 branches:
   only:
   - master
+before_install:
+  - ./tests/travis/install.sh
 install:
   - yarn install
 script:
