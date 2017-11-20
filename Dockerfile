@@ -17,7 +17,7 @@ RUN yarn
 # I don't know why, but unless you do this npm install, Chromium
 # won't be installed.
 # Why isn't that taken care of why the `yarn` install later??
-RUN npm install puppeteer
+RUN yarn add puppeteer
 
 
 WORKDIR /app
