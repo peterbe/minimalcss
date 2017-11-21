@@ -145,11 +145,13 @@ const minimalcss = async options => {
                 if (child.value === null) {
                   str += `[${child.name.name}]`
                 } else if (child.value.value) {
-                  str += `[${child.name.name}${child.operator}${child.value
-                    .value}]`
+                  str += `[${child.name.name}${child.operator}${
+                    child.value.value
+                  }]`
                 } else {
-                  str += `[${child.name.name}${child.operator}${child.value
-                    .name}]`
+                  str += `[${child.name.name}${child.operator}${
+                    child.value.name
+                  }]`
                 }
               } else if (child.type === 'PseudoElementSelector') {
                 str += `::${child.name}`
