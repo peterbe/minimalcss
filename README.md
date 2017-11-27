@@ -100,6 +100,10 @@ It can optionally use `PhantomJS` to extract the HTML.
   JavaScript code has changed the DOM. That means you can extract the
   critical CSS needed to display properly before the JavaScript has kicked in.
 
+* Ability to analyze the remaining CSS selectors to see which keyframe
+  animations that they use and use this to delete keyframe definitions
+  that are no longer needed.
+
 ## State of the project
 
 This is highly experimental.
