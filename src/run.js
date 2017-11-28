@@ -127,16 +127,32 @@ const minimalcss = async options => {
     page.on('pageerror', error => {
       throw error
     })
-    // First goto the page and evaluate it on the 'load' event.
-    let response = await page.goto(pageUrl, { waitUntil: 'load' })
+
+    // First, go to the page with JavaScript disabled.
+    await page.setJavaScriptEnabled(false)
+    let response = await page.goto(pageUrl)
+    if (!response.ok) {
+      throw new Error(`${response.status} on ${pageUrl}`)
+    }
+    const htmlVanilla = await page.evaluate(
+      () => document.documentElement.outerHTML
+    )
+    doms.push(cheerio.load(htmlVanilla))
+    await page.setJavaScriptEnabled(true)
+
+    // Second, goto the page and evaluate it on the 'load' event.
+    response = await page.goto(pageUrl, { waitUntil: 'load' })
     if (!response.ok) {
       throw new Error(`${response.status} on ${pageUrl}`)
     }
     const htmlLoad = await page.evaluate(
       () => document.documentElement.outerHTML
     )
-    doms.push(cheerio.load(htmlLoad))
-    // Second, goto the page and evaluate it on the 'networkidle2' event.
+    if (htmlLoad !== htmlVanilla) {
+      doms.push(cheerio.load(htmlLoad))
+    }
+
+    // Third, goto the page and evaluate it on the 'networkidle2' event.
     // This gives the page a chance to load any <script defer src="...">
     // and even some JS that does XHR requests right after load.
     response = await page.goto(pageUrl, {

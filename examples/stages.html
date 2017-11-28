@@ -15,14 +15,14 @@
     <img src="https://i.ytimg.com/vi/OStPrcq52ZA/maxresdefault.jpg"
      style="width: 100px" />
     <script>
-    $('p').addClass('loaded').text('LOADED');
+    $('p').removeClass('initial').addClass('loaded').text('LOADED');
 
     $(function() {
       $('p').addClass('really-loaded').text('FULLY LOADED');
 
       $.getJSON('https://autocompeter.com/v1?d=autocompeter.com&q=search')
       .done(function(response) {
-        $('p').removeClass('initial').addClass('xhr-loaded')
+        $('p').removeClass('loaded').addClass('xhr-loaded')
         .text('XHR LOADED ' + response.results.length + ' ITEMS WITH XHR');
       });
     });
