@@ -1,0 +1,19 @@
+.initial {
+    color: brown;
+}
+.loaded {
+    color: pink;
+    font-weight: bold;
+}
+
+.really-loaded {
+    color: orange;
+    font-style: italic;
+}
+
+.xhr-loaded {
+    color: purple;
+    font-size: 120%;
+}
+
+pre, p, abbr { padding-left: 10px; }
