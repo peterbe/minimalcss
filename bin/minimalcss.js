@@ -18,7 +18,8 @@ const argv = minimist(args, {
     'version',
     'verbose',
     'debug',
-    'loadimages'
+    'loadimages',
+    'withoutjavascript'
   ],
   string: ['output', 'skip'],
   default: {
@@ -52,6 +53,8 @@ if (argv['help']) {
       '  --verbose                     Include a comment about the options and the date it was generated.\n' +
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
       '  --loadimages                  By default, all images are NOT downloaded. This reverses that.\n' +
+      '  --withoutjavascript           The CSS is evaluated against the DOM twice, first with no JavaScript, ' +
+      'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
       '  --version or -v               Print minimalcss version.\n' +
       ''
@@ -74,6 +77,7 @@ const options = {
   urls: urls,
   debug: argv['debug'],
   loadimages: argv['loadimages'],
+  withoutjavascript: argv['withoutjavascript'],
   skippable: request => {
     let skips = argv['skip']
     if (!skips) {

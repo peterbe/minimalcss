@@ -5,18 +5,21 @@ const puppeteer = require('puppeteer')
 const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
-const collectImportantComments = require('./utils').collectImportantComments
+// @ts-ignore
+const cheerio = require('cheerio')
+const utils = require('./utils')
 const url = require('url')
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
   const loadimages = options.loadimages || false
+  const withoutjavascript = options.withoutjavascript || false
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
@@ -24,7 +27,9 @@ const minimalcss = async options => {
 
   const stylesheetAstObjects = {}
   const stylesheetContents = {}
-  const allCleaned = []
+  const doms = []
+  const allHrefs = new Set()
+
   // Note! This opens one URL at a time synchronous
   for (let i = 0; i < urls.length; i++) {
     const pageUrl = urls[i]
@@ -35,13 +40,16 @@ const minimalcss = async options => {
     }
 
     // A must or else you can't do console.log from within page.evaluate()
-    page.on('console', (...args) => {
+    page.on('console', msg => {
       if (debug) {
-        console.log(...args)
+        // console.log(...(msg.args))
+        // console.log(msg.args)
+        for (let i = 0; i < msg.args.length; ++i) {
+          console.log(`${i}: ${msg.args[i]}`)
+        }
       }
     })
 
-    // XXX Isn't there a better way to enable options like this?
     await page.setRequestInterception(true)
     page.on('request', request => {
       if (/data:image\//.test(request.url)) {
@@ -120,203 +128,159 @@ const minimalcss = async options => {
       throw error
     })
 
-    const response = await page.goto(pageUrl, { waitUntil: 'networkidle2' })
-    if (!response.ok) {
-      throw new Error(`${response.status} on ${pageUrl}`)
+    let response
+
+    if (!withoutjavascript) {
+      // First, go to the page with JavaScript disabled.
+      await page.setJavaScriptEnabled(false)
+      response = await page.goto(pageUrl)
+      if (!response.ok) {
+        throw new Error(`${response.status} on ${pageUrl}`)
+      }
+      const htmlVanilla = await page.content()
+      doms.push(cheerio.load(htmlVanilla))
+      await page.setJavaScriptEnabled(true)
     }
 
-    const cleaned = await page.evaluate(
-      (stylesheetAstObjects, debug) => {
-        const cleaner = (ast, callback) => {
-          const selectorToString = children => {
-            let str = ''
-            children.forEach(child => {
-              if (child.type === 'IdSelector') {
-                str += '#' + child.name
-              } else if (child.type === 'ClassSelector') {
-                str += '.' + child.name
-              } else if (child.type === 'TypeSelector') {
-                str += child.name
-              } else if (child.type === 'WhiteSpace') {
-                str += ' '
-              } else if (child.type === 'Combinator') {
-                str += ` ${child.name} `
-              } else if (child.type === 'AttributeSelector') {
-                if (child.value === null) {
-                  str += `[${child.name.name}]`
-                } else if (child.value.value) {
-                  str += `[${child.name.name}${child.operator}${
-                    child.value.value
-                  }]`
-                } else {
-                  str += `[${child.name.name}${child.operator}${
-                    child.value.name
-                  }]`
-                }
-              } else if (child.type === 'PseudoElementSelector') {
-                str += `::${child.name}`
-                if (child.children) {
-                  str += selectorToString(child.children)
-                }
-              } else if (child.type === 'PseudoClassSelector') {
-                str += `:${child.name}`
-                if (child.children) {
-                  str += selectorToString(child.children)
-                }
-              } else if (child.type === 'SelectorList') {
-                str += selectorToString(child.children)
-              } else if (child.type === 'Selector') {
-                str += `(${selectorToString(child.children)})`
-              } else if (child.type === 'Nth') {
-                str += `(${child.nth.name})`
-              } else if (child.type === 'Identifier') {
-                str += `(${child.name})`
-              } else {
-                // console.error(child);
-                // console.error(children);
-                console.log('TYPE??', child.type, child)
-                console.log(child)
-                console.dir(children)
-                throw new Error(child.type)
-              }
-            })
-            if (str.indexOf('[object Object]') > -1) {
-              console.log(str)
-              console.log(children)
-              throw new Error('selector string became [object Object]!')
-            }
-            if (str === '') {
-              console.log(children)
-              throw new Error('selector string became an empty string!')
-            }
-            return str
-          }
+    // XXX There is another use case *between* the pure DOM (without any
+    // javascript) and after the network is idle.
+    // For example, any CSSOM that is *made by javascript* but goes away
+    // after all XHR is finished loading.
+    // What we can do is do that lookup here using...
+    //    response = await page.goto(pageUrl, {
+    //        waitUntil: ['domcontentloaded']
+    //    })
+    // And add that to the list of DOMs.
+    // This will slow down the whole processing marginally.
 
-          const decisionsCache = {}
-
-          const clean = (children, callback) => {
-            return children.filter(child => {
-              if (child.type === 'Rule') {
-                const values = child.prelude.value.split(',').map(x => x.trim())
-                const keepValues = values.filter(selectorString => {
-                  if (decisionsCache[selectorString] !== undefined) {
-                    return decisionsCache[selectorString]
-                  }
-                  const keep = callback(selectorString)
-                  decisionsCache[selectorString] = keep
-                  return keep
-                })
-                if (keepValues.length) {
-                  // re-write the selector value
-                  child.prelude.value = keepValues.join(', ')
-                  return true
-                } else {
-                  return false
-                }
-                // } else if (
-                //   child.type === 'Atrule' &&
-                //   child.prelude &&
-                //   child.expression.type === 'MediaQueryList'
-                // ) {
-              } else if (child.type === 'Atrule' && child.name === 'media') {
-                // recurse
-                child.block.children = clean(child.block.children, callback)
-                return child.block.children.length > 0
-              } else {
-                // Things like comments
-                // console.log(child.type);
-                // console.dir(child)
-              }
-              // The default is to keep it.
-              return true
-            })
-          }
-
-          ast.children = clean(ast.children, callback)
-          return ast
+    // Second, goto the page and evaluate it on the 'networkidle2' event.
+    // This gives the page a chance to load any <script defer src="...">
+    // and even some JS that does XHR requests right after load.
+    response = await page.goto(pageUrl, {
+      waitUntil: ['domcontentloaded', 'networkidle2']
+    })
+    if (!response.ok) {
+      throw new Error(`${response.status} on ${pageUrl} (second time)`)
+    }
+    const evalNetworkIdle = await page.evaluate(() => {
+      // The reason for NOT using a Set here is that that might not be
+      // supported in ES5.
+      const hrefs = []
+      // Loop over all the 'link' elements in the document and
+      // for each, collect the URL of all the ones we're going to assess.
+      Array.from(document.querySelectorAll('link')).forEach(link => {
+        if (
+          link.href &&
+          (link.rel === 'stylesheet' ||
+            link.href.toLowerCase().endsWith('.css')) &&
+          !link.href.toLowerCase().startsWith('blob:') &&
+          link.media !== 'print'
+        ) {
+          // if (!stylesheetAstObjects[link.href]) {
+          //   throw new Error(`${link.href} not in stylesheetAstObjects!`)
+          // }
+          // if (!Object.keys(stylesheetAstObjects[link.href]).length) {
+          //   // If the 'stylesheetAstObjects[link.href]' thing is an
+          //   // empty object, simply skip this link.
+          //   return
+          // }
+          hrefs.push(link.href)
         }
+      })
+      return {
+        html: document.documentElement.outerHTML,
+        hrefs
+      }
+    })
 
-        const objsCleaned = {}
+    const htmlNetworkIdle = evalNetworkIdle.html
+    doms.push(cheerio.load(htmlNetworkIdle))
+    evalNetworkIdle.hrefs.forEach(href => {
+      allHrefs.add(href)
+    })
 
-        const DEAD_OBVIOUS = new Set(['*', 'body', 'html'])
-
-        const links = Array.from(document.querySelectorAll('link'))
-        links
-          .filter(link => {
-            return (
-              link.href &&
-              (link.rel === 'stylesheet' ||
-                link.href.toLowerCase().endsWith('.css')) &&
-              !link.href.toLowerCase().startsWith('blob:') &&
-              link.media !== 'print'
-            )
-          })
-          .forEach(stylesheet => {
-            if (!stylesheetAstObjects[stylesheet.href]) {
-              throw new Error(`${stylesheet.href} not in stylesheetAstObjects!`)
-            }
-            if (!Object.keys(stylesheetAstObjects[stylesheet.href]).length) {
-              // If the 'stylesheetAstObjects[stylesheet.href]' thing is an
-              // empty object, simply skip this link.
-              return
-            }
-            const obj = stylesheetAstObjects[stylesheet.href]
-            objsCleaned[stylesheet.href] = cleaner(obj, selector => {
-              // Here's the crucial part. Decide whether to keep the selector
-
-              if (DEAD_OBVIOUS.has(selector)) {
-                // low hanging fruit easy ones
-                return true
-              }
-
-              // Avoid doing a querySelector on hacks that will fail
-              if (/:-(ms|moz)-/.test(selector)) {
-                // eg. '.form-control:-ms-input-placeholder'
-                return true
-              }
-
-              try {
-                const keep = !!document.querySelector(selector)
-                return keep
-              } catch (ex) {
-                const exception = ex.toString()
-                if (debug) {
-                  throw new Error(
-                    `Unable to querySelector('${selector}') [${exception}]`
-                  )
-                } else {
-                  // Better safe than sorry
-                  return true
-                }
-              }
-            })
-          })
-        return Promise.resolve(objsCleaned)
-      },
-      stylesheetAstObjects,
-      debug
-    )
-    allCleaned.push(cleaned)
+    // We can close the browser now that all URLs have been opened.
+    if (!options.browser) {
+      browser.close()
+    }
   }
+  // All URLs have been opened, and we now have multiple DOM objects.
 
-  // We can close the browser now that all URLs have been opened.
-  if (!options.browser) {
-    browser.close()
-  }
+  // Now, let's loop over ALL links and process their ASTs compared to
+  // the DOMs.
+  const objsCleaned = {}
+  const decisionsCache = {}
+  const DEAD_OBVIOUS = new Set(['*', 'body', 'html'])
+  allHrefs.forEach(href => {
+    const ast = stylesheetAstObjects[href]
+    const clean = (children, callback) => {
+      return children.filter(child => {
+        if (child.type === 'Rule') {
+          const values = child.prelude.value.split(',').map(x => x.trim())
+          const keepValues = values.filter(selectorString => {
+            if (decisionsCache[selectorString] !== undefined) {
+              return decisionsCache[selectorString]
+            }
+            const keep = callback(selectorString)
+            decisionsCache[selectorString] = keep
+            return keep
+          })
+          if (keepValues.length) {
+            // re-write the selector value
+            child.prelude.value = keepValues.join(', ')
+            return true
+          } else {
+            return false
+          }
+          // } else if (
+          //   child.type === 'Atrule' &&
+          //   child.prelude &&
+          //   child.expression.type === 'MediaQueryList'
+          // ) {
+        } else if (child.type === 'Atrule' && child.name === 'media') {
+          // recurse
+          child.block.children = clean(child.block.children, callback)
+          return child.block.children.length > 0
+        } else {
+          // Things like comments
+          // console.log(child.type);
+          // console.dir(child)
+        }
+        // The default is to keep it.
+        return true
+      })
+    }
 
-  // The rest is post-processing all the CSS that was cleaned.
-
-  const allCombinedCss = allCleaned
-    .map(cleaned => {
-      const combinedCss = Object.keys(cleaned)
-        .map(cssUrl => {
-          const obj = cleaned[cssUrl]
-          const cleanedAst = csstree.fromPlainObject(obj)
-          const cleanedCss = csstree.translate(cleanedAst)
-          return cleanedCss
-        })
-        .join('\n')
-      return combinedCss
+    ast.children = clean(ast.children, selectorString => {
+      // Here's the crucial part. Decide whether to keep the selector
+      if (DEAD_OBVIOUS.has(selectorString)) {
+        // low hanging fruit easy ones.
+        return true
+      }
+      // This changes things like `a.button:active` to `a.button`
+      const originalSelectorString = selectorString
+      selectorString = utils.reduceCSSSelector(originalSelectorString)
+      // Find at least 1 DOM that contains an object that matches
+      // this selector string.
+      return doms.some(dom => {
+        try {
+          return dom(selectorString).length > 0
+        } catch (ex) {
+          // Be conservative. If we can't understand the selector,
+          // best to leave it in.
+          if (debug) {
+            console.warn(selectorString, ex.toString())
+          }
+          return true
+        }
+      })
+    })
+    objsCleaned[href] = ast
+  })
+  // Every unique URL in every <link> tag has been checked.
+  const allCombinedCss = Object.keys(objsCleaned)
+    .map(cssUrl => {
+      return csstree.translate(csstree.fromPlainObject(objsCleaned[cssUrl]))
     })
     .join('\n')
 
@@ -329,7 +293,7 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  let finalCss = collectImportantComments(allCombinedCss)
+  let finalCss = utils.collectImportantComments(allCombinedCss)
   finalCss = csso.minify(finalCss).css
   const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
   return Promise.resolve(returned)

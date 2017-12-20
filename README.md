@@ -147,9 +147,27 @@ key is `urls`. Other optional options are:
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
-* `loadimages` - If set to true, images will actually load.
+* `loadimages` - If set to `true`, images will actually load.
+* `withoutjavascript` - If set to `true` it will *skip* loading the page first
+  without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
+  can be, and then with JavaScript enabled *and* waiting for network activity
+  to be idle.
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
+
+## Warnings
+
+When `minimalcss` evaluate each CSS selector to decide whether to keep it
+or not, some selectors might not be parseable. Possibly, the CSS employs
+hacks for specific browsers that
+[cheerio](https://www.npmjs.com/package/cheerio) doesn't support. Or
+there might be CSS selectors that no browser or tool can understand
+(e.g a typo by the CSS author). If there's a problem parsing a CSS selector,
+the default is to swallow the exception and let the CSS selector stay.
+
+Also by default, all these warnings are hidden. To see them use the `--debug`
+flag (or `debug` API option). Then the CSS selector syntax errors are
+printed on `stderr`.
 
 ## Development
 
