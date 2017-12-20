@@ -142,7 +142,18 @@ const minimalcss = async options => {
       await page.setJavaScriptEnabled(true)
     }
 
-    // Third, goto the page and evaluate it on the 'networkidle2' event.
+    // XXX There is another use case *between* the pure DOM (without any
+    // javascript) and after the network is idle.
+    // For example, any CSSOM that is *made by javascript* but goes away
+    // after all XHR is finished loading.
+    // What we can do is do that lookup here using...
+    //    response = await page.goto(pageUrl, {
+    //        waitUntil: ['domcontentloaded']
+    //    })
+    // And add that to the list of DOMs.
+    // This will slow down the whole processing marginally.
+
+    // Second, goto the page and evaluate it on the 'networkidle2' event.
     // This gives the page a chance to load any <script defer src="...">
     // and even some JS that does XHR requests right after load.
     response = await page.goto(pageUrl, {
