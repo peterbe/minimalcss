@@ -86,6 +86,19 @@ it can't load the HTML as a real browser would and thus does not support a
 DOM with possible JavaScript mutations on load.
 It can optionally use `PhantomJS` to extract the HTML.
 
+## Killer features
+
+* You don't need to specify where the CSS is. It gets downloaded and parsed
+  automatically.
+
+* It uses [puppeteer](https://github.com/GoogleChrome/puppeteer) and
+  [CSSTree](https://github.com/csstree/csstree) which are both high quality
+  projects that are solid and well tested.
+
+* The CSS selectors downloaded is compared to the DOM before *and* after
+  JavaScript code has changed the DOM. That means you can extract the
+  critical CSS needed to display properly before the JavaScript has kicked in.
+
 ## State of the project
 
 This is highly experimental.
