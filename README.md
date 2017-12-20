@@ -155,6 +155,20 @@ key is `urls`. Other optional options are:
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
 
+## Warnings
+
+When `minimalcss` evaluate each CSS selector to decide whether to keep it
+or not, some selectors might not be parseable. Possibly, the CSS employs
+hacks for specific browsers that
+[cheerio](https://www.npmjs.com/package/cheerio) doesn't support. Or
+there might be CSS selectors that no browser or tool can understand
+(e.g a typo by the CSS author). If there's a problem parsing a CSS selector,
+the default is to swallow the exception and let the CSS selector stay.
+
+Also by default, all these warnings are hidden. To see them use the `--debug`
+flag (or `debug` API option). Then the CSS selector syntax errors are
+printed on `stderr`.
+
 ## Development
 
 We use ES6+ with jsdoc comments and TypeScript to do static type checking, like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).

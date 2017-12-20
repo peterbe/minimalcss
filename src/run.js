@@ -12,7 +12,7 @@ const url = require('url')
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
@@ -27,7 +27,6 @@ const minimalcss = async options => {
 
   const stylesheetAstObjects = {}
   const stylesheetContents = {}
-  const allCleaned = []
   const doms = []
   const allHrefs = new Set()
 
