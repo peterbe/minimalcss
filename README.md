@@ -147,7 +147,11 @@ key is `urls`. Other optional options are:
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
-* `loadimages` - If set to true, images will actually load.
+* `loadimages` - If set to `true`, images will actually load.
+* `withoutjavascript` - If set to `true` it will *skip* loading the page first
+  without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
+  can be, and then with JavaScript enabled *and* waiting for network activity
+  to be idle.
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
 

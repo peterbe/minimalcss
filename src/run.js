@@ -7,7 +7,7 @@ const csso = require('csso')
 const csstree = require('css-tree')
 // @ts-ignore
 const cheerio = require('cheerio')
-const collectImportantComments = require('./utils').collectImportantComments
+const utils = require('./utils')
 const url = require('url')
 
 /**
@@ -19,6 +19,7 @@ const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
   const loadimages = options.loadimages || false
+  const withoutjavascript = options.withoutjavascript || false
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
   // just a cli app.
@@ -128,28 +129,18 @@ const minimalcss = async options => {
       throw error
     })
 
-    // First, go to the page with JavaScript disabled.
-    await page.setJavaScriptEnabled(false)
-    let response = await page.goto(pageUrl)
-    if (!response.ok) {
-      throw new Error(`${response.status} on ${pageUrl}`)
-    }
-    const htmlVanilla = await page.evaluate(
-      () => document.documentElement.outerHTML
-    )
-    doms.push(cheerio.load(htmlVanilla))
-    await page.setJavaScriptEnabled(true)
+    let response
 
-    // Second, goto the page and evaluate it on the 'load' event.
-    response = await page.goto(pageUrl, { waitUntil: 'load' })
-    if (!response.ok) {
-      throw new Error(`${response.status} on ${pageUrl}`)
-    }
-    const htmlLoad = await page.evaluate(
-      () => document.documentElement.outerHTML
-    )
-    if (htmlLoad !== htmlVanilla) {
-      doms.push(cheerio.load(htmlLoad))
+    if (!withoutjavascript) {
+      // First, go to the page with JavaScript disabled.
+      await page.setJavaScriptEnabled(false)
+      response = await page.goto(pageUrl)
+      if (!response.ok) {
+        throw new Error(`${response.status} on ${pageUrl}`)
+      }
+      const htmlVanilla = await page.content()
+      doms.push(cheerio.load(htmlVanilla))
+      await page.setJavaScriptEnabled(true)
     }
 
     // Third, goto the page and evaluate it on the 'networkidle2' event.
@@ -193,10 +184,7 @@ const minimalcss = async options => {
     })
 
     const htmlNetworkIdle = evalNetworkIdle.html
-    if (htmlNetworkIdle !== htmlLoad) {
-      // Basically, after waiting for the network, the DOM *did* change.
-      doms.push(cheerio.load(htmlNetworkIdle))
-    }
+    doms.push(cheerio.load(htmlNetworkIdle))
     evalNetworkIdle.hrefs.forEach(href => {
       allHrefs.add(href)
     })
@@ -259,9 +247,23 @@ const minimalcss = async options => {
         // low hanging fruit easy ones.
         return true
       }
+      // This changes things like `a.button:active` to `a.button`
+      const originalSelectorString = selectorString
+      selectorString = utils.reduceCSSSelector(originalSelectorString)
       // Find at least 1 DOM that contains an object that matches
       // this selector string.
-      return doms.some(dom => dom(selectorString).length > 0)
+      return doms.some(dom => {
+        try {
+          return dom(selectorString).length > 0
+        } catch (ex) {
+          // Be conservative. If we can't understand the selector,
+          // best to leave it in.
+          if (debug) {
+            console.warn(selectorString, ex.toString())
+          }
+          return true
+        }
+      })
     })
     objsCleaned[href] = ast
   })
@@ -281,7 +283,7 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  let finalCss = collectImportantComments(allCombinedCss)
+  let finalCss = utils.collectImportantComments(allCombinedCss)
   finalCss = csso.minify(finalCss).css
   const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
   return Promise.resolve(returned)

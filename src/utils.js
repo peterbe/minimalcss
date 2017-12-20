@@ -29,4 +29,22 @@ const collectImportantComments = css => {
   return combined.join('\n')
 }
 
-module.exports = { collectImportantComments }
+/**
+ * Reduce a CSS selector to be without any pseudo class parts.
+ * For example, from `a:hover` return `a`. And from `input::-moz-focus-inner`
+ * to `input`.
+ * Also, more advanced ones like `a[href^="javascript:"]:after` to
+ * `a[href^="javascript:"]`.
+ * The last example works too if the input was `a[href^='javascript:']:after`
+ * instead (using ' instead of ").
+ *
+ * @param {string} selector
+ * @return {string}
+ */
+const reduceCSSSelector = selector => {
+  return selector.split(
+    /:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
+  )[0]
+}
+
+module.exports = { collectImportantComments, reduceCSSSelector }

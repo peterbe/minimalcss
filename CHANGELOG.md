@@ -1,3 +1,16 @@
+# 0.4.0
+
+* Every URL you pass gets loaded twice. First *without Javascript* and then
+  *with JavaScript* (and waiting for network to be idle). These means the
+  minimal CSS will contain CSS that was necessary **before** the page is fully
+  loaded as well.
+  Also, the engine has entirely changed. Instead of evaluating the DOM inside
+  a page evaluation (the equivalent of running in the Web Console), puppeteer
+  is only used to 1) download relevant assets and 2) yield the DOM as a string
+  of HTML. Instead [cheerio](https://www.npmjs.com/package/cheerio) is used
+  to compare the CSS to the DOM.
+  [pull#53](https://github.com/peterbe/minimalcss/pull/53)
+
 # 0.3.1
 
 * Any errors raised internally by `document.querySelector()` are not
