@@ -5,7 +5,6 @@ const puppeteer = require('puppeteer')
 const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
-// @ts-ignore
 const cheerio = require('cheerio')
 const utils = require('./utils')
 const url = require('url')
