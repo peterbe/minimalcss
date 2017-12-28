@@ -48,7 +48,6 @@ const postProcessKeyframes = ast => {
       // Bootstrap v3 has this for example.
       if (child.type === 'Atrule' && child.name.search(/\bkeyframes$/i) > -1) {
         const keyframeName = child.prelude.children[0].name
-        console.log('KEEP', keyframeName, '?', callback(keyframeName))
         return callback(keyframeName)
       }
       return true
