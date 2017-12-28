@@ -12,7 +12,7 @@ const url = require('url')
 
 /**
  *
- * @param Object ast
+ * @param {Object} ast
  * @return Object
  */
 const postProcessKeyframes = ast => {
