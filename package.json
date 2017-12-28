@@ -28,6 +28,7 @@
     "csso": "3.4.0",
     "filesize": "^3.5.11",
     "minimist": "^1.2.0",
+    "node-fetch": "^1.6.7",
     "puppeteer": "^0.13.0"
   },
   "devDependencies": {
