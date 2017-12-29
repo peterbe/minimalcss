@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href="css-in-js.css" rel=stylesheet>
+    <style type="text/css">
+      .inline { color: red }
+    </style>
+    <script type="text/javascript">
+      (() => {
+        const css = '.cssinjs1 { color: red; }',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
+
+        style.type = 'text/css';
+        if (style.styleSheet){
+          style.styleSheet.cssText = css;
+        } else {
+          style.appendChild(document.createTextNode(css));
+        }
+
+        head.appendChild(style);
+      })();
+    </script>
+    <script type="text/javascript">
+      (() => {
+        const css = '.cssinjs2 { color: red; }',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
+        head.appendChild(style);
+
+        const sheet = style.sheet;
+        sheet.insertRule(css, sheet.cssRules.length)
+      })();
+    </script>
+  </head>
+  <body>
+    <p class="external">external</p>
+    <p class="inline">inline</p>
+    <p class="cssinjs1">cssinjs1</p>
+    <p class="cssinjs2">cssinjs2</p>
+  </body>
+</html>
