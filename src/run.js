@@ -168,17 +168,6 @@ const minimalcss = async options => {
                 }
               }
               value.value = path
-              // } else if (
-              //   node.type === 'Declaration' &&
-              //   node.property.search(/animation$/) > -1
-              // ) {
-              //   let firstName = false
-              //   node.value.children.each(child => {
-              //     if (child.type === 'Identifier' && child.name && !firstName) {
-              //       allAnimationNames.add(child.name)
-              //       firstName = true
-              //     }
-              //   })
             }
           })
           stylesheetAstObjects[responseUrl] = csstree.toPlainObject(ast)
