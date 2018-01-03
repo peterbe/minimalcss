@@ -12,6 +12,58 @@ const url = require('url')
 
 /**
  *
+ * @param {Object} ast
+ * @return Object
+ */
+const postProcessKeyframes = ast => {
+  const activeAnimationNames = new Set()
+  // First walk the AST to know which animations are ever mentioned
+  // by the remaining selectors.
+  csstree.walk(ast, node => {
+    if (node.type === 'Declaration') {
+      if (
+        node.property.search(/\banimation$/i) > -1 ||
+        node.property.search(/\banimation-name$/i) > -1
+      ) {
+        // E.g. `animation: thename infinite 5s linear`
+        // Or `animation-name: thename`
+        let firstName = false
+        node.value.children.each(child => {
+          if (child.type === 'Identifier' && child.name && !firstName) {
+            activeAnimationNames.add(child.name.toLowerCase())
+            firstName = true
+          }
+        })
+      }
+    }
+  })
+  // This is the function we use to filter children out.
+  const cleanChildren = (children, callback) => {
+    return children.filter(child => {
+      // The reason for the '\bkeyframes$' regex here is because you might
+      // have CSS that looks like this:
+      //   @-webkit-keyframes progress-bar-stripes {
+      //     ...
+      //   }
+      // Bootstrap v3 has this for example.
+      if (child.type === 'Atrule' && child.name.search(/\bkeyframes$/i) > -1) {
+        const keyframeName = child.prelude.children[0].name
+        return callback(keyframeName)
+      }
+      return true
+    })
+  }
+  // First convert the AST object into a plain object so we can mutate
+  // the plain array that is 'children'.
+  const obj = csstree.toPlainObject(ast)
+  obj.children = cleanChildren(obj.children, keyframename => {
+    return activeAnimationNames.has(keyframename.toLowerCase())
+  })
+  return csstree.fromPlainObject(obj)
+}
+
+/**
+ *
  * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
@@ -294,7 +346,10 @@ const minimalcss = async options => {
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
   let finalCss = utils.collectImportantComments(allCombinedCss)
-  finalCss = csso.minify(finalCss).css
+  let csstreeAst = csstree.parse(csso.minify(finalCss).css)
+  csstreeAst = postProcessKeyframes(csstreeAst)
+  finalCss = csstree.translate(csstreeAst)
+
   const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
   return Promise.resolve(returned)
 }
