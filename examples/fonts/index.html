@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href="index.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- <div id="rating">
+      Temporarily here
+    </div> -->
+    <p class="loading">
+      L O A D I N G
+    </p>
+    <div class="ui ordered steps">
+      <div class="completed step">
+        <div class="content">
+          <div class="title">Shipping</div>
+          <div class="description">Choose your shipping options</div>
+        </div>
+      </div>
+      <div class="completed step">
+        <div class="content">
+          <div class="title">Billing</div>
+          <div class="description">Enter billing information</div>
+        </div>
+      </div>
+      <div class="active step">
+        <div class="content">
+          <div class="title">Confirm Order</div>
+          <div class="description">Verify order details</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui checkbox">
+      <input name="example" type="checkbox">
+      <label>Make my profile visible</label>
+    </div>
+
+    <script>
+    window.onload = () => {
+      setTimeout(() => {
+        let el = document.querySelector('.loading')
+        el.classList.remove('loading')
+        el.classList.add('loaded')
+      }, 10)
+    };
+    </script>
+  </body>
+</html>

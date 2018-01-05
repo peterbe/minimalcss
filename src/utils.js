@@ -47,4 +47,18 @@ const reduceCSSSelector = selector => {
   )[0]
 }
 
-module.exports = { collectImportantComments, reduceCSSSelector }
+/**
+ * Remove the ' and/or " at the beginning and end of a string if it has it.
+ * @param {string} string
+ * @return {string}
+ */
+const unquoteString = string => {
+  const first = string.charAt(0)
+  const last = string.charAt(string.length - 1)
+  if (first === last && (first === '"' || first === "'")) {
+    return string.substring(1, string.length - 1)
+  }
+  return string
+}
+
+module.exports = { collectImportantComments, reduceCSSSelector, unquoteString }

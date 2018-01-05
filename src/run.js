@@ -10,11 +10,24 @@ const utils = require('./utils')
 const url = require('url')
 
 /**
+ * Take in a csstree AST, mutate it and return a csstree AST.
+ * The mutation is about:
  *
+ *   1) Remove all keyframe declarations that are *not* mentioned
+ *      by animation name.
+ *   2) Remove all font-face declarations that are *not* mentioned
+ *      as the font-family.
+ *
+ * The gist of the function is that it walks the AST, populates sets
+ * that track the names of all animations and font families. Then,
+ * it converts the AST to a plain object, which it mutates by filtering
+ * the 'children' object.
+ * Lastly it uses the csstree's fromPlainObject to return the plain
+ * object back as an AST.
  * @param {Object} ast
  * @return Object
  */
-const postProcessKeyframes = ast => {
+const postProcessOptimize = ast => {
   // First walk the AST to know which animations are ever mentioned
   // by the remaining rules.
   const activeAnimationNames = new Set(
@@ -31,6 +44,54 @@ const postProcessKeyframes = ast => {
         if (!activeAnimationNames.has(csstree.generate(node.prelude))) {
           list.remove(item)
         }
+      }
+    }
+  })
+
+  // Now figure out what font-families are at all used in the AST.
+  const activeFontFamilyNames = new Set()
+  csstree.walk(ast, {
+    visit: 'Declaration',
+    enter: function(node) {
+      // walker pass through `font-family` declarations inside @font-face too
+      // this condition filter them, to walk through declarations
+      // inside a rules only.
+      if (this.rule) {
+        csstree.lexer
+          .findDeclarationValueFragments(node, 'Type', 'family-name')
+          .forEach(entry => {
+            const name = utils.unquoteString(
+              csstree.generate({
+                type: 'Value',
+                children: entry.nodes
+              })
+            )
+            activeFontFamilyNames.add(name)
+          })
+      }
+    }
+  })
+
+  // Walk into every font-family rule and inspect if we uses its declarations
+  csstree.walk(ast, {
+    visit: 'Atrule',
+    enter: (atrule, atruleItem, atruleList) => {
+      if (csstree.keyword(atrule.name).basename === 'font-face') {
+        // We're inside a font-face rule! Let's dig deeper.
+        csstree.walk(atrule, {
+          visit: 'Declaration',
+          enter: declaration => {
+            if (csstree.property(declaration.property).name === 'font-family') {
+              const name = utils.unquoteString(
+                csstree.generate(declaration.value)
+              )
+              // was this @font-face used?
+              if (!activeFontFamilyNames.has(name)) {
+                atruleList.remove(atruleItem)
+              }
+            }
+          }
+        })
       }
     }
   })
@@ -330,7 +391,7 @@ const minimalcss = async options => {
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
   csso.compress(allCombinedAst)
-  postProcessKeyframes(allCombinedAst)
+  postProcessOptimize(allCombinedAst)
 
   const returned = {
     finalCss: csstree.generate(allCombinedAst),
