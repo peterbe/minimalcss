@@ -38,7 +38,7 @@ const postProcessKeyframes = ast => {
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any }} options
  * @return Promise<{ finalCss: string, stylesheetContents: string }>
  */
 const minimalcss = async options => {
@@ -59,10 +59,12 @@ const minimalcss = async options => {
   // Note! This opens one URL at a time synchronous
   for (let i = 0; i < urls.length; i++) {
     const pageUrl = urls[i]
-    // console.log(url, i);
     const page = await browser.newPage()
     if (options.userAgent) {
       await page.setUserAgent(options.userAgent)
+    }
+    if (options.viewport) {
+      await page.setViewport(options.viewport)
     }
 
     // A must or else you can't do console.log from within page.evaluate()
