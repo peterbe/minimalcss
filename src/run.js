@@ -91,6 +91,16 @@ const minimalcss = async options => {
       await page.setUserAgent(options.userAgent)
     }
 
+    //Start sending raw DevTools Protocol commands are sent using `client.send()`
+    //First off enable the necessary "Domains" for the DevTools commands we care about
+    const client = page._client
+    await client.send('Page.enable')
+    await client.send('DOM.enable')
+    await client.send('CSS.enable')
+
+    //Start tracking CSS coverage
+    await client.send('CSS.startRuleUsageTracking')
+
     // A must or else you can't do console.log from within page.evaluate()
     page.on('console', msg => {
       if (debug) {
@@ -211,6 +221,7 @@ const minimalcss = async options => {
     response = await page.goto(pageUrl, {
       waitUntil: ['domcontentloaded', 'networkidle2']
     })
+
     if (!response.ok) {
       throw new Error(`${response.status} on ${pageUrl} (second time)`)
     }
@@ -244,6 +255,12 @@ const minimalcss = async options => {
         hrefs
       }
     })
+
+    const rules = await client.send('CSS.takeCoverageDelta')
+    const usedRules = rules.coverage.filter(rule => {
+      return rule.used
+    })
+    console.log(usedRules)
 
     const htmlNetworkIdle = evalNetworkIdle.html
     doms.push(cheerio.load(htmlNetworkIdle))
