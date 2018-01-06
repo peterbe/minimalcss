@@ -350,7 +350,18 @@ const minimalcss = async options => {
   csstreeAst = postProcessKeyframes(csstreeAst)
   finalCss = csstree.translate(csstreeAst)
 
-  const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
+  const newStylesheetContents = {}
+  Object.keys(stylesheetAstObjects).forEach(cssUrl => {
+    newStylesheetContents[cssUrl] = csso.minify(
+      csstree.translate(csstree.fromPlainObject(stylesheetAstObjects[cssUrl]))
+    ).css
+  })
+
+  const returned = {
+    finalCss,
+    stylesheetAstObjects,
+    stylesheetContents: newStylesheetContents
+  }
   return Promise.resolve(returned)
 }
 
