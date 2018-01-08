@@ -31,7 +31,7 @@
     "puppeteer": "^0.13.0"
   },
   "devDependencies": {
-    "@types/node": "^8.0.57",
+    "@types/node": "^9.3.0",
     "@types/puppeteer": "^0.13.7",
     "husky": "^0.14.3",
     "lint-staged": "^6.0.0",
