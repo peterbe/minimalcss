@@ -214,5 +214,5 @@ If your document uses `Blob` to create injectable stylesheets into the DOM, `min
 
 ## License
 
-Copyright (c) 2017 [Peter Bengtsson](https://www.peterbe.com).
+Copyright (c) 2017-2018 [Peter Bengtsson](https://www.peterbe.com).
 See the [LICENSE](/LICENSE.md) file for license rights and limitations (MIT).
