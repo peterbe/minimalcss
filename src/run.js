@@ -63,6 +63,21 @@ const postProcessKeyframes = ast => {
 }
 
 /**
+ * Takes collection of AST object and converts is to minified CSS
+ *
+ * @param  {Object} stylesheetAstObjects
+ * @return {string}
+ */
+const astToCss = stylesheetAstObjects =>
+  csso.minify(
+    Object.keys(stylesheetAstObjects)
+      .map(cssUrl =>
+        csstree.translate(csstree.fromPlainObject(stylesheetAstObjects[cssUrl]))
+      )
+      .join('')
+  ).css
+
+/**
  *
  * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
@@ -354,4 +369,4 @@ const minimalcss = async options => {
   return Promise.resolve(returned)
 }
 
-module.exports = { run: minimalcss }
+module.exports = { run: minimalcss, astToCss }

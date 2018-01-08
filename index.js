@@ -8,5 +8,6 @@ module.exports = {
     // returns a promise
     return minimalcss.run(options)
   },
+  astToCss: minimalcss.astToCss,
   version
 }
