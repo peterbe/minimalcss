@@ -63,13 +63,14 @@ const postProcessKeyframes = ast => {
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, loadfonts: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
  */
 const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
   const loadimages = options.loadimages || false
+  const loadfonts = options.loadfonts || false
   const withoutjavascript = options.withoutjavascript || false
   // const keepPrintAtRules = options.keepPrintAtRules || false
   // XXX The launch options should be a parameter once this is no longer
@@ -103,15 +104,14 @@ const minimalcss = async options => {
 
     await page.setRequestInterception(true)
     page.on('request', request => {
-      if (/data:image\//.test(request.url)) {
-        // don't need to download those
+      if (request.resourceType === 'image' && !loadimages) {
+        request.abort()
+      } else if (request.resourceType === 'font' && !loadfonts) {
         request.abort()
       } else if (
-        !loadimages &&
-        /\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])
+        request.resourceType === 'stylesheet' &&
+        stylesheetAstObjects[request.url]
       ) {
-        request.abort()
-      } else if (stylesheetAstObjects[request.url]) {
         // no point downloading this again
         request.abort()
       } else if (options.skippable && options.skippable(request)) {
@@ -120,7 +120,7 @@ const minimalcss = async options => {
         // problem later when we loop through all <link ref="stylesheet">
         // tags.
         // So put in an empty (but not falsy!) object for this URL.
-        if (request.url.match(/\.css/i)) {
+        if (request.resourceType === 'stylesheet') {
           stylesheetAstObjects[request.url] = {}
           stylesheetContents[request.url] = ''
         }
@@ -133,11 +133,10 @@ const minimalcss = async options => {
     // To build up a map of all downloaded CSS
     page.on('response', response => {
       const responseUrl = response.url
-      const ct = response.headers['content-type'] || ''
       if (!response.ok) {
         throw new Error(`${response.status} on ${responseUrl}`)
       }
-      if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+      if (response.request().resourceType === 'stylesheet') {
         response.text().then(text => {
           const ast = csstree.parse(text, {
             parseValue: true,
