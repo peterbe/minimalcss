@@ -6,6 +6,16 @@
     <style type="text/css">
       .inline { color: red }
     </style>
+  </head>
+  <body>
+    <p class="external">external</p>
+    <p class="inline">inline</p>
+    <p class="cssinjs1">cssinjs1</p>
+    <p class="cssinjs2">cssinjs2</p>
+    <p class="cssinjs3">cssinjs3</p>
+    <p class="cssinjs4">cssinjs4</p>
+    <p class="cssinjs5">cssinjs5</p>
+    <p class="cssinjs6">cssinjs8</p>
     <script type="text/javascript">
       (() => {
         const css = '.cssinjs1 { color: red; }',
@@ -33,11 +43,18 @@
         sheet.insertRule(css, sheet.cssRules.length)
       })();
     </script>
-  </head>
-  <body>
-    <p class="external">external</p>
-    <p class="inline">inline</p>
-    <p class="cssinjs1">cssinjs1</p>
-    <p class="cssinjs2">cssinjs2</p>
+    <script type="text/javascript">
+      const blob = new Blob(['.cssinjs3 { color: red; }'], {type: 'text/css'});
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = window.URL.createObjectURL(blob);
+      const head = document.head || document.getElementsByTagName('head')[0];
+      head.appendChild(link);
+    </script>
+    <script type="text/javascript">
+      document.querySelector('.cssinjs4').style.cssText = "color: red";
+      document.querySelector('.cssinjs5').setAttribute("style", "color:red");
+      document.querySelector('.cssinjs6').style.color = "red";
+    </script>
   </body>
 </html>
