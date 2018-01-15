@@ -291,7 +291,7 @@ const minimalcss = async options => {
   const comments = new csstree.List()
   csstree.walk(allCombinedAst, {
     visit: 'Comment',
-    enter: (node, item, list) => {
+    enter: (_node, item, list) => {
       comments.append(list.remove(item))
     }
   })
