@@ -29,10 +29,10 @@ if (urls.length > 1) {
 
   await page.setRequestInterceptionEnabled(true)
   page.on('request', request => {
-    if (/data:image\//.test(request.url)) {
+    if (/data:image\//.test(request.url())) {
       // don't need to download those
       request.abort()
-    } else if (/\.(png|jpg|jpeg$)/.test(request.url)) {
+    } else if (/\.(png|jpg|jpeg$)/.test(request.url())) {
       request.abort()
     } else {
       // XXX could do things like NOT download from domains like www.google-analytics.com
@@ -65,9 +65,7 @@ if (urls.length > 1) {
   // console.log('TOOK', (t1 - t0).toFixed() + 's')
 
   const cleaned = await page.evaluate(stylesheetsContents => {
-
     const cleaner = (obj, callback) => {
-
       const selectorToString = children => {
         let str = ''
         children.forEach(child => {
@@ -111,18 +109,18 @@ if (urls.length > 1) {
             // console.error(child);
             // console.error(children);
             console.log('TYPE??', child.type, child)
-            console.log(child);
+            console.log(child)
             console.dir(children)
             throw new Error(child.type)
           }
         })
         if (str.indexOf('[object Object]') > -1) {
-          console.log(str);
-          console.log(children);
+          console.log(str)
+          console.log(children)
           throw new Error('selector string became [object Object]!')
         }
         if (str === '') {
-          console.log(children);
+          console.log(children)
           throw new Error('selector string became an empty string!')
         }
         return str
@@ -164,7 +162,6 @@ if (urls.length > 1) {
 
       obj.children = clean(obj.children, callback)
       return obj
-
     }
 
     const objsCleaned = {}
@@ -198,7 +195,8 @@ if (urls.length > 1) {
           // Here's the crucial part. Decide whether to keep the selector
 
           // Avoid doing a querySelector on hacks that will fail
-          if (/:-(ms|moz)-/.test(selector)) {  // '.form-control:-ms-input-placeholder'
+          if (/:-(ms|moz)-/.test(selector)) {
+            // '.form-control:-ms-input-placeholder'
             return true
           }
 
@@ -211,7 +209,7 @@ if (urls.length > 1) {
             // }
             return keep
           } catch (ex) {
-            console.error("EXCEPTION!!!!", selector, ex.toString());
+            console.error('EXCEPTION!!!!', selector, ex.toString())
             return true
           }
         })
@@ -224,7 +222,7 @@ if (urls.length > 1) {
     const obj = cleaned[url]
     const cleanedAst = csstree.fromPlainObject(obj)
     const cleanedCSS = csstree.translate(cleanedAst)
-    console.log(cleanedCSS);
+    console.log(cleanedCSS)
   })
 
   browser.close()

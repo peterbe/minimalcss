@@ -18,9 +18,9 @@
   version "8.0.57"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.57.tgz#e5d8b4dc112763e35cfc51988f4f38da3c486d99"
 
-"@types/puppeteer@^0.13.7":
-  version "0.13.7"
-  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-0.13.7.tgz#6a6aff56913bbbdcfe5f1201e43a66de341ef152"
+"@types/puppeteer@^0.13.9":
+  version "0.13.9"
+  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-0.13.9.tgz#2448ebddb91e5336bb2f771d76401c70b43a7fe6"
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
@@ -781,9 +781,9 @@ pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
 
-puppeteer@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-0.13.0.tgz#2e6956205f2c640964c2107f620ae1eef8bde8fd"
+puppeteer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.0.0.tgz#20f3bb6ad6c6778b4d1fb750e808a29fec0a88a4"
   dependencies:
     debug "^2.6.8"
     extract-zip "^1.6.5"
