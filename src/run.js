@@ -15,56 +15,31 @@ const url = require('url')
  * @return Object
  */
 const postProcessKeyframes = ast => {
-  const activeAnimationNames = new Set()
   // First walk the AST to know which animations are ever mentioned
-  // by the remaining selectors.
-  csstree.walk(ast, node => {
-    if (node.type === 'Declaration') {
-      if (
-        node.property.search(/\banimation$/i) > -1 ||
-        node.property.search(/\banimation-name$/i) > -1
-      ) {
-        // E.g. `animation: thename infinite 5s linear`
-        // Or `animation-name: thename`
-        let firstName = false
-        node.value.children.each(child => {
-          if (child.type === 'Identifier' && child.name && !firstName) {
-            activeAnimationNames.add(child.name.toLowerCase())
-            firstName = true
-          }
-        })
+  // by the remaining rules.
+  const activeAnimationNames = new Set(
+    csstree.lexer
+      .findAllFragments(ast, 'Type', 'keyframes-name')
+      .map(entry => csstree.generate(entry.nodes.first()))
+  )
+
+  // This is the function we use to filter @keyframes atrules out.
+  csstree.walk(ast, {
+    visit: 'Atrule',
+    enter: (node, item, list) => {
+      if (csstree.keyword(node.name).basename === 'keyframes') {
+        if (!activeAnimationNames.has(csstree.generate(node.prelude))) {
+          list.remove(item)
+        }
       }
     }
   })
-  // This is the function we use to filter children out.
-  const cleanChildren = (children, callback) => {
-    return children.filter(child => {
-      // The reason for the '\bkeyframes$' regex here is because you might
-      // have CSS that looks like this:
-      //   @-webkit-keyframes progress-bar-stripes {
-      //     ...
-      //   }
-      // Bootstrap v3 has this for example.
-      if (child.type === 'Atrule' && child.name.search(/\bkeyframes$/i) > -1) {
-        const keyframeName = child.prelude.children[0].name
-        return callback(keyframeName)
-      }
-      return true
-    })
-  }
-  // First convert the AST object into a plain object so we can mutate
-  // the plain array that is 'children'.
-  const obj = csstree.toPlainObject(ast)
-  obj.children = cleanChildren(obj.children, keyframename => {
-    return activeAnimationNames.has(keyframename.toLowerCase())
-  })
-  return csstree.fromPlainObject(obj)
 }
 
 /**
  *
  * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean }} options
- * @return Promise<{ finalCss: string, stylesheetAstObjects: any, stylesheetContents: string }>
+ * @return Promise<{ finalCss: string, stylesheetContents: string }>
  */
 const minimalcss = async options => {
   const { urls } = options
@@ -76,7 +51,7 @@ const minimalcss = async options => {
   // just a cli app.
   const browser = options.browser || (await puppeteer.launch({}))
 
-  const stylesheetAstObjects = {}
+  const stylesheetAst = {}
   const stylesheetContents = {}
   const doms = []
   const allHrefs = new Set()
@@ -111,17 +86,17 @@ const minimalcss = async options => {
         /\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])
       ) {
         request.abort()
-      } else if (stylesheetAstObjects[request.url]) {
+      } else if (stylesheetAst[request.url]) {
         // no point downloading this again
         request.abort()
       } else if (options.skippable && options.skippable(request)) {
         // If the URL of the request that got skipped is a CSS file
-        // not having it in stylesheetAstObjects is going to cause a
+        // not having it in stylesheetAst is going to cause a
         // problem later when we loop through all <link ref="stylesheet">
         // tags.
         // So put in an empty (but not falsy!) object for this URL.
         if (request.url.match(/\.css/i)) {
-          stylesheetAstObjects[request.url] = {}
+          stylesheetAst[request.url] = {}
           stylesheetContents[request.url] = ''
         }
         request.abort()
@@ -139,10 +114,7 @@ const minimalcss = async options => {
       }
       if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
         response.text().then(text => {
-          const ast = csstree.parse(text, {
-            parseValue: true,
-            parseRulePrelude: false
-          })
+          const ast = csstree.parse(text)
           csstree.walk(ast, node => {
             if (node.type === 'Url') {
               let value = node.value
@@ -169,7 +141,7 @@ const minimalcss = async options => {
               value.value = path
             }
           })
-          stylesheetAstObjects[responseUrl] = csstree.toPlainObject(ast)
+          stylesheetAst[responseUrl] = ast
           stylesheetContents[responseUrl] = text
         })
       }
@@ -227,11 +199,11 @@ const minimalcss = async options => {
           !link.href.toLowerCase().startsWith('blob:') &&
           link.media !== 'print'
         ) {
-          // if (!stylesheetAstObjects[link.href]) {
-          //   throw new Error(`${link.href} not in stylesheetAstObjects!`)
+          // if (!stylesheetAst[link.href]) {
+          //   throw new Error(`${link.href} not in stylesheetAst!`)
           // }
-          // if (!Object.keys(stylesheetAstObjects[link.href]).length) {
-          //   // If the 'stylesheetAstObjects[link.href]' thing is an
+          // if (!Object.keys(stylesheetAst[link.href]).length) {
+          //   // If the 'stylesheetAst[link.href]' thing is an
           //   // empty object, simply skip this link.
           //   return
           // }
@@ -259,97 +231,88 @@ const minimalcss = async options => {
 
   // Now, let's loop over ALL links and process their ASTs compared to
   // the DOMs.
-  const objsCleaned = {}
   const decisionsCache = {}
-  const DEAD_OBVIOUS = new Set(['*', 'body', 'html'])
-  allHrefs.forEach(href => {
-    const ast = stylesheetAstObjects[href]
-    const clean = (children, callback) => {
-      return children.filter(child => {
-        if (child.type === 'Rule') {
-          const values = child.prelude.value.split(',').map(x => x.trim())
-          const keepValues = values.filter(selectorString => {
-            if (decisionsCache[selectorString] !== undefined) {
-              return decisionsCache[selectorString]
-            }
-            const keep = callback(selectorString)
-            decisionsCache[selectorString] = keep
-            return keep
-          })
-          if (keepValues.length) {
-            // re-write the selector value
-            child.prelude.value = keepValues.join(', ')
-            return true
-          } else {
-            return false
-          }
-          // } else if (
-          //   child.type === 'Atrule' &&
-          //   child.prelude &&
-          //   child.expression.type === 'MediaQueryList'
-          // ) {
-        } else if (child.type === 'Atrule' && child.name === 'media') {
-          // recurse
-          child.block.children = clean(child.block.children, callback)
-          return child.block.children.length > 0
-        } else {
-          // Things like comments
-          // console.log(child.type);
-          // console.dir(child)
+  const isSelectorMatchToAnyElement = selectorString => {
+    // Here's the crucial part. Decide whether to keep the selector
+    // Find at least 1 DOM that contains an object that matches
+    // this selector string.
+    return doms.some(dom => {
+      try {
+        return dom(selectorString).length > 0
+      } catch (ex) {
+        // Be conservative. If we can't understand the selector,
+        // best to leave it in.
+        if (debug) {
+          console.warn(selectorString, ex.toString())
         }
-        // The default is to keep it.
-        return true
-      })
-    }
-
-    ast.children = clean(ast.children, selectorString => {
-      // Here's the crucial part. Decide whether to keep the selector
-      if (DEAD_OBVIOUS.has(selectorString)) {
-        // low hanging fruit easy ones.
         return true
       }
-      // This changes things like `a.button:active` to `a.button`
-      const originalSelectorString = selectorString
-      selectorString = utils.reduceCSSSelector(originalSelectorString)
-      // Find at least 1 DOM that contains an object that matches
-      // this selector string.
-      return doms.some(dom => {
-        try {
-          return dom(selectorString).length > 0
-        } catch (ex) {
-          // Be conservative. If we can't understand the selector,
-          // best to leave it in.
-          if (debug) {
-            console.warn(selectorString, ex.toString())
-          }
-          return true
-        }
-      })
     })
-    objsCleaned[href] = ast
+  }
+  allHrefs.forEach(href => {
+    const ast = stylesheetAst[href]
+
+    csstree.walk(ast, {
+      visit: 'Rule',
+      enter: (node, item, list) => {
+        node.prelude.children.forEach((node, item, list) => {
+          // Translate selector's AST to a string and filter pseudos from it
+          // This changes things like `a.button:active` to `a.button`
+          const selectorString = utils.reduceCSSSelector(csstree.generate(node))
+          if (selectorString in decisionsCache === false) {
+            decisionsCache[selectorString] = isSelectorMatchToAnyElement(
+              selectorString
+            )
+          }
+          if (!decisionsCache[selectorString]) {
+            // delete selector from a list of selectors
+            list.remove(item)
+          }
+        })
+
+        if (node.prelude.children.isEmpty()) {
+          // delete rule from a list
+          list.remove(item)
+        }
+      }
+    })
   })
   // Every unique URL in every <link> tag has been checked.
-  const allCombinedCss = Object.keys(objsCleaned)
-    .map(cssUrl => {
-      return csstree.translate(csstree.fromPlainObject(objsCleaned[cssUrl]))
-    })
-    .join('\n')
+  const allCombinedAst = {
+    type: 'StyleSheet',
+    loc: null,
+    children: Object.keys(stylesheetAst).reduce(
+      (children, href) => children.appendList(stylesheetAst[href].children),
+      new csstree.List()
+    )
+  }
+
+  // Lift important comments (i.e. /*! comment */) up to the beginning
+  const comments = new csstree.List()
+  csstree.walk(allCombinedAst, {
+    visit: 'Comment',
+    enter: (_node, item, list) => {
+      comments.append(list.remove(item))
+    }
+  })
+  allCombinedAst.children.prependList(comments)
 
   // Why not just allow the return of the "unminified" CSS (in case
   // some odd ball wants it)?
-  // Because, the 'allCombinedCss' is a string that concatenates multiple
-  // payloads of CSS. It only contains the selectors that are supposedly
+  // 'allCombinedAst' concatenates multiple payloads of CSS.
+  // It only contains the selectors that are supposedly
   // in the DOM. However it does contain *duplicate* selectors.
   // E.g. `p { color: blue; } p { font-weight: bold; }`
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  let finalCss = utils.collectImportantComments(allCombinedCss)
-  let csstreeAst = csstree.parse(csso.minify(finalCss).css)
-  csstreeAst = postProcessKeyframes(csstreeAst)
-  finalCss = csstree.translate(csstreeAst)
+  csso.compress(allCombinedAst)
+  postProcessKeyframes(allCombinedAst)
 
-  const returned = { finalCss, stylesheetAstObjects, stylesheetContents }
+  const returned = {
+    finalCss: csstree.generate(allCombinedAst),
+    stylesheetContents
+  }
   return Promise.resolve(returned)
 }
 
