@@ -1,3 +1,19 @@
+# 0.5.0
+
+* Engine massively refactored by the author of
+  [csstree](https://github.com/csstree/csstree) and
+  [csso](https://github.com/css/csso)
+  himself; [@lahmatiy](https://github.com/lahmatiy)
+
+* The `minimalcss.minimize()` functions promise no longer contains a
+  `stylesheetAstObjects` objects. It wasn't clear which AST it should be.
+  Thanks again @lahmatiy
+
+* Redundant and never referred to `keyframes` get automatically removed.
+  [pull#57](https://github.com/peterbe/minimalcss/pull/57).
+
+* greenkeeper.io now helps maintain dependency upgrades.
+
 # 0.4.0
 
 * Every URL you pass gets loaded twice. First *without Javascript* and then

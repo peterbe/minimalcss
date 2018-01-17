@@ -58,7 +58,7 @@ npm install [--save-dev|--global] minimalcss
 Now you can run it:
 
 ```shell
-$ ./node_modules/./bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
+$ ./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
 ```
 
 ## Prior art
@@ -106,7 +106,7 @@ It can optionally use `PhantomJS` to extract the HTML.
 
 ## State of the project
 
-This is highly experimental.
+This is quite a new project.
 
 The goal is to expand the tooling with all the bells and whistles that
 `penthouse` and `critical` etc. has.
@@ -149,8 +149,6 @@ That `result` object that is returned by the `minimize` function contains:
 * `finalCss` - the minified minimal CSS as a string.
 * `stylesheetContents` - an object of stylesheet URLs as keys and their
   content as text.
-* `stylesheetAstObjects` - an object of stylesheet URLs as keys and their
-  AST as a plain object.
 
 ## API Options
 
@@ -189,7 +187,8 @@ printed on `stderr`.
 
 ## Development
 
-We use ES6+ with jsdoc comments and TypeScript to do static type checking, like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).
+We use ES6+ with jsdoc comments and TypeScript to do static type checking,
+like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).
 
 Run `tsc` to check types.
 
@@ -210,7 +209,9 @@ To check that all your code conforms, run:
 
 ### A Warning About Blobs
 
-If your document uses `Blob` to create injectable stylesheets into the DOM, `minimalcss` will *not* be able to optimize that. It will be not be included in the final CSS.
+If your document uses `Blob` to create injectable stylesheets into the DOM,
+`minimalcss` will *not* be able to optimize that. It will be not be
+included in the final CSS.
 
 ## License
 
