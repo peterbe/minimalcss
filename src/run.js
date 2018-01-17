@@ -51,7 +51,7 @@ const minimalcss = async options => {
   // just a cli app.
   const browser = options.browser || (await puppeteer.launch({}))
 
-  const stylesheetAst = {}
+  const stylesheetAsts = {}
   const stylesheetContents = {}
   const doms = []
   const allHrefs = new Set()
@@ -86,17 +86,17 @@ const minimalcss = async options => {
         /\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])
       ) {
         request.abort()
-      } else if (stylesheetAst[request.url]) {
+      } else if (stylesheetAsts[request.url]) {
         // no point downloading this again
         request.abort()
       } else if (options.skippable && options.skippable(request)) {
         // If the URL of the request that got skipped is a CSS file
-        // not having it in stylesheetAst is going to cause a
+        // not having it in stylesheetAsts is going to cause a
         // problem later when we loop through all <link ref="stylesheet">
         // tags.
         // So put in an empty (but not falsy!) object for this URL.
         if (request.url.match(/\.css/i)) {
-          stylesheetAst[request.url] = {}
+          stylesheetAsts[request.url] = {}
           stylesheetContents[request.url] = ''
         }
         request.abort()
@@ -141,7 +141,7 @@ const minimalcss = async options => {
               value.value = path
             }
           })
-          stylesheetAst[responseUrl] = ast
+          stylesheetAsts[responseUrl] = ast
           stylesheetContents[responseUrl] = text
         })
       }
@@ -199,11 +199,11 @@ const minimalcss = async options => {
           !link.href.toLowerCase().startsWith('blob:') &&
           link.media !== 'print'
         ) {
-          // if (!stylesheetAst[link.href]) {
-          //   throw new Error(`${link.href} not in stylesheetAst!`)
+          // if (!stylesheetAsts[link.href]) {
+          //   throw new Error(`${link.href} not in stylesheetAsts!`)
           // }
-          // if (!Object.keys(stylesheetAst[link.href]).length) {
-          //   // If the 'stylesheetAst[link.href]' thing is an
+          // if (!Object.keys(stylesheetAsts[link.href]).length) {
+          //   // If the 'stylesheetAsts[link.href]' thing is an
           //   // empty object, simply skip this link.
           //   return
           // }
@@ -250,7 +250,7 @@ const minimalcss = async options => {
     })
   }
   allHrefs.forEach(href => {
-    const ast = stylesheetAst[href]
+    const ast = stylesheetAsts[href]
 
     csstree.walk(ast, {
       visit: 'Rule',
@@ -281,8 +281,8 @@ const minimalcss = async options => {
   const allCombinedAst = {
     type: 'StyleSheet',
     loc: null,
-    children: Object.keys(stylesheetAst).reduce(
-      (children, href) => children.appendList(stylesheetAst[href].children),
+    children: Object.keys(stylesheetAsts).reduce(
+      (children, href) => children.appendList(stylesheetAsts[href].children),
       new csstree.List()
     )
   }
