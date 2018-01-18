@@ -86,7 +86,7 @@ const options = {
     if (!Array.isArray(skips)) {
       skips = [skips]
     }
-    return skips.some(skip => !!request.url.match(skip))
+    return skips.some(skip => !!request.url().match(skip))
   }
 }
 

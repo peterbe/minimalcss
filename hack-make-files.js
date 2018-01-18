@@ -25,10 +25,10 @@ if (urls.length > 1) {
 
   await page.setRequestInterceptionEnabled(true)
   page.on('request', request => {
-    if (/data:image\//.test(request.url)) {
+    if (/data:image\//.test(request.url())) {
       // don't need to download those
       request.abort()
-    } else if (/\.(png|jpg|jpeg$)/.test(request.url)) {
+    } else if (/\.(png|jpg|jpeg$)/.test(request.url())) {
       request.abort()
     } else {
       // XXX could do things like NOT download from domains like www.google-analytics.com
@@ -78,10 +78,10 @@ if (urls.length > 1) {
     return Promise.resolve(linkUrls)
   })
 
-  console.log('CSS DOWNLOADED');
-  console.log(Object.keys(stylesheetsContents));
-  console.log('URL-to-STYLESHEETS');
-  console.dir(linkUrls);
+  console.log('CSS DOWNLOADED')
+  console.log(Object.keys(stylesheetsContents))
+  console.log('URL-to-STYLESHEETS')
+  console.dir(linkUrls)
   // Object.keys(cleaned).forEach(url => {
   //   // console.log('For URL', url);
   //   const obj = cleaned[url]
