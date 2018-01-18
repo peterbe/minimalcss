@@ -1,3 +1,8 @@
+# 0.5.1
+
+* Works with and requires puppeteer 1.0.0. [pull#74](https://github.com/peterbe/minimalcss/pull/74)
+  Thanks @jonathaningram
+
 # 0.5.0
 
 * Engine massively refactored by the author of
