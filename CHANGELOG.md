@@ -1,6 +1,9 @@
+# 0.5.2
+
 * Supports setting `viewport`. Both via the cli and via the pure API.
   Thanks @stereobooster [pull#64](https://github.com/peterbe/minimalcss/pull/64)
-
+  And works on the cli by passing a JSON string
+  [pull#78](https://github.com/peterbe/minimalcss/pull/78)
 
 # 0.5.1
 
