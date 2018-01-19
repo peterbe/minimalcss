@@ -108,128 +108,148 @@ const minimalcss = async options => {
       }
     })
 
-    // To build up a map of all downloaded CSS
-    page.on('response', response => {
-      const responseUrl = response.url()
-      const ct = response.headers()['content-type'] || ''
-      if (!response.ok()) {
-        throw new Error(`${response.status()} on ${responseUrl}`)
+    await new Promise(async (resolve, reject) => {
+      // If anything goes wrong, for example a `pageerror` event or
+      // a bad download request (e.g. !response.ok), then remember that
+      // we have fulfilled the promise and don't want to call `reject` or `resolve`
+      // a second time.
+      let fulfilledPromise = false
+
+      const safeReject = error => {
+        if (!fulfilledPromise) {
+          reject(error)
+        }
       }
-      if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
-        response.text().then(text => {
-          const ast = csstree.parse(text)
-          csstree.walk(ast, node => {
-            if (node.type === 'Url') {
-              let value = node.value
-              let path
-              if (value.type === 'Raw') {
-                path = value.value
-              } else {
-                path = value.value.substr(1, value.value.length - 2)
-              }
-              const sameHost =
-                url.parse(responseUrl).host === url.parse(pageUrl).host
-              if (/^https?:\/\/|^\/\//i.test(path)) {
-                // do nothing
-              } else if (/^\//.test(path) && sameHost) {
-                // do nothing
-              } else {
-                const resolved = new url.URL(path, responseUrl)
-                if (sameHost) {
-                  path = resolved.pathname
+
+      // To build up a map of all downloaded CSS
+      page.on('response', response => {
+        const responseUrl = response.url()
+        const ct = response.headers()['content-type'] || ''
+        if (!response.ok()) {
+          return safeReject(new Error(`${response.status()} on ${responseUrl}`))
+        }
+        if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+          response.text().then(text => {
+            const ast = csstree.parse(text)
+            csstree.walk(ast, node => {
+              if (node.type === 'Url') {
+                let value = node.value
+                let path
+                if (value.type === 'Raw') {
+                  path = value.value
                 } else {
-                  path = resolved.href
+                  path = value.value.substr(1, value.value.length - 2)
                 }
+                const sameHost =
+                  url.parse(responseUrl).host === url.parse(pageUrl).host
+                if (/^https?:\/\/|^\/\//i.test(path)) {
+                  // do nothing
+                } else if (/^\//.test(path) && sameHost) {
+                  // do nothing
+                } else {
+                  const resolved = new url.URL(path, responseUrl)
+                  if (sameHost) {
+                    path = resolved.pathname
+                  } else {
+                    path = resolved.href
+                  }
+                }
+                value.value = path
               }
-              value.value = path
-            }
+            })
+            stylesheetAsts[responseUrl] = ast
+            stylesheetContents[responseUrl] = text
           })
-          stylesheetAsts[responseUrl] = ast
-          stylesheetContents[responseUrl] = text
-        })
-      }
-    })
-
-    page.on('pageerror', error => {
-      throw error
-    })
-
-    let response
-
-    if (!withoutjavascript) {
-      // First, go to the page with JavaScript disabled.
-      await page.setJavaScriptEnabled(false)
-      response = await page.goto(pageUrl)
-      if (!response.ok()) {
-        throw new Error(`${response.status()} on ${pageUrl}`)
-      }
-      const htmlVanilla = await page.content()
-      doms.push(cheerio.load(htmlVanilla))
-      await page.setJavaScriptEnabled(true)
-    }
-
-    // XXX There is another use case *between* the pure DOM (without any
-    // javascript) and after the network is idle.
-    // For example, any CSSOM that is *made by javascript* but goes away
-    // after all XHR is finished loading.
-    // What we can do is do that lookup here using...
-    //    response = await page.goto(pageUrl, {
-    //        waitUntil: ['domcontentloaded']
-    //    })
-    // And add that to the list of DOMs.
-    // This will slow down the whole processing marginally.
-
-    // Second, goto the page and evaluate it on the 'networkidle2' event.
-    // This gives the page a chance to load any <script defer src="...">
-    // and even some JS that does XHR requests right after load.
-    response = await page.goto(pageUrl, {
-      waitUntil: ['domcontentloaded', 'networkidle2']
-    })
-    if (!response.ok()) {
-      throw new Error(`${response.status()} on ${pageUrl} (second time)`)
-    }
-    const evalNetworkIdle = await page.evaluate(() => {
-      // The reason for NOT using a Set here is that that might not be
-      // supported in ES5.
-      const hrefs = []
-      // Loop over all the 'link' elements in the document and
-      // for each, collect the URL of all the ones we're going to assess.
-      Array.from(document.querySelectorAll('link')).forEach(link => {
-        if (
-          link.href &&
-          (link.rel === 'stylesheet' ||
-            link.href.toLowerCase().endsWith('.css')) &&
-          !link.href.toLowerCase().startsWith('blob:') &&
-          link.media !== 'print'
-        ) {
-          // if (!stylesheetAsts[link.href]) {
-          //   throw new Error(`${link.href} not in stylesheetAsts!`)
-          // }
-          // if (!Object.keys(stylesheetAsts[link.href]).length) {
-          //   // If the 'stylesheetAsts[link.href]' thing is an
-          //   // empty object, simply skip this link.
-          //   return
-          // }
-          hrefs.push(link.href)
         }
       })
-      return {
-        html: document.documentElement.outerHTML,
-        hrefs
+
+      page.on('pageerror', error => {
+        safeReject(error)
+      })
+
+      let response
+
+      if (!withoutjavascript) {
+        // First, go to the page with JavaScript disabled.
+        await page.setJavaScriptEnabled(false)
+        response = await page.goto(pageUrl)
+        if (!response.ok()) {
+          return safeReject(new Error(`${response.status()} on ${pageUrl}`))
+        }
+        const htmlVanilla = await page.content()
+        doms.push(cheerio.load(htmlVanilla))
+        await page.setJavaScriptEnabled(true)
       }
+
+      // XXX There is another use case *between* the pure DOM (without any
+      // javascript) and after the network is idle.
+      // For example, any CSSOM that is *made by javascript* but goes away
+      // after all XHR is finished loading.
+      // What we can do is do that lookup here using...
+      //    response = await page.goto(pageUrl, {
+      //        waitUntil: ['domcontentloaded']
+      //    })
+      // And add that to the list of DOMs.
+      // This will slow down the whole processing marginally.
+
+      // Second, goto the page and evaluate it on the 'networkidle2' event.
+      // This gives the page a chance to load any <script defer src="...">
+      // and even some JS that does XHR requests right after load.
+      response = await page.goto(pageUrl, {
+        waitUntil: ['domcontentloaded', 'networkidle2']
+      })
+      if (!response.ok()) {
+        return safeReject(
+          new Error(`${response.status()} on ${pageUrl} (second time)`)
+        )
+      }
+      const evalNetworkIdle = await page.evaluate(() => {
+        // The reason for NOT using a Set here is that that might not be
+        // supported in ES5.
+        const hrefs = []
+        // Loop over all the 'link' elements in the document and
+        // for each, collect the URL of all the ones we're going to assess.
+        Array.from(document.querySelectorAll('link')).forEach(link => {
+          if (
+            link.href &&
+            (link.rel === 'stylesheet' ||
+              link.href.toLowerCase().endsWith('.css')) &&
+            !link.href.toLowerCase().startsWith('blob:') &&
+            link.media !== 'print'
+          ) {
+            // if (!stylesheetAsts[link.href]) {
+            //   throw new Error(`${link.href} not in stylesheetAsts!`)
+            // }
+            // if (!Object.keys(stylesheetAsts[link.href]).length) {
+            //   // If the 'stylesheetAsts[link.href]' thing is an
+            //   // empty object, simply skip this link.
+            //   return
+            // }
+            hrefs.push(link.href)
+          }
+        })
+        return {
+          html: document.documentElement.outerHTML,
+          hrefs
+        }
+      })
+
+      const htmlNetworkIdle = evalNetworkIdle.html
+      doms.push(cheerio.load(htmlNetworkIdle))
+      evalNetworkIdle.hrefs.forEach(href => {
+        allHrefs.add(href)
+      })
+
+      if (!fulfilledPromise) resolve()
     })
 
-    const htmlNetworkIdle = evalNetworkIdle.html
-    doms.push(cheerio.load(htmlNetworkIdle))
-    evalNetworkIdle.hrefs.forEach(href => {
-      allHrefs.add(href)
-    })
-
-    // We can close the browser now that all URLs have been opened.
-    if (!options.browser) {
-      browser.close()
-    }
+    await page.close()
   }
+  // We can close the browser now that all URLs have been opened.
+  if (!options.browser) {
+    browser.close()
+  }
+
   // All URLs have been opened, and we now have multiple DOM objects.
 
   // Now, let's loop over ALL links and process their ASTs compared to
