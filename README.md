@@ -104,6 +104,11 @@ It can optionally use `PhantomJS` to extract the HTML.
   animations that they use and use this to delete keyframe definitions
   that are no longer needed.
 
+* You can specify a [viewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport),
+  which might cause the page to render slightly different. It does not
+  create the minimal CSS *only* on DOM that is visible though.
+
+
 ## State of the project
 
 This is quite a new project.
