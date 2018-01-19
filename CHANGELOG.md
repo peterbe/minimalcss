@@ -1,3 +1,7 @@
+* Supports setting `viewport`. Both via the cli and via the pure API.
+  Thanks @stereobooster [pull#64](https://github.com/peterbe/minimalcss/pull/64)
+
+
 # 0.5.1
 
 * Works with and requires puppeteer 1.0.0. [pull#74](https://github.com/peterbe/minimalcss/pull/74)

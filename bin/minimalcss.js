@@ -21,7 +21,7 @@ const argv = minimist(args, {
     'loadimages',
     'withoutjavascript'
   ],
-  string: ['output', 'skip'],
+  string: ['output', 'skip', 'viewport'],
   default: {
     // color: true,
     // "ignore-path": ".prettierignore"
@@ -56,6 +56,7 @@ if (argv['help']) {
       '  --withoutjavascript           The CSS is evaluated against the DOM twice, first with no JavaScript, ' +
       'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
+      '  --viewport                    JSON string that gets converted into valid parameter to `page.setViewport()`\n' +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
@@ -73,6 +74,18 @@ urls.forEach(url => {
   }
 })
 
+const parseViewport = asString => {
+  if (!asString) {
+    return null
+  }
+  try {
+    return JSON.parse(asString)
+  } catch (ex) {
+    console.error(`Unable to parse 'viewport' (${ex.toString()})`)
+    process.exit(2)
+  }
+}
+
 const options = {
   urls: urls,
   debug: argv['debug'],
@@ -87,7 +100,8 @@ const options = {
       skips = [skips]
     }
     return skips.some(skip => !!request.url().match(skip))
-  }
+  },
+  viewport: parseViewport(argv['viewport'])
 }
 
 const start = Date.now()

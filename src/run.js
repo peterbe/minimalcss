@@ -63,6 +63,7 @@ const minimalcss = async options => {
     if (options.userAgent) {
       await page.setUserAgent(options.userAgent)
     }
+
     if (options.viewport) {
       await page.setViewport(options.viewport)
     }
