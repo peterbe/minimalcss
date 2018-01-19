@@ -1,4 +1,4 @@
-# 0.5.2
+# 0.6.0
 
 * Supports setting `viewport`. Both via the cli and via the pure API.
   Thanks @stereobooster [pull#64](https://github.com/peterbe/minimalcss/pull/64)
