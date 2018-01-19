@@ -170,6 +170,7 @@ key is `urls`. Other optional options are:
   to be idle.
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
+* `viewport` - viewport object as specified in [page.setViewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport)
 
 ## Warnings
 
