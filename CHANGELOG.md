@@ -1,3 +1,11 @@
+# 0.6.1
+
+* Much better error handling. If a CSS file fails to download or some
+  JavaScript on the page throws an error, the minimalcss process now
+  exits immediately, closes the puppeteer instance, and triggers the
+  rejection on the main promise.
+  Thanks @stereobooster [pull#65](https://github.com/peterbe/minimalcss/pull/65)
+
 # 0.6.0
 
 * Supports setting `viewport`. Both via the cli and via the pure API.
