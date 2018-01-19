@@ -277,7 +277,15 @@ const minimalcss = async options => {
 
     csstree.walk(ast, {
       visit: 'Rule',
-      enter: (node, item, list) => {
+      enter: function(node, item, list) {
+        if (
+          this.atrule &&
+          csstree.keyword(this.atrule.name).basename === 'keyframes'
+        ) {
+          // Don't bother inspecting rules that are inside a keyframe.
+          return
+        }
+
         node.prelude.children.forEach((node, item, list) => {
           // Translate selector's AST to a string and filter pseudos from it
           // This changes things like `a.button:active` to `a.button`
