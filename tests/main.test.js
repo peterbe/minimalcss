@@ -54,11 +54,11 @@ test('cares only about external CSS files', async () => {
 })
 
 // this is unstable test it fails from time to time
-// test('handles 404 CSS file', async () => {
-//   expect.assertions(1)
-//   try {
-//     await runMinimalcss('404css')
-//   } catch (e) {
-//     expect(e.message).toMatch('404 on')
-//   }
-// })
+test('handles 404 CSS file', async () => {
+  expect.assertions(1)
+  try {
+    await runMinimalcss('404css')
+  } catch (e) {
+    expect(e.message).toMatch('404 on')
+  }
+})
