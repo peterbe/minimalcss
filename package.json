@@ -34,7 +34,10 @@
     "@types/cheerio": "^0.22.6",
     "@types/node": "^8.0.57",
     "@types/puppeteer": "^0.13.9",
+    "fastify": "^0.39.1",
+    "fastify-static": "^0.6.0",
     "husky": "^0.14.3",
+    "jest": "^22.1.4",
     "lint-staged": "^6.0.0",
     "prettier": "^1.9.1",
     "typescript": "^2.7.0-dev.20171025"
@@ -42,7 +45,8 @@
   "scripts": {
     "precommit": "lint-staged",
     "tsc": "tsc -p .",
-    "lintcheck": "scripts/lintcheck.sh"
+    "lintcheck": "scripts/lintcheck.sh",
+    "test": "jest"
   },
   "lint-staged": {
     "**/*.js": [
