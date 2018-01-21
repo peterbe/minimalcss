@@ -42,14 +42,14 @@ test('handles JS errors', async () => {
   }
 })
 
-// test('handles 404 CSS file', async () => {
-//   expect.assertions(1)
-//   try {
-//     await runMinimalcss('404css')
-//   } catch (e) {
-//     expect(e.message).toMatch('404 on')
-//   }
-// })
+test('handles 404 CSS file', async () => {
+  expect.assertions(1)
+  try {
+    await runMinimalcss('404css')
+  } catch (e) {
+    expect(e.message).toMatch('404 on')
+  }
+})
 
 test('cares only about external CSS files', async () => {
   const result = '.external{color:red}'
