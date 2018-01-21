@@ -13,4 +13,5 @@ before_install:
 script:
   - docker container run -it minimalcss:tests yarn tsc
   - docker container run -it minimalcss:tests yarn lintcheck
+  - docker container run -it minimalcss:tests yarn test
   - docker container run -it minimalcss:tests
