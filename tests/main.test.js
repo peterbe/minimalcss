@@ -50,3 +50,9 @@ test('handles JS errors', async () => {
 //     expect(e.message).toMatch('404 on')
 //   }
 // })
+
+test('cares only about external CSS files', async () => {
+  const result = '.external{color:red}'
+  const { finalCss } = await runMinimalcss('css-in-js')
+  expect(finalCss).toEqual(result)
+})
