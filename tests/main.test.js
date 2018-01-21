@@ -41,3 +41,12 @@ test('handles JS errors', async () => {
     expect(e.message).toMatch('Error: unhandled')
   }
 })
+
+// test('handles 404 CSS file', async () => {
+//   expect.assertions(1)
+//   try {
+//     await runMinimalcss('404css')
+//   } catch (e) {
+//     expect(e.message).toMatch('404 on')
+//   }
+// })
