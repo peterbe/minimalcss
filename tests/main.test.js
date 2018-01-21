@@ -12,7 +12,7 @@ let browser
 const runMinimalcss = path => {
   return minimalcss.minimize({
     browser,
-    urls: [`http://localhost:3000/${path}`]
+    urls: [`http://localhost:3000/${path}.html`]
   })
 }
 
@@ -29,6 +29,15 @@ afterAll(async () => {
 test('handles relative paths', async () => {
   const result =
     'body{background:url(/images/small.jpg)}p{background-image:url(images/small.jp)}'
-  const { finalCss } = await runMinimalcss('css-relative-path.html')
+  const { finalCss } = await runMinimalcss('css-relative-path')
   expect(finalCss).toEqual(result)
+})
+
+test('handles JS errors', async () => {
+  expect.assertions(1)
+  try {
+    await runMinimalcss('jserror')
+  } catch (e) {
+    expect(e.message).toMatch('Error: unhandled')
+  }
 })
