@@ -27,10 +27,15 @@ afterAll(async () => {
 })
 
 test('handles relative paths', async () => {
-  const result =
-    'body{background:url(/images/small.jpg);background:url(http://127.0.0.1:3000/images/small.jpg)}p{background-image:url(ttp://127.0.0.1:3000/images/small.jp)}'
   const { finalCss } = await runMinimalcss('css-relative-path')
-  expect(finalCss).toEqual(result)
+  expect(finalCss).toMatch('background:url(/images/small.jpg)')
+  expect(finalCss).toMatch('background-image:url(/images/small.jpg)')
+  expect(finalCss).toMatch(
+    'background:url(http://127.0.0.1:3000/images/small.jpg)'
+  )
+  expect(finalCss).toMatch(
+    'background-image:url(http://127.0.0.1:3000/images/small.jpg)'
+  )
 })
 
 test('handles JS errors', async () => {
