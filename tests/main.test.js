@@ -18,7 +18,9 @@ const runMinimalcss = path => {
 
 beforeAll(async () => {
   await fastify.listen(3000)
-  browser = await puppeteer.launch({})
+  browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  })
 })
 
 afterAll(async () => {
@@ -53,7 +55,6 @@ test('cares only about external CSS files', async () => {
   expect(finalCss).toEqual(result)
 })
 
-// this is unstable test it fails from time to time
 test('handles 404 CSS file', async () => {
   expect.assertions(1)
   try {
