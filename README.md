@@ -108,13 +108,8 @@ It can optionally use `PhantomJS` to extract the HTML.
   which might cause the page to render slightly different. It does not
   create the minimal CSS *only* on DOM that is visible though.
 
-
-## State of the project
-
-This is quite a new project.
-
-The goal is to expand the tooling with all the bells and whistles that
-`penthouse` and `critical` etc. has.
+* If the CSS contains `@font-face { ... }` rules whose name is never
+  used in any remaining CSS selector, the whole `font-face` block is removed.
 
 
 ## Help needed
@@ -179,6 +174,8 @@ key is `urls`. Other optional options are:
 
 ## Warnings
 
+### About `cheerio`
+
 When `minimalcss` evaluate each CSS selector to decide whether to keep it
 or not, some selectors might not be parseable. Possibly, the CSS employs
 hacks for specific browsers that
@@ -190,6 +187,20 @@ the default is to swallow the exception and let the CSS selector stay.
 Also by default, all these warnings are hidden. To see them use the `--debug`
 flag (or `debug` API option). Then the CSS selector syntax errors are
 printed on `stderr`.
+
+### About `@font-face`
+
+`minimalcss` will remove any `@font-face` rules whose name is not mentioned
+in any of the CSS selectors. But be aware that you might have a
+`@font-face { font-family: MyName; }` in some `/static/foo.css` but separately
+you might have an inline style sheet that looks like this:
+```html
+<style type="text/css">
+div.something { font-family: MyName; }
+</style>
+```
+In this case the `@font-face { font-family: MyName; }` would be removed even
+though it's mentioned from somewhere else.
 
 ## Development
 
