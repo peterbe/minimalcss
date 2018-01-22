@@ -1,3 +1,11 @@
+# 0.6.2
+
+* All `@font-face` rules whose name is never mentioned in any remaining
+  selector is now deleted. [pull#81](https://github.com/peterbe/minimalcss/pull/81)
+
+* Rules inside `keyframe` at-rules are not analyzed.
+  [pull#83](https://github.com/peterbe/minimalcss/pull/83)
+
 # 0.6.1
 
 * Much better error handling. If a CSS file fails to download or some
