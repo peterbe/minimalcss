@@ -91,15 +91,11 @@ const parseWaitUntil = value => {
   if (!value) {
     return null
   }
-  const validStrings = [
-    'load',
-    'domcontentloaded',
-    'networkidle0',
-    'networkidle2'
-  ]
+  const validStrings = ['domcontentloaded', 'networkidle0', 'networkidle2']
   return value.split(',').map(x => {
     if (!validStrings.includes(x.trim())) {
-      throw new Error(`${x} is not a valid 'waitUntil' option`)
+      console.error(`${x} is not a valid 'waitUntil' option.`)
+      process.exit(4)
     }
     return x.trim()
   })

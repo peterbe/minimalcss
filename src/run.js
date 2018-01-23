@@ -131,6 +131,21 @@ const processPage = ({
     const withoutjavascript = options.withoutjavascript || false
     const waitUntil = options.waitUntil || ['domcontentloaded', 'networkidle0']
 
+    // 'waitUntil' can be a string or an array of strings.
+    // Whatever it is, do not allow 'load' even though it's a valid
+    // option to puppeteer's page.goto() because it's near impossible
+    // to ever figure out what the minimal CSS is if we never get a chance
+    // to download the external stylesheets.
+    if (
+      (typeof waitUntil === 'string' && waitUntil === 'load') ||
+      (Array.isArray(waitUntil) && waitUntil.includes('load'))
+    ) {
+      throw new Error(
+        "'load' is not an allowed 'waitUntil' option because it never " +
+          'gives us any chance to download external stylesheets.'
+      )
+    }
+
     try {
       if (options.userAgent) {
         await page.setUserAgent(options.userAgent)
@@ -253,9 +268,9 @@ const processPage = ({
       // And add that to the list of DOMs.
       // This will slow down the whole processing marginally.
 
-      // Second, goto the page and evaluate it on the 'networkidle2' event.
-      // This gives the page a chance to load any <script defer src="...">
-      // and even some JS that does XHR requests right after load.
+      // Second, goto the page and evaluate it with JavaScript.
+      // The 'waitUntil' option determines how long we wait for all
+      // possible assets to load.
       response = await page.goto(pageUrl, { waitUntil })
       if (!response.ok()) {
         return safeReject(

@@ -53,8 +53,8 @@ test('handles impatient CSS downloads', async () => {
   try {
     await runMinimalcss('slowcss', {
       // The most impatient option. The `slowcss.html` fixture uses
-      // a <link> href that takes a whole second to download.
-      waitUntil: 'load'
+      // a <link> href that takes 2 whole seconds to download.
+      waitUntil: 'domcontentloaded'
     })
   } catch (e) {
     expect(e.message).toMatch('Found stylesheets that failed to download')
