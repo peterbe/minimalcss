@@ -127,3 +127,10 @@ test('evaluate DOM multiple times', async () => {
   const { finalCss } = await runMinimalcss('evaluate-dom-multiple-times')
   expect(finalCss).toEqual(result)
 })
+
+test('form elements', async () => {
+  const result =
+    'input[type=radio]:checked{color:red}input[type=checkbox]:checked{color:#00f}option:selected{color:green}'
+  const { finalCss } = await runMinimalcss('form-elements')
+  expect(finalCss).toEqual(result)
+})
