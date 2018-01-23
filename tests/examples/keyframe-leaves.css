@@ -4,7 +4,5 @@
 }
 
 .SomeSelector {
-  font-size: 4px;
-  /* animation: RotateSlot infinite 5s linear; */
-
+  animation: RotateSlot infinite 5s linear;
 }

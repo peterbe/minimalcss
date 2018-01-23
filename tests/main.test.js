@@ -69,3 +69,22 @@ test('media queries print removed', async () => {
   const { finalCss } = await runMinimalcss('media-queries-print')
   expect(finalCss).toEqual(result)
 })
+
+test('removes unused @keyframes', async () => {
+  const result = ''
+  const { finalCss } = await runMinimalcss('keyframe-removes')
+  expect(finalCss).toEqual(result)
+})
+
+test('leaves used @keyframes', async () => {
+  const result =
+    '@keyframes RotateSlot{3%{margin-top:-2em}0%{transform:rotate(0deg)}}.SomeSelector{animation:RotateSlot infinite 5s linear}'
+  const { finalCss } = await runMinimalcss('keyframe-leaves')
+  expect(finalCss).toEqual(result)
+})
+
+test('removes used inline @keyframes', async () => {
+  const result = ''
+  const { finalCss } = await runMinimalcss('keyframe-removes-inline')
+  expect(finalCss).toEqual(result)
+})
