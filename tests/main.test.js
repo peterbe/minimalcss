@@ -107,3 +107,10 @@ test('removes used inline @fontface', async () => {
   const { finalCss } = await runMinimalcss('fontface-removes-inline')
   expect(finalCss).toEqual(result)
 })
+
+test('leaves used pseudo classes', async () => {
+  const result =
+    'a{color:red}a:active{color:olive}input:disabled{color:red}a:focus{color:green}a:hover{color:#00f}a:visited{color:orange}'
+  const { finalCss } = await runMinimalcss('pseudo-classes')
+  expect(finalCss).toEqual(result)
+})
