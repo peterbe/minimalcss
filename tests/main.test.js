@@ -114,3 +114,10 @@ test('leaves used pseudo classes', async () => {
   const { finalCss } = await runMinimalcss('pseudo-classes')
   expect(finalCss).toEqual(result)
 })
+
+test('media queries', async () => {
+  const result =
+    '@media only screen and (min-device-width:414px) and (max-device-width:736px) and (-webkit-min-device-pixel-ratio:3){a{color:red}}@media only screen and (min-device-width:375px) and (max-device-width:812px) and (-webkit-min-device-pixel-ratio:3){a{color:green}}'
+  const { finalCss } = await runMinimalcss('media-queries')
+  expect(finalCss).toEqual(result)
+})
