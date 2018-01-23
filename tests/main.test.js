@@ -121,3 +121,9 @@ test('media queries', async () => {
   const { finalCss } = await runMinimalcss('media-queries')
   expect(finalCss).toEqual(result)
 })
+
+test('evaluate DOM multiple times', async () => {
+  const result = '.SomeSelector{color:red}.OtherSelector{background:#000}'
+  const { finalCss } = await runMinimalcss('evaluate-dom-multiple-times')
+  expect(finalCss).toEqual(result)
+})
