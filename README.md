@@ -204,6 +204,29 @@ though it's mentioned from somewhere else.
 
 ## Development
 
+First thing to get started, once you've cloned the repo is to install all
+the dependencies:
+
+```sh
+yarn
+```
+
+### Testing
+
+Testing is done with [`jest`](https://facebook.github.io/jest/). At the
+beginning of every test, a static file server is started on `localhost`
+and a `puppeteer` browser instance is created for every test.
+
+To run the tests:
+
+```sh
+yarn jest
+```
+
+Best way to get into writing tests is to look at existing tests and copy.
+
+### Type checking
+
 We use ES6+ with jsdoc comments and TypeScript to do static type checking,
 like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).
 
