@@ -86,6 +86,6 @@ test('handles 307 CSS file', async () => {
 
 test('handles 307 HTML file', async () => {
   const result = 'p{color:violet}'
-  const { finalCss } = await runMinimalcss('307css')
+  const { finalCss } = await runMinimalcss('307')
   expect(finalCss).toEqual(result)
 })
