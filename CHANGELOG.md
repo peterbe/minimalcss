@@ -1,3 +1,7 @@
+* Switching to wait for [`networkidle0`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options)
+  instead to allow the page slightly more time to finish more XHR and static
+  resources.
+
 # 0.6.2
 
 * All `@font-face` rules whose name is never mentioned in any remaining
