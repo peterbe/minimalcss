@@ -302,7 +302,7 @@ const processPage = ({
 /**
  *
  * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any }} options
- * @return Promise<{ finalCss: string, stylesheetContents: string }>
+ * @return Promise<{ finalCss: string, stylesheetContents: Object.<string, string> }>
  */
 const minimalcss = async options => {
   const { urls } = options
