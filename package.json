@@ -34,7 +34,7 @@
     "@types/cheerio": "^0.22.6",
     "@types/node": "^8.0.57",
     "@types/puppeteer": "^0.13.9",
-    "fastify": "^0.39.1",
+    "fastify": "^0.40.0",
     "fastify-static": "^0.6.0",
     "husky": "^0.14.3",
     "jest": "^22.1.4",
