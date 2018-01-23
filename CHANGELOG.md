@@ -2,7 +2,7 @@
 
 * Switching to wait for [`networkidle0`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options)
   instead to allow the page slightly more time to finish more XHR and static
-  resources.
+  resources. [pull#87](https://github.com/peterbe/minimalcss/pull/87)
 
 # 0.6.2
 

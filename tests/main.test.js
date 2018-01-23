@@ -9,11 +9,10 @@ fastify.register(require('fastify-static'), {
 
 let browser
 
-const runMinimalcss = path => {
-  return minimalcss.minimize({
-    browser,
-    urls: [`http://localhost:3000/${path}.html`]
-  })
+const runMinimalcss = (path, options = {}) => {
+  options.browser = browser
+  options.urls = [`http://localhost:3000/${path}.html`]
+  return minimalcss.minimize(options)
 }
 
 beforeAll(async () => {
@@ -46,6 +45,19 @@ test('handles JS errors', async () => {
     await runMinimalcss('jserror')
   } catch (e) {
     expect(e.message).toMatch('Error: unhandled')
+  }
+})
+
+test('handles impatient CSS downloads', async () => {
+  expect.assertions(1)
+  try {
+    await runMinimalcss('slowcss', {
+      // The most impatient option. The `slowcss.html` fixture uses
+      // a <link> href that takes a whole second to download.
+      waitUntil: 'load'
+    })
+  } catch (e) {
+    expect(e.message).toMatch('Found stylesheets that failed to download')
   }
 })
 

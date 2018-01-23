@@ -129,6 +129,7 @@ const processPage = ({
     const debug = options.debug || false
     const loadimages = options.loadimages || false
     const withoutjavascript = options.withoutjavascript || false
+    const waitUntil = options.waitUntil || ['domcontentloaded', 'networkidle0']
 
     try {
       if (options.userAgent) {
@@ -255,15 +256,13 @@ const processPage = ({
       // Second, goto the page and evaluate it on the 'networkidle2' event.
       // This gives the page a chance to load any <script defer src="...">
       // and even some JS that does XHR requests right after load.
-      response = await page.goto(pageUrl, {
-        waitUntil: ['domcontentloaded', 'networkidle0']
-      })
+      response = await page.goto(pageUrl, { waitUntil })
       if (!response.ok()) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
         )
       }
-      const evalNetworkIdle = await page.evaluate(() => {
+      const evalWithJavascript = await page.evaluate(() => {
         // The reason for NOT using a Set here is that that might not be
         // supported in ES5.
         const hrefs = []
@@ -294,9 +293,9 @@ const processPage = ({
         }
       })
 
-      const htmlNetworkIdle = evalNetworkIdle.html
-      doms.push(cheerio.load(htmlNetworkIdle))
-      evalNetworkIdle.hrefs.forEach(href => {
+      const htmlWithJavascript = evalWithJavascript.html
+      doms.push(cheerio.load(htmlWithJavascript))
+      evalWithJavascript.hrefs.forEach(href => {
         allHrefs.add(href)
       })
 
@@ -308,7 +307,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, waitUntil: (string|string[]) }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
@@ -354,7 +353,15 @@ const minimalcss = async options => {
     }
   }
 
-  // All URLs have been opened, and we now have multiple DOM objects.
+  // All URLs have been opened, and we now have multiple DOM (cheerio) objects.
+  // But first check that every spotted stylesheet (by <link> tags)
+  // got downloaded.
+  const missingASTs = [...allHrefs].filter(url => !stylesheetAsts[url])
+  if (missingASTs.length) {
+    throw new Error(
+      `Found stylesheets that failed to download (${missingASTs})`
+    )
+  }
 
   // Now, let's loop over ALL links and process their ASTs compared to
   // the DOMs.
