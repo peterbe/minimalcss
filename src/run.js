@@ -249,7 +249,7 @@ const processPage = ({
       // This gives the page a chance to load any <script defer src="...">
       // and even some JS that does XHR requests right after load.
       response = await page.goto(pageUrl, {
-        waitUntil: ['domcontentloaded', 'networkidle2']
+        waitUntil: ['domcontentloaded', 'networkidle0']
       })
       if (!response.ok()) {
         return safeReject(
