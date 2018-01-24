@@ -63,3 +63,9 @@ test('handles 404 CSS file', async () => {
     expect(e.message).toMatch('404 on')
   }
 })
+
+test('media queries print removed', async () => {
+  const result = ''
+  const { finalCss } = await runMinimalcss('media-queries-print')
+  expect(finalCss).toEqual(result)
+})
