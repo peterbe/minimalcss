@@ -26,10 +26,6 @@
   version "8.0.57"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.57.tgz#e5d8b4dc112763e35cfc51988f4f38da3c486d99"
 
-"@types/node@^8.5.8":
-  version "8.5.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.9.tgz#7155cfb4ae405bca4dd8df1a214c339e939109bf"
-
 "@types/pino@^4.7.0":
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/@types/pino/-/pino-4.7.1.tgz#8f818f8cde5c2052aef6c68a4560347f86256805"
@@ -37,9 +33,9 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/puppeteer@^0.13.9":
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-0.13.9.tgz#2448ebddb91e5336bb2f771d76401c70b43a7fe6"
+"@types/puppeteer@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-1.0.0.tgz#3e8f6c6612ed3ed7503fce4c7b6ef4a191d5e931"
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
@@ -88,7 +84,7 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.0.0:
+ajv@^6.0.0, ajv@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.0.1.tgz#2898580a9f3def5f9c85dfead7a2223ef13cf3da"
   dependencies:
@@ -224,9 +220,9 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-avvio@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/avvio/-/avvio-4.0.1.tgz#63f20d35718a6a4c2312c2cf70003185596f6885"
+avvio@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.0.1.tgz#06f435de53c4c82b821f131bc116ceaa989de5dd"
   dependencies:
     debug "^3.1.0"
     fastq "^1.5.0"
@@ -1007,9 +1003,9 @@ fast-deep-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.0.0.tgz#96256a3bc975595eb36d82e9929d060d893439ff"
 
-fast-iterator@^0.2.1:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/fast-iterator/-/fast-iterator-0.2.2.tgz#321df4cbbc6f4bb4d4de0631e08f8e5d9c386ad5"
+fast-iterator@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/fast-iterator/-/fast-iterator-0.3.0.tgz#8601a33fcd6e87155f68e085a5be05d42780f09f"
   dependencies:
     reusify "^1.0.3"
 
@@ -1049,21 +1045,20 @@ fastify-static@^0.6.0:
     fastify-plugin "^0.2.1"
     send "^0.16.0"
 
-fastify@^0.39.1:
-  version "0.39.1"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-0.39.1.tgz#c540d22ca145acd204d100e0536f0898c02a396d"
+fastify@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-0.40.0.tgz#56b38c578d135961a940b62661dee741d30511d1"
   dependencies:
-    "@types/node" "^8.5.8"
     "@types/pino" "^4.7.0"
     abstract-logging "^1.0.0"
-    ajv "^6.0.0"
-    avvio "^4.0.1"
-    fast-iterator "^0.2.1"
+    ajv "^6.0.1"
+    avvio "^5.0.0"
+    fast-iterator "^0.3.0"
     fast-json-stringify "^0.17.0"
-    find-my-way "^1.8.1"
+    find-my-way "^1.9.0"
     flatstr "^1.0.5"
-    light-my-request "^2.0.0"
-    middie "^3.0.0"
+    light-my-request "^2.0.1"
+    middie "^3.1.0"
     pino "^4.10.2"
     pump "^2.0.0"
 
@@ -1117,9 +1112,9 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-find-my-way@^1.8.1:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.9.0.tgz#407003854631017eff639b6e90992ee1db592749"
+find-my-way@^1.9.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.9.1.tgz#776d1946281cb24fd21d9f8924e083a6e9a1f307"
 
 find-parent-dir@^0.3.0:
   version "0.3.0"
@@ -2089,7 +2084,7 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-light-my-request@^2.0.0:
+light-my-request@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/light-my-request/-/light-my-request-2.0.1.tgz#341c98af9c5d359c4615b3591607fa71ba13b2b3"
   dependencies:
@@ -2275,7 +2270,7 @@ micromatch@^2.1.5, micromatch@^2.3.11:
     parse-glob "^3.0.4"
     regex-cache "^0.4.2"
 
-middie@^3.0.0:
+middie@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/middie/-/middie-3.1.0.tgz#99986a166e827fd0b0c8fa55f5ee28e7b6c23d9f"
   dependencies:
