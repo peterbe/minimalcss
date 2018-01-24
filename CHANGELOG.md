@@ -1,3 +1,5 @@
+* Remove `@media print` rules. [pull#101](https://github.com/peterbe/minimalcss/pull/101)
+
 * Switching to wait for [`networkidle0`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options)
   instead to allow the page slightly more time to finish more XHR and static
   resources.
