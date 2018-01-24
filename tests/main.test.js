@@ -7,6 +7,14 @@ fastify.register(require('fastify-static'), {
   root: path.join(__dirname, 'examples')
 })
 
+fastify.get('/307.css', (req, reply) => {
+  reply.redirect(307, '/redirect.css')
+})
+
+fastify.get('/307.html', (req, reply) => {
+  reply.redirect(307, '/redirect.html')
+})
+
 let browser
 
 const runMinimalcss = path => {
@@ -67,5 +75,17 @@ test('handles 404 CSS file', async () => {
 test('media queries print removed', async () => {
   const result = ''
   const { finalCss } = await runMinimalcss('media-queries-print')
+  expect(finalCss).toEqual(result)
+})
+
+test('handles 307 CSS file', async () => {
+  const result = 'p{color:violet}'
+  const { finalCss } = await runMinimalcss('307css')
+  expect(finalCss).toEqual(result)
+})
+
+test('handles 307 HTML file', async () => {
+  const result = 'p{color:violet}'
+  const { finalCss } = await runMinimalcss('307css')
   expect(finalCss).toEqual(result)
 })
