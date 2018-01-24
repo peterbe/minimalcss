@@ -36,12 +36,19 @@ const postProcessOptimize = ast => {
       .map(entry => csstree.generate(entry.nodes.first()))
   )
 
-  // This is the function we use to filter @keyframes atrules out.
+  // This is the function we use to filter @keyframes atrules out,
+  // if its name is not actively used.
+  // It also filters out all `@media print` atrules.
   csstree.walk(ast, {
     visit: 'Atrule',
     enter: (node, item, list) => {
-      if (csstree.keyword(node.name).basename === 'keyframes') {
+      const basename = csstree.keyword(node.name).basename
+      if (basename === 'keyframes') {
         if (!activeAnimationNames.has(csstree.generate(node.prelude))) {
+          list.remove(item)
+        }
+      } else if (basename === 'media') {
+        if (csstree.generate(node.prelude) === 'print') {
           list.remove(item)
         }
       }
