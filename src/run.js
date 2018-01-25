@@ -111,7 +111,8 @@ const processPage = ({
   stylesheetAsts,
   stylesheetContents,
   doms,
-  allHrefs
+  allHrefs,
+  redirectResponses
 }) =>
   new Promise(async (resolve, reject) => {
     // If anything goes wrong, for example a `pageerror` event or
@@ -182,9 +183,14 @@ const processPage = ({
       // To build up a map of all downloaded CSS
       page.on('response', response => {
         const responseUrl = response.url()
+
         const ct = response.headers()['content-type'] || ''
-        if (!response.ok()) {
+        if (response.status() >= 400) {
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
+        }
+        if (response.status() >= 300) {
+          console.log('SETTING', responseUrl, 'TO', response.headers().location)
+          redirectResponses[responseUrl] = response.headers().location
         }
         if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
           response.text().then(text => {
@@ -317,10 +323,13 @@ const minimalcss = async options => {
   // just a cli app.
   const browser = options.browser || (await puppeteer.launch({}))
 
+  // All of these get mutated by the processPage() function. Once
+  // per URL.
   const stylesheetAsts = {}
   const stylesheetContents = {}
   const doms = []
   const allHrefs = new Set()
+  const redirectResponses = {}
 
   try {
     // Note! This opens one URL at a time synchronous
@@ -335,7 +344,8 @@ const minimalcss = async options => {
           stylesheetAsts,
           stylesheetContents,
           doms,
-          allHrefs
+          allHrefs,
+          redirectResponses
         })
       } catch (e) {
         throw e
@@ -383,6 +393,10 @@ const minimalcss = async options => {
     })
   }
   allHrefs.forEach(href => {
+    href = redirectResponses[href] || href
+    while (redirectResponses[href]) {
+      href = redirectResponses[href]
+    }
     const ast = stylesheetAsts[href]
 
     csstree.walk(ast, {
