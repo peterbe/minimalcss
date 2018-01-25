@@ -189,7 +189,6 @@ const processPage = ({
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
         }
         if (response.status() >= 300) {
-          console.log('SETTING', responseUrl, 'TO', response.headers().location)
           redirectResponses[responseUrl] = response.headers().location
         }
         if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
