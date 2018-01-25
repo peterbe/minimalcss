@@ -183,10 +183,22 @@ const processPage = ({
       page.on('response', response => {
         const responseUrl = response.url()
         const ct = response.headers()['content-type'] || ''
-        if (!response.ok()) {
-          return safeReject(new Error(`${response.status()} on ${responseUrl}`))
-        }
         if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+          if (response.status() >= 400) {
+            return safeReject(
+              new Error(
+                `Response status ${response.status()} on ${responseUrl}`
+              )
+            )
+          } else if (response.status() >= 300) {
+            page.evaluate(url => {
+              const linkTag = document.createElement('link')
+              linkTag.setAttribute('rel', 'stylesheet')
+              linkTag.setAttribute('href', url)
+              document.body.appendChild(linkTag)
+            }, response.headers().location)
+            response.text = () => Promise.resolve('')
+          }
           response.text().then(text => {
             const ast = csstree.parse(text)
             csstree.walk(ast, node => {
@@ -233,8 +245,10 @@ const processPage = ({
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false)
         response = await page.goto(pageUrl)
-        if (!response.ok()) {
-          return safeReject(new Error(`${response.status()} on ${pageUrl}`))
+        if (response.status() >= 400) {
+          return safeReject(
+            new Error(`Response status ${response.status()} on ${pageUrl}`)
+          )
         }
         const htmlVanilla = await page.content()
         doms.push(cheerio.load(htmlVanilla))
