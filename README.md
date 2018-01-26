@@ -1,6 +1,5 @@
 # minimalcss
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/peterbe/minimalcss.svg)](https://greenkeeper.io/)
 [![NPM version](https://img.shields.io/npm/v/minimalcss.svg)](https://www.npmjs.com/package/minimalcss)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
 
