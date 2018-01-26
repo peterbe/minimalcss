@@ -135,15 +135,13 @@ test('form elements', async () => {
 })
 
 test('handles 307 CSS file', async () => {
-  const result = 'p{color:violet}'
   const { finalCss } = await runMinimalcss('307css')
-  expect(finalCss).toEqual(result)
+  expect(finalCss).toEqual('p{color:violet}')
 })
 
 test('handles 307 HTML file', async () => {
-  const result = 'p{color:violet}'
   const { finalCss } = await runMinimalcss('307')
-  expect(finalCss).toEqual(result)
+  expect(finalCss).toEqual('p{color:violet}')
 })
 
 test("deliberately skipped .css shouldn't error", async () => {
