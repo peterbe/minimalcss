@@ -5,7 +5,6 @@ const puppeteer = require('puppeteer')
 const csso = require('csso')
 // @ts-ignore
 const csstree = require('css-tree')
-const cheerio = require('cheerio')
 const utils = require('./utils')
 const url = require('url')
 
@@ -109,9 +108,7 @@ const processPage = ({
   options,
   pageUrl,
   stylesheetAsts,
-  stylesheetContents,
-  doms,
-  allHrefs
+  stylesheetContents
 }) =>
   new Promise(async (resolve, reject) => {
     // If anything goes wrong, for example a `pageerror` event or
@@ -144,7 +141,7 @@ const processPage = ({
         if (debug) {
           // console.log(...(msg.args))
           // console.log(msg.args)
-          for (let i = 0; i < msg.args.length; ++i) {
+          for (let i = 0; i < msg.args.length; +i) {
             console.log(`${i}: ${msg.args[i]}`)
           }
         }
@@ -229,18 +226,6 @@ const processPage = ({
 
       let response
 
-      if (!withoutjavascript) {
-        // First, go to the page with JavaScript disabled.
-        await page.setJavaScriptEnabled(false)
-        response = await page.goto(pageUrl)
-        if (!response.ok()) {
-          return safeReject(new Error(`${response.status()} on ${pageUrl}`))
-        }
-        const htmlVanilla = await page.content()
-        doms.push(cheerio.load(htmlVanilla))
-        await page.setJavaScriptEnabled(true)
-      }
-
       // XXX There is another use case *between* the pure DOM (without any
       // javascript) and after the network is idle.
       // For example, any CSSOM that is *made by javascript* but goes away
@@ -263,42 +248,6 @@ const processPage = ({
           new Error(`${response.status()} on ${pageUrl} (second time)`)
         )
       }
-      const evalNetworkIdle = await page.evaluate(() => {
-        // The reason for NOT using a Set here is that that might not be
-        // supported in ES5.
-        const hrefs = []
-        // Loop over all the 'link' elements in the document and
-        // for each, collect the URL of all the ones we're going to assess.
-        Array.from(document.querySelectorAll('link')).forEach(link => {
-          if (
-            link.href &&
-            (link.rel === 'stylesheet' ||
-              link.href.toLowerCase().endsWith('.css')) &&
-            !link.href.toLowerCase().startsWith('blob:') &&
-            link.media !== 'print'
-          ) {
-            // if (!stylesheetAsts[link.href]) {
-            //   throw new Error(`${link.href} not in stylesheetAsts!`)
-            // }
-            // if (!Object.keys(stylesheetAsts[link.href]).length) {
-            //   // If the 'stylesheetAsts[link.href]' thing is an
-            //   // empty object, simply skip this link.
-            //   return
-            // }
-            hrefs.push(link.href)
-          }
-        })
-        return {
-          html: document.documentElement.outerHTML,
-          hrefs
-        }
-      })
-
-      const htmlNetworkIdle = evalNetworkIdle.html
-      doms.push(cheerio.load(htmlNetworkIdle))
-      evalNetworkIdle.hrefs.forEach(href => {
-        allHrefs.add(href)
-      })
 
       if (!fulfilledPromise) resolve()
     } catch (e) {
@@ -323,22 +272,63 @@ const minimalcss = async options => {
   const stylesheetContents = {}
   const doms = []
   const allHrefs = new Set()
+  const stylesheetUsed = []
 
   try {
     // Note! This opens one URL at a time synchronous
     for (let i = 0; i < urls.length; i++) {
       const pageUrl = urls[i]
       const page = await browser.newPage()
+      //Start sending raw DevTools Protocol commands are sent using `client.send()`
+      //First off enable the necessary "Domains" for the DevTools commands we care about
+      const client = await page.target().createCDPSession()
+      await client.send('Page.enable')
+      await client.send('DOM.enable')
+      await client.send('CSS.enable')
+
+      //Start tracking CSS coverage
+      await client.send('CSS.startRuleUsageTracking')
+      const inlineStylesheetIndex = new Set()
+      client.on('CSS.styleSheetAdded', stylesheet => {
+        const { header } = stylesheet
+        if (
+          header.isInline ||
+          header.sourceURL === '' ||
+          header.sourceURL.startsWith('blob:')
+        ) {
+          inlineStylesheetIndex.add(header.styleSheetId)
+        }
+      })
       try {
         await processPage({
           page,
           options,
           pageUrl,
           stylesheetAsts,
-          stylesheetContents,
-          doms,
-          allHrefs
+          stylesheetContents
         })
+        const rules = await client.send('CSS.takeCoverageDelta')
+        const usedRules = rules.coverage.filter(rule => {
+          return rule.used
+        })
+
+        const slices = []
+        for (const usedRule of usedRules) {
+          // console.log(usedRule.styleSheetId)
+          if (inlineStylesheetIndex.has(usedRule.styleSheetId)) {
+            continue
+          }
+
+          const stylesheet = await client.send('CSS.getStyleSheetText', {
+            styleSheetId: usedRule.styleSheetId
+          })
+
+          slices.push(
+            stylesheet.text.slice(usedRule.startOffset, usedRule.endOffset)
+          )
+        }
+
+        stylesheetUsed.push(slices.join(''))
       } catch (e) {
         throw e
       } finally {
@@ -354,83 +344,25 @@ const minimalcss = async options => {
     }
   }
 
-  // All URLs have been opened, and we now have multiple DOM objects.
-
-  // Now, let's loop over ALL links and process their ASTs compared to
-  // the DOMs.
-  const decisionsCache = {}
-  const isSelectorMatchToAnyElement = selectorString => {
-    // Here's the crucial part. Decide whether to keep the selector
-    // Find at least 1 DOM that contains an object that matches
-    // this selector string.
-    return doms.some(dom => {
-      try {
-        return dom(selectorString).length > 0
-      } catch (ex) {
-        // Be conservative. If we can't understand the selector,
-        // best to leave it in.
-        if (debug) {
-          console.warn(selectorString, ex.toString())
-        }
-        return true
-      }
-    })
-  }
-  allHrefs.forEach(href => {
-    const ast = stylesheetAsts[href]
-
-    csstree.walk(ast, {
-      visit: 'Rule',
-      enter: function(node, item, list) {
-        if (
-          this.atrule &&
-          csstree.keyword(this.atrule.name).basename === 'keyframes'
-        ) {
-          // Don't bother inspecting rules that are inside a keyframe.
-          return
-        }
-
-        node.prelude.children.forEach((node, item, list) => {
-          // Translate selector's AST to a string and filter pseudos from it
-          // This changes things like `a.button:active` to `a.button`
-          const selectorString = utils.reduceCSSSelector(csstree.generate(node))
-          if (selectorString in decisionsCache === false) {
-            decisionsCache[selectorString] = isSelectorMatchToAnyElement(
-              selectorString
-            )
-          }
-          if (!decisionsCache[selectorString]) {
-            // delete selector from a list of selectors
-            list.remove(item)
-          }
-        })
-
-        if (node.prelude.children.isEmpty()) {
-          // delete rule from a list
-          list.remove(item)
-        }
-      }
-    })
-  })
   // Every unique URL in every <link> tag has been checked.
-  const allCombinedAst = {
-    type: 'StyleSheet',
-    loc: null,
-    children: Object.keys(stylesheetAsts).reduce(
-      (children, href) => children.appendList(stylesheetAsts[href].children),
-      new csstree.List()
-    )
-  }
+  // const allCombinedAst = {
+  //   type: 'StyleSheet',
+  //   loc: null,
+  //   children: Object.keys(stylesheetAsts).reduce(
+  //     (children, href) => children.appendList(stylesheetAsts[href].children),
+  //     new csstree.List()
+  //   )
+  // }
 
   // Lift important comments (i.e. /*! comment */) up to the beginning
-  const comments = new csstree.List()
-  csstree.walk(allCombinedAst, {
-    visit: 'Comment',
-    enter: (_node, item, list) => {
-      comments.append(list.remove(item))
-    }
-  })
-  allCombinedAst.children.prependList(comments)
+  // const comments = new csstree.List()
+  // csstree.walk(allCombinedAst, {
+  //   visit: 'Comment',
+  //   enter: (_node, item, list) => {
+  //     comments.append(list.remove(item))
+  //   }
+  // })
+  // allCombinedAst.children.prependList(comments)
 
   // Why not just allow the return of the "unminified" CSS (in case
   // some odd ball wants it)?
@@ -441,11 +373,11 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  csso.compress(allCombinedAst)
-  postProcessOptimize(allCombinedAst)
+  // csso.compress(allCombinedAst)
+  // postProcessOptimize(allCombinedAst)
 
   const returned = {
-    finalCss: csstree.generate(allCombinedAst),
+    finalCss: csso.minify(stylesheetUsed.join('')).css,
     stylesheetContents
   }
   return Promise.resolve(returned)
