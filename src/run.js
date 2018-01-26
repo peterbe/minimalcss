@@ -189,7 +189,12 @@ const processPage = ({
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
         }
         if (response.status() >= 300) {
-          redirectResponses[responseUrl] = response.headers().location
+          let redirectsTo = response.headers().location
+          if (redirectsTo.search('://') === -1) {
+            // If it's not an absolute URL, it needs to be converted to one.
+            redirectsTo = new URL(redirectsTo, responseUrl).toString()
+          }
+          redirectResponses[responseUrl] = redirectsTo
         }
         if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
           response.text().then(text => {
