@@ -405,6 +405,12 @@ const minimalcss = async options => {
       href = redirectResponses[href]
     }
     if (skippedUrls.has(href)) {
+      // skippedUrls are URLs that for some reason was deliberately not
+      // downloaded. You can supply a `options.skippable` function which
+      // might, for some reason, skip certain URLs. But if we don't
+      // remember which URLs we skipped, when we later find all the
+      // <link> tags to start analyze, we'd get an error here because
+      // we deliberately chose to now parse its CSS.
       return
     }
     const ast = stylesheetAsts[href]
