@@ -7,6 +7,15 @@ fastify.register(require('fastify-static'), {
   root: path.join(__dirname, 'examples')
 })
 
+// Important that the URL doesn't end with .css
+fastify.get('/307-css', (req, reply) => {
+  reply.redirect(307, '/redirected.css')
+})
+
+fastify.get('/307.html', (req, reply) => {
+  reply.redirect(307, '/redirected.html')
+})
+
 let browser
 
 const runMinimalcss = (path, options = {}) => {
@@ -123,4 +132,25 @@ test('form elements', async () => {
   expect(finalCss).toMatch('input[type=radio]:checked')
   expect(finalCss).toMatch('input[type=checkbox]:checked')
   expect(finalCss).toMatch('option:selected')
+})
+
+test('handles 307 CSS file', async () => {
+  const result = 'p{color:violet}'
+  const { finalCss } = await runMinimalcss('307css')
+  expect(finalCss).toEqual(result)
+})
+
+test('handles 307 HTML file', async () => {
+  const result = 'p{color:violet}'
+  const { finalCss } = await runMinimalcss('307')
+  expect(finalCss).toEqual(result)
+})
+
+test("deliberately skipped .css shouldn't error", async () => {
+  const { finalCss } = await runMinimalcss('skippable-stylesheets', {
+    skippable: request => {
+      return request.url().search(/must-skip.css/) > -1
+    }
+  })
+  expect(finalCss).toEqual('p{color:brown}')
 })

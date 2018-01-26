@@ -111,7 +111,9 @@ const processPage = ({
   stylesheetAsts,
   stylesheetContents,
   doms,
-  allHrefs
+  allHrefs,
+  redirectResponses,
+  skippedUrls
 }) =>
   new Promise(async (resolve, reject) => {
     // If anything goes wrong, for example a `pageerror` event or
@@ -152,15 +154,16 @@ const processPage = ({
 
       await page.setRequestInterception(true)
       page.on('request', request => {
-        if (/data:image\//.test(request.url())) {
+        const requestUrl = request.url()
+        if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort()
         } else if (
           !loadimages &&
-          /\.(png|jpg|jpeg|gif|webp)$/.test(request.url().split('?')[0])
+          /\.(png|jpg|jpeg|gif|webp)$/.test(requestUrl.split('?')[0])
         ) {
           request.abort()
-        } else if (stylesheetAsts[request.url()]) {
+        } else if (stylesheetAsts[requestUrl]) {
           // no point downloading this again
           request.abort()
         } else if (options.skippable && options.skippable(request)) {
@@ -169,10 +172,7 @@ const processPage = ({
           // problem later when we loop through all <link ref="stylesheet">
           // tags.
           // So put in an empty (but not falsy!) object for this URL.
-          if (request.url().match(/\.css/i)) {
-            stylesheetAsts[request.url()] = {}
-            stylesheetContents[request.url()] = ''
-          }
+          skippedUrls.add(requestUrl)
           request.abort()
         } else {
           request.continue()
@@ -182,11 +182,23 @@ const processPage = ({
       // To build up a map of all downloaded CSS
       page.on('response', response => {
         const responseUrl = response.url()
+
         const ct = response.headers()['content-type'] || ''
-        if (!response.ok()) {
+        if (response.status() >= 400) {
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
-        }
-        if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+        } else if (response.status() >= 300) {
+          // If the 'Location' header points to a relative URL,
+          // convert it to an absolute URL.
+          // If it already was an absolute URL, it stays like that.
+          const redirectsTo = new URL(
+            response.headers().location,
+            responseUrl
+          ).toString()
+          redirectResponses[responseUrl] = redirectsTo
+        } else if (
+          ct.indexOf('text/css') > -1 ||
+          /\.css$/i.test(responseUrl.split('?')[0])
+        ) {
           response.text().then(text => {
             const ast = csstree.parse(text)
             csstree.walk(ast, node => {
@@ -317,10 +329,14 @@ const minimalcss = async options => {
   // just a cli app.
   const browser = options.browser || (await puppeteer.launch({}))
 
+  // All of these get mutated by the processPage() function. Once
+  // per URL.
   const stylesheetAsts = {}
   const stylesheetContents = {}
   const doms = []
   const allHrefs = new Set()
+  const redirectResponses = {}
+  const skippedUrls = new Set()
 
   try {
     // Note! This opens one URL at a time synchronous
@@ -335,7 +351,9 @@ const minimalcss = async options => {
           stylesheetAsts,
           stylesheetContents,
           doms,
-          allHrefs
+          allHrefs,
+          redirectResponses,
+          skippedUrls
         })
       } catch (e) {
         throw e
@@ -355,7 +373,13 @@ const minimalcss = async options => {
   // All URLs have been opened, and we now have multiple DOM (cheerio) objects.
   // But first check that every spotted stylesheet (by <link> tags)
   // got downloaded.
-  const missingASTs = [...allHrefs].filter(url => !stylesheetAsts[url])
+  const missingASTs = [...allHrefs].filter(url => {
+    return !(
+      stylesheetAsts[url] ||
+      skippedUrls.has(url) ||
+      redirectResponses[url]
+    )
+  })
   if (missingASTs.length) {
     throw new Error(
       `Found stylesheets that failed to download (${missingASTs})`
@@ -383,6 +407,18 @@ const minimalcss = async options => {
     })
   }
   allHrefs.forEach(href => {
+    while (redirectResponses[href]) {
+      href = redirectResponses[href]
+    }
+    if (skippedUrls.has(href)) {
+      // skippedUrls are URLs that for some reason was deliberately not
+      // downloaded. You can supply a `options.skippable` function which
+      // might, for some reason, skip certain URLs. But if we don't
+      // remember which URLs we skipped, when we later find all the
+      // <link> tags to start analyze, we'd get an error here because
+      // we deliberately chose to now parse its CSS.
+      return
+    }
     const ast = stylesheetAsts[href]
 
     csstree.walk(ast, {
