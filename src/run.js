@@ -112,7 +112,8 @@ const processPage = ({
   stylesheetContents,
   doms,
   allHrefs,
-  redirectResponses
+  redirectResponses,
+  skippedUrls
 }) =>
   new Promise(async (resolve, reject) => {
     // If anything goes wrong, for example a `pageerror` event or
@@ -153,15 +154,16 @@ const processPage = ({
 
       await page.setRequestInterception(true)
       page.on('request', request => {
-        if (/data:image\//.test(request.url())) {
+        const requestUrl = request.url()
+        if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort()
         } else if (
           !loadimages &&
-          /\.(png|jpg|jpeg|gif|webp)$/.test(request.url().split('?')[0])
+          /\.(png|jpg|jpeg|gif|webp)$/.test(requestUrl.split('?')[0])
         ) {
           request.abort()
-        } else if (stylesheetAsts[request.url()]) {
+        } else if (stylesheetAsts[requestUrl]) {
           // no point downloading this again
           request.abort()
         } else if (options.skippable && options.skippable(request)) {
@@ -170,10 +172,7 @@ const processPage = ({
           // problem later when we loop through all <link ref="stylesheet">
           // tags.
           // So put in an empty (but not falsy!) object for this URL.
-          if (request.url().match(/\.css/i)) {
-            stylesheetAsts[request.url()] = {}
-            stylesheetContents[request.url()] = ''
-          }
+          skippedUrls.add(requestUrl)
           request.abort()
         } else {
           request.continue()
@@ -187,8 +186,7 @@ const processPage = ({
         const ct = response.headers()['content-type'] || ''
         if (response.status() >= 400) {
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
-        }
-        if (response.status() >= 300) {
+        } else if (response.status() >= 300) {
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.
           // If it already was an absolute URL, it stays like that.
@@ -197,8 +195,10 @@ const processPage = ({
             responseUrl
           ).toString()
           redirectResponses[responseUrl] = redirectsTo
-        }
-        if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+        } else if (
+          ct.indexOf('text/css') > -1 ||
+          /\.css$/i.test(responseUrl.split('?')[0])
+        ) {
           response.text().then(text => {
             const ast = csstree.parse(text)
             csstree.walk(ast, node => {
@@ -336,6 +336,7 @@ const minimalcss = async options => {
   const doms = []
   const allHrefs = new Set()
   const redirectResponses = {}
+  const skippedUrls = new Set()
 
   try {
     // Note! This opens one URL at a time synchronous
@@ -351,7 +352,8 @@ const minimalcss = async options => {
           stylesheetContents,
           doms,
           allHrefs,
-          redirectResponses
+          redirectResponses,
+          skippedUrls
         })
       } catch (e) {
         throw e
@@ -401,6 +403,9 @@ const minimalcss = async options => {
   allHrefs.forEach(href => {
     while (redirectResponses[href]) {
       href = redirectResponses[href]
+    }
+    if (skippedUrls.has(href)) {
+      return
     }
     const ast = stylesheetAsts[href]
 
