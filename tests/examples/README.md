@@ -4,4 +4,4 @@ To serve these files run::
 
 Then you can do things like::
 
-    ./bin/minimalcss http://localhost:8000/images.html
+    ./bin/minimalcss http://localhost:8000/css-in-js.html

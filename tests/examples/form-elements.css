@@ -1,0 +1,11 @@
+input[type=radio]:checked {
+  color: red
+}
+
+input[type=checkbox]:checked {
+  color: blue
+}
+
+option:selected {
+  color: green
+}

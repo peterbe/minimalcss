@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link href="evaluate-dom-multiple-times.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1 class="SomeSelector">Hi!</h1>
+    <script>
+      const element = document.querySelector(".SomeSelector");
+      element.classList.remove("SomeSelector");
+      element.classList.add("OtherSelector");
+    </script>
+  </body>
+</html>
