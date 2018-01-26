@@ -183,10 +183,10 @@ const processPage = ({
       page.on('response', response => {
         const responseUrl = response.url()
         const ct = response.headers()['content-type'] || ''
-        if (!response.ok()) {
-          return safeReject(new Error(`${response.status()} on ${responseUrl}`))
-        }
         if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
+          if (!response.ok()) {
+            return safeReject(new Error(`${response.status()} on ${pageUrl}`))
+          }
           response.text().then(text => {
             const ast = csstree.parse(text)
             csstree.walk(ast, node => {
