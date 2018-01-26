@@ -190,7 +190,7 @@ const processPage = ({
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.
           // If it already was an absolute URL, it stays like that.
-          const redirectsTo = new URL(
+          const redirectsTo = new url.URL(
             response.headers().location,
             responseUrl
           ).toString()

@@ -1,3 +1,8 @@
+# 0.6.3
+
+* Redirects, both of external style sheets and other URLs is now correctly
+  followed. [pull#106](https://github.com/peterbe/minimalcss/pull/106)
+
 * Remove `@media print` rules. [pull#101](https://github.com/peterbe/minimalcss/pull/101)
 
 * Switching to wait for [`networkidle0`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options)
