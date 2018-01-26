@@ -48,19 +48,6 @@ test('handles JS errors', async () => {
   }
 })
 
-test('handles impatient CSS downloads', async () => {
-  expect.assertions(1)
-  try {
-    await runMinimalcss('slowcss', {
-      // The most impatient option. The `slowcss.html` fixture uses
-      // a <link> href that takes 2 whole seconds to download.
-      waitUntil: 'domcontentloaded'
-    })
-  } catch (e) {
-    expect(e.message).toMatch('Found stylesheets that failed to download')
-  }
-})
-
 test('cares only about external CSS files', async () => {
   const { finalCss } = await runMinimalcss('css-in-js')
   expect(finalCss).toEqual('.external{color:red}')

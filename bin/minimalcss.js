@@ -21,7 +21,7 @@ const argv = minimist(args, {
     'loadimages',
     'withoutjavascript'
   ],
-  string: ['output', 'skip', 'viewport', 'waituntil'],
+  string: ['output', 'skip', 'viewport'],
   default: {
     // color: true,
     // "ignore-path": ".prettierignore"
@@ -57,7 +57,6 @@ if (argv['help']) {
       'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
       '  --viewport                    JSON string that gets converted into valid parameter to `page.setViewport()`\n' +
-      "  --waituntil                   Comma separated string to use in `page.goto()` options (defaults to 'domcontentloaded,networkidle0')\n" +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
@@ -87,20 +86,6 @@ const parseViewport = asString => {
   }
 }
 
-const parseWaitUntil = value => {
-  if (!value) {
-    return null
-  }
-  const validStrings = ['domcontentloaded', 'networkidle0', 'networkidle2']
-  return value.split(',').map(x => {
-    if (!validStrings.includes(x.trim())) {
-      console.error(`${x} is not a valid 'waitUntil' option.`)
-      process.exit(4)
-    }
-    return x.trim()
-  })
-}
-
 const options = {
   urls: urls,
   debug: argv['debug'],
@@ -116,8 +101,7 @@ const options = {
     }
     return skips.some(skip => !!request.url().match(skip))
   },
-  viewport: parseViewport(argv['viewport']),
-  waitUntil: parseWaitUntil(argv['waituntil'])
+  viewport: parseViewport(argv['viewport'])
 }
 
 const start = Date.now()

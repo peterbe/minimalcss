@@ -129,22 +129,6 @@ const processPage = ({
     const debug = options.debug || false
     const loadimages = options.loadimages || false
     const withoutjavascript = options.withoutjavascript || false
-    const waitUntil = options.waitUntil || ['domcontentloaded', 'networkidle0']
-
-    // 'waitUntil' can be a string or an array of strings.
-    // Whatever it is, do not allow 'load' even though it's a valid
-    // option to puppeteer's page.goto() because it's near impossible
-    // to ever figure out what the minimal CSS is if we never get a chance
-    // to download the external stylesheets.
-    if (
-      (typeof waitUntil === 'string' && waitUntil === 'load') ||
-      (Array.isArray(waitUntil) && waitUntil.includes('load'))
-    ) {
-      throw new Error(
-        "'load' is not an allowed 'waitUntil' option because it never " +
-          'gives us any chance to download external stylesheets.'
-      )
-    }
 
     try {
       if (options.userAgent) {
@@ -271,7 +255,7 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      response = await page.goto(pageUrl, { waitUntil })
+      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' })
       if (!response.ok()) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
@@ -322,7 +306,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, waitUntil: (string|string[]) }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
