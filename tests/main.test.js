@@ -133,7 +133,7 @@ test('form elements', async () => {
   expect(finalCss).toMatch('option:selected')
 })
 
-                        test('handles 307 CSS file', async () => {
+test('handles 307 CSS file', async () => {
   const result = 'p{color:violet}'
   const { finalCss } = await runMinimalcss('307css')
   expect(finalCss).toEqual(result)
