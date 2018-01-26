@@ -373,7 +373,13 @@ const minimalcss = async options => {
   // All URLs have been opened, and we now have multiple DOM (cheerio) objects.
   // But first check that every spotted stylesheet (by <link> tags)
   // got downloaded.
-  const missingASTs = [...allHrefs].filter(url => !stylesheetAsts[url])
+  const missingASTs = [...allHrefs].filter(url => {
+    return !(
+      stylesheetAsts[url] ||
+      skippedUrls.has(url) ||
+      redirectResponses[url]
+    )
+  })
   if (missingASTs.length) {
     throw new Error(
       `Found stylesheets that failed to download (${missingASTs})`
