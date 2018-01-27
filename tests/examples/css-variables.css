@@ -1,0 +1,8 @@
+html {
+  --main-bg-color: brown;
+  --unused-color: red;
+}
+
+p {
+  background-color: var(--main-bg-color);
+}
