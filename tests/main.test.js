@@ -194,3 +194,8 @@ test('leaves vendor prefixed properties', async () => {
   const { finalCss } = await runMinimalcss('vendor-prefixes')
   expect(finalCss).toMatch('-webkit-transition')
 })
+
+test('leaves unknown properties', async () => {
+  const { finalCss } = await runMinimalcss('vendor-prefixes')
+  expect(finalCss).toMatch('abracadabra')
+})
