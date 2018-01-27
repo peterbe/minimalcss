@@ -154,14 +154,14 @@ const processPage = ({
 
       await page.setRequestInterception(true)
       page.on('request', request => {
+        const resourceType = request.resourceType()
         const requestUrl = request.url()
         if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort()
-        } else if (
-          !loadimages &&
-          /\.(png|jpg|jpeg|gif|webp)$/.test(requestUrl.split('?')[0])
-        ) {
+        } else if (!loadimages && resourceType === 'image') {
+          request.abort()
+        } else if (resourceType === 'font') {
           request.abort()
         } else if (stylesheetAsts[requestUrl]) {
           // no point downloading this again
@@ -182,8 +182,7 @@ const processPage = ({
       // To build up a map of all downloaded CSS
       page.on('response', response => {
         const responseUrl = response.url()
-
-        const ct = response.headers()['content-type'] || ''
+        const resourceType = response.request().resourceType()
         if (response.status() >= 400) {
           return safeReject(new Error(`${response.status()} on ${responseUrl}`))
         } else if (response.status() >= 300) {
@@ -195,10 +194,7 @@ const processPage = ({
             responseUrl
           ).toString()
           redirectResponses[responseUrl] = redirectsTo
-        } else if (
-          ct.indexOf('text/css') > -1 ||
-          /\.css$/i.test(responseUrl.split('?')[0])
-        ) {
+        } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
             const ast = csstree.parse(text)
             csstree.walk(ast, node => {
