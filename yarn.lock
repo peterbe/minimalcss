@@ -26,7 +26,7 @@
   version "8.5.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.9.tgz#7155cfb4ae405bca4dd8df1a214c339e939109bf"
 
-"@types/pino@^4.7.0":
+"@types/pino@^4.7.1":
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/@types/pino/-/pino-4.7.1.tgz#8f818f8cde5c2052aef6c68a4560347f86256805"
   dependencies:
@@ -84,9 +84,17 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.0.0, ajv@^6.0.1:
+ajv@^6.0.0:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.0.1.tgz#2898580a9f3def5f9c85dfead7a2223ef13cf3da"
+  dependencies:
+    fast-deep-equal "^1.0.0"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.3.0"
+
+ajv@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.1.0.tgz#adc4b3dd64b2d8740d13c5b38e4596115970e59d"
   dependencies:
     fast-deep-equal "^1.0.0"
     fast-json-stable-stringify "^2.0.0"
@@ -220,7 +228,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-avvio@^5.0.0:
+avvio@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.0.1.tgz#06f435de53c4c82b821f131bc116ceaa989de5dd"
   dependencies:
@@ -1003,12 +1011,6 @@ fast-deep-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.0.0.tgz#96256a3bc975595eb36d82e9929d060d893439ff"
 
-fast-iterator@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/fast-iterator/-/fast-iterator-0.3.0.tgz#8601a33fcd6e87155f68e085a5be05d42780f09f"
-  dependencies:
-    reusify "^1.0.3"
-
 fast-json-parse@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fast-json-parse/-/fast-json-parse-1.0.3.tgz#43e5c61ee4efa9265633046b770fb682a7577c4d"
@@ -1045,22 +1047,21 @@ fastify-static@0.6.0:
     fastify-plugin "^0.2.1"
     send "^0.16.0"
 
-fastify@0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-0.40.0.tgz#56b38c578d135961a940b62661dee741d30511d1"
+fastify@0.41.0:
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-0.41.0.tgz#9873f34d891936dbb6ccc1a74687666703daaed8"
   dependencies:
-    "@types/pino" "^4.7.0"
+    "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
-    ajv "^6.0.1"
-    avvio "^5.0.0"
-    fast-iterator "^0.3.0"
+    ajv "^6.1.0"
+    avvio "^5.0.1"
     fast-json-stringify "^0.17.0"
-    find-my-way "^1.9.0"
+    find-my-way "^1.10.0"
     flatstr "^1.0.5"
     light-my-request "^2.0.1"
     middie "^3.1.0"
-    pino "^4.10.2"
-    pump "^2.0.0"
+    pino "^4.10.3"
+    pump "^2.0.1"
 
 fastq@^1.5.0:
   version "1.5.0"
@@ -1112,9 +1113,9 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-find-my-way@^1.9.0:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.9.1.tgz#776d1946281cb24fd21d9f8924e083a6e9a1f307"
+find-my-way@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.10.0.tgz#12589cb292ffb1991460cfc04cd07cd7ead7d1ba"
 
 find-parent-dir@^0.3.0:
   version "0.3.0"
@@ -2659,7 +2660,7 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-pino@^4.10.2:
+pino@^4.10.3:
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/pino/-/pino-4.10.3.tgz#d46030524f2294fe43a2e2247ce1a7ef028c46bc"
   dependencies:
@@ -2730,6 +2731,13 @@ pseudomap@^1.0.2:
 pump@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/pump/-/pump-2.0.0.tgz#7946da1c8d622b098e2ceb2d3476582470829c9d"
+  dependencies:
+    end-of-stream "^1.1.0"
+    once "^1.3.1"
+
+pump@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/pump/-/pump-2.0.1.tgz#12399add6e4cf7526d973cbc8b5ce2e2908b3909"
   dependencies:
     end-of-stream "^1.1.0"
     once "^1.3.1"
@@ -2951,7 +2959,7 @@ restore-cursor@^1.0.1:
     exit-hook "^1.0.0"
     onetime "^1.0.0"
 
-reusify@^1.0.0, reusify@^1.0.2, reusify@^1.0.3:
+reusify@^1.0.0, reusify@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.3.tgz#9da7fc786f39400fd6809e3d694b3b28ecd0f38e"
 
