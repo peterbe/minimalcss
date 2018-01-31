@@ -40,7 +40,7 @@
     "jest": "22.1.4",
     "lint-staged": "6.1.0",
     "prettier": "1.10.2",
-    "typescript": "2.7.0-rc"
+    "typescript": "2.7.1"
   },
   "scripts": {
     "precommit": "lint-staged",
