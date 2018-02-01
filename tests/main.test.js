@@ -152,3 +152,11 @@ test("deliberately skipped .css shouldn't error", async () => {
   })
   expect(finalCss).toEqual('p{color:brown}')
 })
+
+test('order matters in multiple style sheets', async () => {
+  // In inheritance.html it references two .css files. The
+  // second one overrides the first one. But it's not a 100% overlap,
+  // as the first one has some rules of its own.
+  const { finalCss } = await runMinimalcss('inheritance')
+  expect(finalCss).toEqual('p{color:violet;font-size:16px;font-style:italic}')
+})
