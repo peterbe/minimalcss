@@ -1040,9 +1040,9 @@ fastify-plugin@^0.2.1:
   dependencies:
     semver "^5.4.1"
 
-fastify-static@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.6.0.tgz#70d9f8378c5475b2719a16ac5a745b21862269d4"
+fastify-static@0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.7.0.tgz#3675f0e2e3cf41ba7c9027cc1d8669615503e938"
   dependencies:
     fastify-plugin "^0.2.1"
     send "^0.16.0"
