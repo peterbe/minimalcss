@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/peterbe/minimalcss.svg?branch=master)](https://travis-ci.org/peterbe/minimalcss)
 [![NPM version](https://img.shields.io/npm/v/minimalcss.svg)](https://www.npmjs.com/package/minimalcss)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovateapp.com/)
 
 A Node library to extract the minimal CSS used in a set of URLs with puppeteer.
 Used to find what minimal CSS is needed to render on first load, even with
