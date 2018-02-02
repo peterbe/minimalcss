@@ -34,7 +34,7 @@
     "@types/cheerio": "0.22.7",
     "@types/node": "8.5.9",
     "@types/puppeteer": "1.0.0",
-    "fastify": "0.42.0",
+    "fastify": "0.43.0",
     "fastify-static": "0.7.0",
     "husky": "0.14.3",
     "jest": "22.1.4",
