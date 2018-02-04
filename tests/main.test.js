@@ -160,3 +160,22 @@ test('order matters in multiple style sheets', async () => {
   const { finalCss } = await runMinimalcss('inheritance')
   expect(finalCss).toEqual('p{color:violet;font-size:16px;font-style:italic}')
 })
+
+test('order matters in badly repeated style sheets', async () => {
+  // In repeated-badly.html it references two .css files. One
+  // of them repeated!
+  // It looks like this:
+  //  <head>
+  //    <link rel=stylesheet href=second.css>
+  //    <link rel=stylesheet href=first.css>
+  //    <link rel=stylesheet href=second.css>
+  //  </head>
+  // This is clearly bad. The 'first.css' overrides 'second.css' but then
+  // 'second.css' overrides again.
+  // You should not do your HTML like this but it can happen and minimalcss
+  // should cope and not choke.
+  // If you open repeated.html in a browser, the rules
+  // from repeated-second.css should decide lastly.
+  const { finalCss } = await runMinimalcss('repeated')
+  expect(finalCss).toEqual('p{color:violet;font-size:16px;font-style:italic}')
+})

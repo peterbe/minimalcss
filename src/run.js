@@ -303,7 +303,14 @@ const processPage = ({
       const htmlWithJavascript = evalWithJavascript.html
       doms.push(cheerio.load(htmlWithJavascript))
       evalWithJavascript.hrefs.forEach(href => {
-        allHrefs.add(href)
+        // The order of allHrefs is important! That's what browsers do.
+        // But we can't blindly using allHrefs.push() because the href
+        // *might* already have been encountered. If it has been encountered
+        // before, remove it and add it to the end of the array.
+        if (allHrefs.includes(href)) {
+          allHrefs.splice(allHrefs.indexOf(href), 1)
+        }
+        allHrefs.push(href)
       })
 
       if (!fulfilledPromise) resolve()
@@ -330,7 +337,7 @@ const minimalcss = async options => {
   const stylesheetAsts = {}
   const stylesheetContents = {}
   const doms = []
-  const allHrefs = new Set()
+  const allHrefs = []
   const redirectResponses = {}
   const skippedUrls = new Set()
 
@@ -451,10 +458,24 @@ const minimalcss = async options => {
     })
   })
   // Every unique URL in every <link> tag has been checked.
+  // We can't simply loop over allHrefs because it might contain
+  // entries that *aren't* in stylesheetAsts. For example, a page
+  // might have a href in there but it's been deliberately skipped.
+  // That's why we need to make a ordered copy of it based on
+  // each item existing in stylesheetAsts.
+  const allUsedHrefs = []
+  allHrefs.forEach(href => {
+    while (redirectResponses[href]) {
+      href = redirectResponses[href]
+    }
+    if (stylesheetAsts[href]) {
+      allUsedHrefs.push(href)
+    }
+  })
   const allCombinedAst = {
     type: 'StyleSheet',
     loc: null,
-    children: Object.keys(stylesheetAsts).reduce(
+    children: allUsedHrefs.reduce(
       (children, href) => children.appendList(stylesheetAsts[href].children),
       new csstree.List()
     )
