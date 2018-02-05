@@ -10,7 +10,8 @@ function assert(truth, failure) {
 }
 function assertStatus(spawned) {
   if (spawned.status !== 0) {
-    console.error(spawned)
+    console.error('STDOUT', spawned.stdout.toString())
+    console.error('STDERR', spawned.stderr.toString())
     process.exit(spawned.status)
   }
 }
@@ -25,7 +26,6 @@ assert(versionNumber2 === versionNumber, 'alias not working')
 function openUrl(url, ...options) {
   console.log(`Opening ${url} ...`)
   options.push(url)
-  // console.log('OPTIONS', options)
   const t0 = new Date()
   const opened = spawn('./bin/minimalcss.js', options)
   assertStatus(opened)
