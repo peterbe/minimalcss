@@ -1,3 +1,13 @@
+# 0.7.0
+
+* Important fix for how multiple external stylesheets are parsed in the exact
+  order the `<link rel=stylesheet>` tags appear in the HTML.
+  [pull#131](https://github.com/peterbe/minimalcss/pull/131)
+
+* The response interceptor skips or includes resources based on
+  `responseType` instead of URL and filename.
+  [pull#118](https://github.com/peterbe/minimalcss/pull/118) Thanks @stereobooster
+
 # 0.6.3
 
 * Redirects, both of external style sheets and other URLs is now correctly
@@ -55,8 +65,8 @@
 
 # 0.4.0
 
-* Every URL you pass gets loaded twice. First *without Javascript* and then
-  *with JavaScript* (and waiting for network to be idle). These means the
+* Every URL you pass gets loaded twice. First _without Javascript_ and then
+  _with JavaScript_ (and waiting for network to be idle). These means the
   minimal CSS will contain CSS that was necessary **before** the page is fully
   loaded as well.
   Also, the engine has entirely changed. Instead of evaluating the DOM inside
@@ -139,7 +149,7 @@
 
 * List of "dead obvious" selectors that don't need to be analyzed like
   `*`, `body`, and
-`html`.
+  `html`.
 
 * Clean up repeated important-comments in the concatenated CSS.
 

@@ -68,25 +68,25 @@ $ ./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutu
 special about `minimalcss` is that it uses the Chrome Headless browser.
 
 * [penthouse](https://github.com/pocketjoso/penthouse) -
-uses [PhantomJS](http://phantomjs.org/) which is a headless WebKit browser.
-`PhantomJS` is [no longer maintained](https://groups.google.com/forum/m/#!topic/phantomjs/9aI5d-LDuNE).
-Supports only 1 URL at a time and can't you have to first save the CSS files
-it should process.
+  uses [PhantomJS](http://phantomjs.org/) which is a headless WebKit browser.
+  `PhantomJS` is [no longer maintained](https://groups.google.com/forum/m/#!topic/phantomjs/9aI5d-LDuNE).
+  Supports only 1 URL at a time and can't you have to first save the CSS files
+  it should process.
 
 * [critical](https://github.com/addyosmani/critical) - uses `penthouse`
-(see above) with its "flaws" meaning you can only do 1 URL (or HTML string)
-and you have to prepare the CSS files too.
+  (see above) with its "flaws" meaning you can only do 1 URL (or HTML string)
+  and you have to prepare the CSS files too.
 
 * [UnCSS](https://github.com/giakki/uncss) - uses [jsdom](https://github.com/tmpvar/jsdom)
-to render and execute JavaScript. Supports supplying multiple URLs but still
-requires to manually supply the CSS files to process.
+  to render and execute JavaScript. Supports supplying multiple URLs but still
+  requires to manually supply the CSS files to process.
 
 * [mincss](https://github.com/peterbe/mincss) - Python project that uses
-[lxml.html](http://lxml.de/lxmlhtml.html) to analyze the HTML statically
-(by doing a `GET` of the URL as if done by a server). I.e.
-it can't load the HTML as a real browser would and thus does not support a
-DOM with possible JavaScript mutations on load.
-It can optionally use `PhantomJS` to extract the HTML.
+  [lxml.html](http://lxml.de/lxmlhtml.html) to analyze the HTML statically
+  (by doing a `GET` of the URL as if done by a server). I.e.
+  it can't load the HTML as a real browser would and thus does not support a
+  DOM with possible JavaScript mutations on load.
+  It can optionally use `PhantomJS` to extract the HTML.
 
 ## Killer features
 
@@ -97,7 +97,7 @@ It can optionally use `PhantomJS` to extract the HTML.
   [CSSTree](https://github.com/csstree/csstree) which are both high quality
   projects that are solid and well tested.
 
-* The CSS selectors downloaded is compared to the DOM before *and* after
+* The CSS selectors downloaded is compared to the DOM before _and_ after
   JavaScript code has changed the DOM. That means you can extract the
   critical CSS needed to display properly before the JavaScript has kicked in.
 
@@ -107,11 +107,10 @@ It can optionally use `PhantomJS` to extract the HTML.
 
 * You can specify a [viewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport),
   which might cause the page to render slightly different. It does not
-  create the minimal CSS *only* on DOM that is visible though.
+  create the minimal CSS _only_ on DOM that is visible though.
 
 * If the CSS contains `@font-face { ... }` rules whose name is never
   used in any remaining CSS selector, the whole `font-face` block is removed.
-
 
 ## Help needed
 
@@ -135,14 +134,16 @@ Just prints out the current version.
 Returns a promise. The promise returns an object containing, amongst
 other things, the minified minimal CSS as a string.
 For example:
+
 ```javascript
 minimalcss
   .minimize({ urls: ['http://peterbecom.dev/css-blocking/ultra-basic.html'] })
   .then(result => {
     console.log('OUTPUT', result.finalCss.length, result.finalCss)
-}).catch(error => {
+  })
+  .catch(error => {
     console.error(`Failed the minimize CSS: ${error}`)
-})
+  })
 ```
 
 That `result` object that is returned by the `minimize` function contains:
@@ -165,9 +166,9 @@ key is `urls`. Other optional options are:
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
 * `loadimages` - If set to `true`, images will actually load.
-* `withoutjavascript` - If set to `true` it will *skip* loading the page first
+* `withoutjavascript` - If set to `true` it will _skip_ loading the page first
   without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
-  can be, and then with JavaScript enabled *and* waiting for network activity
+  can be, and then with JavaScript enabled _and_ waiting for network activity
   to be idle.
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
@@ -175,9 +176,42 @@ key is `urls`. Other optional options are:
 
 ## Warnings
 
+### Multiple URLs
+
+`minimalcss` can accept multiple URLs when figuring out the minimal CSS for
+all those URLs, combined. But **be careful**, this can be dangerous. If
+you have one URL with this HTML:
+
+```html
+<head>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="specific.css">
+</head>
+```
+
+and another URL with...:
+
+```html
+<head>
+  <link rel="stylesheet" href="base.css">
+</head>
+```
+
+When combining these, it will optimize the CSS in this order:
+
+1. `base.css`
+2. `specific.css`
+3. `base.css`
+
+But if `specific.css` was meant to override something in `base.css` in the
+first URL, that might get undone when `base.css` becomes the last CSS
+to include.
+
+[See this issue for another good example](https://github.com/peterbe/minimalcss/issues/16) why running `minimalcss` across multiple URLs.
+
 ### About `cheerio`
 
-When `minimalcss` evaluate each CSS selector to decide whether to keep it
+When `minimalcss` evaluates each CSS selector to decide whether to keep it
 or not, some selectors might not be parseable. Possibly, the CSS employs
 hacks for specific browsers that
 [cheerio](https://www.npmjs.com/package/cheerio) doesn't support. Or
@@ -195,13 +229,21 @@ printed on `stderr`.
 in any of the CSS selectors. But be aware that you might have a
 `@font-face { font-family: MyName; }` in some `/static/foo.css` but separately
 you might have an inline style sheet that looks like this:
+
 ```html
 <style type="text/css">
 div.something { font-family: MyName; }
 </style>
 ```
+
 In this case the `@font-face { font-family: MyName; }` would be removed even
 though it's mentioned from somewhere else.
+
+### About Blobs
+
+If your document uses `Blob` to create injectable stylesheets into the DOM,
+`minimalcss` will _not_ be able to optimize that. It will be not be
+included in the final CSS.
 
 ## Development
 
@@ -245,14 +287,6 @@ to the the `.prettierrc` file in the root of the project.
 To check that all your code conforms, run:
 
     yarn lintcheck
-
-## Caveats
-
-### A Warning About Blobs
-
-If your document uses `Blob` to create injectable stylesheets into the DOM,
-`minimalcss` will *not* be able to optimize that. It will be not be
-included in the final CSS.
 
 ## License
 
