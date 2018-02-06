@@ -144,8 +144,6 @@ const processPage = ({
       // A must or else you can't do console.log from within page.evaluate()
       page.on('console', msg => {
         if (debug) {
-          // console.log(...(msg.args))
-          // console.log(msg.args)
           for (let i = 0; i < msg.args.length; ++i) {
             console.log(`${i}: ${msg.args[i]}`)
           }
@@ -249,7 +247,7 @@ const processPage = ({
         await page.setJavaScriptEnabled(true)
       }
 
-      // XXX There is another use case *between* the pure DOM (without any
+      // There is another use case *between* the pure DOM (without any
       // javascript) and after the network is idle.
       // For example, any CSSOM that is *made by javascript* but goes away
       // after all XHR is finished loading.
@@ -283,14 +281,6 @@ const processPage = ({
             !link.href.toLowerCase().startsWith('blob:') &&
             link.media !== 'print'
           ) {
-            // if (!stylesheetAsts[link.href]) {
-            //   throw new Error(`${link.href} not in stylesheetAsts!`)
-            // }
-            // if (!Object.keys(stylesheetAsts[link.href]).length) {
-            //   // If the 'stylesheetAsts[link.href]' thing is an
-            //   // empty object, simply skip this link.
-            //   return
-            // }
             hrefs.push(link.href)
           }
         })
