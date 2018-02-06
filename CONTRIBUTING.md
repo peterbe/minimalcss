@@ -1,8 +1,17 @@
 # Contributing
 
-XXX Needs instructions how how to get up and running to do dev,
-linting and testing.
+The README has instructions about how to do testing and lint checking.
 
+Generally you do:
+
+```sh
+$ git clone https://github.com/peterbe/minimalcss.git
+$ cd minimalcss
+$ ./bin/minimalcss.js https://news.ycombinator.com
+```
+
+If you make a PR, Travis will run unit tests, lint checks and end-to-end
+testing. Hopefully it's clear from any errors there what needs to be done.
 
 ## Style guide
 
