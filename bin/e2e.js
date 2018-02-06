@@ -31,7 +31,6 @@ function openUrl(url, ...options) {
     options.push('--nosandbox')
   }
   options.push(url)
-  console.log('inCI?', inCI, '  options:', options)
   const t0 = new Date()
   const opened = spawn('./bin/minimalcss.js', options)
   assertStatus(opened)
