@@ -2,6 +2,8 @@
 const fs = require('fs')
 const spawn = require('child_process').spawnSync
 
+const inCI = process.env.CI || false
+
 function assert(truth, failure) {
   if (!truth) {
     console.error(failure)
@@ -25,6 +27,9 @@ assert(versionNumber2 === versionNumber, 'alias not working')
 
 function openUrl(url, ...options) {
   console.log(`Opening ${url} ...`)
+  if (inCI) {
+    options.push('--nosandbox')
+  }
   options.push(url)
   const t0 = new Date()
   const opened = spawn('./bin/minimalcss.js', options)
