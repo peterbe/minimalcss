@@ -321,16 +321,18 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string> }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
   const { urls } = options
   const debug = options.debug || false
-  // const keepPrintAtRules = options.keepPrintAtRules || false
-  // XXX The launch options should be a parameter once this is no longer
-  // just a cli app.
-  const browser = options.browser || (await puppeteer.launch({}))
+  const puppeteerArgs = options.puppeteerArgs || []
+  const browser =
+    options.browser ||
+    (await puppeteer.launch({
+      args: puppeteerArgs
+    }))
 
   // All of these get mutated by the processPage() function. Once
   // per URL.

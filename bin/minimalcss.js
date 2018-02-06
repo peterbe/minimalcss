@@ -12,19 +12,17 @@ const args = process.argv.slice(2)
 
 const argv = minimist(args, {
   boolean: [
-    // "write",
-    // "stdin",
     'help',
     'version',
     'verbose',
     'debug',
     'loadimages',
-    'withoutjavascript'
+    'withoutjavascript',
+    'nosandbox'
   ],
   string: ['output', 'skip', 'viewport'],
   default: {
     // color: true,
-    // "ignore-path": ".prettierignore"
   },
   alias: {
     debug: 'd',
@@ -57,6 +55,7 @@ if (argv['help']) {
       'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
       '  --viewport                    JSON string that gets converted into valid parameter to `page.setViewport()`\n' +
+      "  --nosandbox                   Adds `['--no-sandbox', '--disable-setuid-sandbox']` to puppeteer launch.\n" +
       '  --version or -v               Print minimalcss version.\n' +
       ''
   )
@@ -101,7 +100,10 @@ const options = {
     }
     return skips.some(skip => !!request.url().match(skip))
   },
-  viewport: parseViewport(argv['viewport'])
+  viewport: parseViewport(argv['viewport']),
+  puppeteerArgs: argv['nosandbox']
+    ? ['--no-sandbox', '--disable-setuid-sandbox']
+    : []
 }
 
 const start = Date.now()
