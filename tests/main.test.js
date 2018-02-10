@@ -180,22 +180,14 @@ test('order matters in badly repeated style sheets', async () => {
   expect(finalCss).toEqual('p{color:violet;font-size:16px;font-style:italic}')
 })
 
-test.skip('leaves used css variables', async () => {
+test.skip('handles css variables', async () => {
   const { finalCss } = await runMinimalcss('css-variables')
   expect(finalCss).toMatch('--main-bg-color:')
-})
-
-test.skip('removes unused css variables', async () => {
-  const { finalCss } = await runMinimalcss('css-variables')
   expect(finalCss).not.toMatch('--unused-color:')
 })
 
-test('leaves vendor prefixed properties', async () => {
+test('handles vendor prefixed properties', async () => {
   const { finalCss } = await runMinimalcss('vendor-prefixes')
   expect(finalCss).toMatch('-webkit-transition')
-})
-
-test('leaves unknown properties', async () => {
-  const { finalCss } = await runMinimalcss('vendor-prefixes')
   expect(finalCss).toMatch('abracadabra')
 })
