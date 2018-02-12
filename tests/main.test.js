@@ -179,3 +179,15 @@ test('order matters in badly repeated style sheets', async () => {
   const { finalCss } = await runMinimalcss('repeated')
   expect(finalCss).toEqual('p{color:violet;font-size:16px;font-style:italic}')
 })
+
+test.skip('handles css variables', async () => {
+  const { finalCss } = await runMinimalcss('css-variables')
+  expect(finalCss).toMatch('--main-bg-color:')
+  expect(finalCss).not.toMatch('--unused-color:')
+})
+
+test('handles vendor prefixed properties', async () => {
+  const { finalCss } = await runMinimalcss('vendor-prefixes')
+  expect(finalCss).toMatch('-webkit-transition')
+  expect(finalCss).toMatch('abracadabra')
+})
