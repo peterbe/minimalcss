@@ -22,9 +22,9 @@
   version "8.0.46"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.46.tgz#6e1766b2d0ed06631d5b5f87bb8e72c8dbb6888e"
 
-"@types/node@8.9.2":
-  version "8.9.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.9.2.tgz#94bb08914ea1aebbb18ecff4c27dc0930e512934"
+"@types/node@8.9.3":
+  version "8.9.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.9.3.tgz#47d00392c5834dd5a095346d72df7ff8995f7365"
 
 "@types/pino@^4.7.1":
   version "4.7.1"
