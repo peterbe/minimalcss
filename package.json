@@ -13,12 +13,7 @@
     "type": "git",
     "url": "https://github.com/peterbe/minimalcss.git"
   },
-  "keywords": [
-    "css",
-    "web-perf",
-    "web-performance",
-    "optimizer"
-  ],
+  "keywords": ["css", "web-perf", "web-performance", "optimizer"],
   "bugs": {
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
@@ -46,12 +41,10 @@
     "precommit": "lint-staged",
     "tsc": "tsc -p .",
     "lintcheck": "scripts/lintcheck.sh",
-    "test": "jest"
+    "test": "jest",
+    "e2e": "./bin/e2e.js"
   },
   "lint-staged": {
-    "**/*.js": [
-      "prettier --write",
-      "git add"
-    ]
+    "**/*.js": ["prettier --write", "git add"]
   }
 }
