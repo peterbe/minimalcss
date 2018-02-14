@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer');
 // @ts-ignore
-const csso = require('csso')
+const csso = require('csso');
 // @ts-ignore
-const csstree = require('css-tree')
-const cheerio = require('cheerio')
-const utils = require('./utils')
-const url = require('url')
+const csstree = require('css-tree');
+const cheerio = require('cheerio');
+const utils = require('./utils');
+const url = require('url');
 
 /**
  * Take in a csstree AST, mutate it and return a csstree AST.
@@ -34,7 +34,7 @@ const postProcessOptimize = ast => {
     csstree.lexer
       .findAllFragments(ast, 'Type', 'keyframes-name')
       .map(entry => csstree.generate(entry.nodes.first()))
-  )
+  );
 
   // This is the function we use to filter @keyframes atrules out,
   // if its name is not actively used.
@@ -42,21 +42,21 @@ const postProcessOptimize = ast => {
   csstree.walk(ast, {
     visit: 'Atrule',
     enter: (node, item, list) => {
-      const basename = csstree.keyword(node.name).basename
+      const basename = csstree.keyword(node.name).basename;
       if (basename === 'keyframes') {
         if (!activeAnimationNames.has(csstree.generate(node.prelude))) {
-          list.remove(item)
+          list.remove(item);
         }
       } else if (basename === 'media') {
         if (csstree.generate(node.prelude) === 'print') {
-          list.remove(item)
+          list.remove(item);
         }
       }
     }
-  })
+  });
 
   // Now figure out what font-families are at all used in the AST.
-  const activeFontFamilyNames = new Set()
+  const activeFontFamilyNames = new Set();
   csstree.walk(ast, {
     visit: 'Declaration',
     enter: function(node) {
@@ -72,12 +72,12 @@ const postProcessOptimize = ast => {
                 type: 'Value',
                 children: entry.nodes
               })
-            )
-            activeFontFamilyNames.add(name)
-          })
+            );
+            activeFontFamilyNames.add(name);
+          });
       }
     }
-  })
+  });
 
   // Walk into every font-family rule and inspect if we uses its declarations
   csstree.walk(ast, {
@@ -91,18 +91,18 @@ const postProcessOptimize = ast => {
             if (csstree.property(declaration.property).name === 'font-family') {
               const name = utils.unquoteString(
                 csstree.generate(declaration.value)
-              )
+              );
               // was this @font-face used?
               if (!activeFontFamilyNames.has(name)) {
-                atruleList.remove(atruleItem)
+                atruleList.remove(atruleItem);
               }
             }
           }
-        })
+        });
       }
     }
-  })
-}
+  });
+};
 
 const processPage = ({
   page,
@@ -120,69 +120,71 @@ const processPage = ({
     // a bad download request (e.g. !response.ok), then remember that
     // we have fulfilled the promise and don't want to call `reject` or `resolve`
     // a second time.
-    let fulfilledPromise = false
+    let fulfilledPromise = false;
 
     const safeReject = error => {
       if (!fulfilledPromise) {
-        reject(error)
+        reject(error);
       }
-    }
+    };
 
-    const debug = options.debug || false
-    const loadimages = options.loadimages || false
-    const withoutjavascript = options.withoutjavascript || false
+    const debug = options.debug || false;
+    const loadimages = options.loadimages || false;
+    const withoutjavascript = options.withoutjavascript || false;
 
     try {
       if (options.userAgent) {
-        await page.setUserAgent(options.userAgent)
+        await page.setUserAgent(options.userAgent);
       }
 
       if (options.viewport) {
-        await page.setViewport(options.viewport)
+        await page.setViewport(options.viewport);
       }
 
       // A must or else you can't do console.log from within page.evaluate()
       page.on('console', msg => {
         if (debug) {
           for (let i = 0; i < msg.args.length; ++i) {
-            console.log(`${i}: ${msg.args[i]}`)
+            console.log(`${i}: ${msg.args[i]}`);
           }
         }
-      })
+      });
 
-      await page.setRequestInterception(true)
+      await page.setRequestInterception(true);
       page.on('request', request => {
-        const resourceType = request.resourceType()
-        const requestUrl = request.url()
+        const resourceType = request.resourceType();
+        const requestUrl = request.url();
         if (/data:image\//.test(requestUrl)) {
           // don't need to download those
-          request.abort()
+          request.abort();
         } else if (!loadimages && resourceType === 'image') {
-          request.abort()
+          request.abort();
         } else if (resourceType === 'font') {
-          request.abort()
+          request.abort();
         } else if (stylesheetAsts[requestUrl]) {
           // no point downloading this again
-          request.abort()
+          request.abort();
         } else if (options.skippable && options.skippable(request)) {
           // If the URL of the request that got skipped is a CSS file
           // not having it in stylesheetAsts is going to cause a
           // problem later when we loop through all <link ref="stylesheet">
           // tags.
           // So put in an empty (but not falsy!) object for this URL.
-          skippedUrls.add(requestUrl)
-          request.abort()
+          skippedUrls.add(requestUrl);
+          request.abort();
         } else {
-          request.continue()
+          request.continue();
         }
-      })
+      });
 
       // To build up a map of all downloaded CSS
       page.on('response', response => {
-        const responseUrl = response.url()
-        const resourceType = response.request().resourceType()
+        const responseUrl = response.url();
+        const resourceType = response.request().resourceType();
         if (response.status() >= 400) {
-          return safeReject(new Error(`${response.status()} on ${responseUrl}`))
+          return safeReject(
+            new Error(`${response.status()} on ${responseUrl}`)
+          );
         } else if (response.status() >= 300) {
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.
@@ -190,61 +192,61 @@ const processPage = ({
           const redirectsTo = new url.URL(
             response.headers().location,
             responseUrl
-          ).toString()
-          redirectResponses[responseUrl] = redirectsTo
+          ).toString();
+          redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
-            const ast = csstree.parse(text)
+            const ast = csstree.parse(text);
             csstree.walk(ast, node => {
               if (node.type === 'Url') {
-                let value = node.value
-                let path = value.value
+                let value = node.value;
+                let path = value.value;
                 if (value.type !== 'Raw') {
-                  path = path.substr(1, path.length - 2)
+                  path = path.substr(1, path.length - 2);
                 }
                 const sameHost =
-                  url.parse(responseUrl).host === url.parse(pageUrl).host
+                  url.parse(responseUrl).host === url.parse(pageUrl).host;
                 if (/^https?:\/\/|^\/\//i.test(path)) {
                   // do nothing
                 } else if (/^\//.test(path) && sameHost) {
                   // do nothing
                 } else {
-                  const resolved = new url.URL(path, responseUrl)
+                  const resolved = new url.URL(path, responseUrl);
                   if (sameHost) {
-                    path = resolved.pathname
+                    path = resolved.pathname;
                   } else {
-                    path = resolved.href
+                    path = resolved.href;
                   }
                 }
                 if (value.type !== 'Raw') {
-                  value.value = `"${path}"`
+                  value.value = `"${path}"`;
                 } else {
-                  value.value = path
+                  value.value = path;
                 }
               }
-            })
-            stylesheetAsts[responseUrl] = ast
-            stylesheetContents[responseUrl] = text
-          })
+            });
+            stylesheetAsts[responseUrl] = ast;
+            stylesheetContents[responseUrl] = text;
+          });
         }
-      })
+      });
 
       page.on('pageerror', error => {
-        safeReject(error)
-      })
+        safeReject(error);
+      });
 
-      let response
+      let response;
 
       if (!withoutjavascript) {
         // First, go to the page with JavaScript disabled.
-        await page.setJavaScriptEnabled(false)
-        response = await page.goto(pageUrl)
+        await page.setJavaScriptEnabled(false);
+        response = await page.goto(pageUrl);
         if (!response.ok()) {
-          return safeReject(new Error(`${response.status()} on ${pageUrl}`))
+          return safeReject(new Error(`${response.status()} on ${pageUrl}`));
         }
-        const htmlVanilla = await page.content()
-        doms.push(cheerio.load(htmlVanilla))
-        await page.setJavaScriptEnabled(true)
+        const htmlVanilla = await page.content();
+        doms.push(cheerio.load(htmlVanilla));
+        await page.setJavaScriptEnabled(true);
       }
 
       // There is another use case *between* the pure DOM (without any
@@ -261,16 +263,16 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' })
+      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
       if (!response.ok()) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
-        )
+        );
       }
       const evalWithJavascript = await page.evaluate(() => {
         // The reason for NOT using a Set here is that that might not be
         // supported in ES5.
-        const hrefs = []
+        const hrefs = [];
         // Loop over all the 'link' elements in the document and
         // for each, collect the URL of all the ones we're going to assess.
         Array.from(document.querySelectorAll('link')).forEach(link => {
@@ -281,33 +283,33 @@ const processPage = ({
             !link.href.toLowerCase().startsWith('blob:') &&
             link.media !== 'print'
           ) {
-            hrefs.push(link.href)
+            hrefs.push(link.href);
           }
-        })
+        });
         return {
           html: document.documentElement.outerHTML,
           hrefs
-        }
-      })
+        };
+      });
 
-      const htmlWithJavascript = evalWithJavascript.html
-      doms.push(cheerio.load(htmlWithJavascript))
+      const htmlWithJavascript = evalWithJavascript.html;
+      doms.push(cheerio.load(htmlWithJavascript));
       evalWithJavascript.hrefs.forEach(href => {
         // The order of allHrefs is important! That's what browsers do.
         // But we can't blindly using allHrefs.push() because the href
         // *might* already have been encountered. If it has been encountered
         // before, remove it and add it to the end of the array.
         if (allHrefs.includes(href)) {
-          allHrefs.splice(allHrefs.indexOf(href), 1)
+          allHrefs.splice(allHrefs.indexOf(href), 1);
         }
-        allHrefs.push(href)
-      })
+        allHrefs.push(href);
+      });
 
-      if (!fulfilledPromise) resolve()
+      if (!fulfilledPromise) resolve();
     } catch (e) {
-      return safeReject(e)
+      return safeReject(e);
     }
-  })
+  });
 
 /**
  *
@@ -315,29 +317,29 @@ const processPage = ({
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
-  const { urls } = options
-  const debug = options.debug || false
-  const puppeteerArgs = options.puppeteerArgs || []
+  const { urls } = options;
+  const debug = options.debug || false;
+  const puppeteerArgs = options.puppeteerArgs || [];
   const browser =
     options.browser ||
     (await puppeteer.launch({
       args: puppeteerArgs
-    }))
+    }));
 
   // All of these get mutated by the processPage() function. Once
   // per URL.
-  const stylesheetAsts = {}
-  const stylesheetContents = {}
-  const doms = []
-  const allHrefs = []
-  const redirectResponses = {}
-  const skippedUrls = new Set()
+  const stylesheetAsts = {};
+  const stylesheetContents = {};
+  const doms = [];
+  const allHrefs = [];
+  const redirectResponses = {};
+  const skippedUrls = new Set();
 
   try {
     // Note! This opens one URL at a time synchronous
     for (let i = 0; i < urls.length; i++) {
-      const pageUrl = urls[i]
-      const page = await browser.newPage()
+      const pageUrl = urls[i];
+      const page = await browser.newPage();
       try {
         await processPage({
           page,
@@ -349,19 +351,19 @@ const minimalcss = async options => {
           allHrefs,
           redirectResponses,
           skippedUrls
-        })
+        });
       } catch (e) {
-        throw e
+        throw e;
       } finally {
-        await page.close()
+        await page.close();
       }
     }
   } catch (e) {
-    throw e
+    throw e;
   } finally {
     // We can close the browser now that all URLs have been opened.
     if (!options.browser) {
-      browser.close()
+      browser.close();
     }
   }
 
@@ -373,37 +375,37 @@ const minimalcss = async options => {
       stylesheetAsts[url] ||
       skippedUrls.has(url) ||
       redirectResponses[url]
-    )
-  })
+    );
+  });
   if (missingASTs.length) {
     throw new Error(
       `Found stylesheets that failed to download (${missingASTs})`
-    )
+    );
   }
 
   // Now, let's loop over ALL links and process their ASTs compared to
   // the DOMs.
-  const decisionsCache = {}
+  const decisionsCache = {};
   const isSelectorMatchToAnyElement = selectorString => {
     // Here's the crucial part. Decide whether to keep the selector
     // Find at least 1 DOM that contains an object that matches
     // this selector string.
     return doms.some(dom => {
       try {
-        return dom(selectorString).length > 0
+        return dom(selectorString).length > 0;
       } catch (ex) {
         // Be conservative. If we can't understand the selector,
         // best to leave it in.
         if (debug) {
-          console.warn(selectorString, ex.toString())
+          console.warn(selectorString, ex.toString());
         }
-        return true
+        return true;
       }
-    })
-  }
+    });
+  };
   allHrefs.forEach(href => {
     while (redirectResponses[href]) {
-      href = redirectResponses[href]
+      href = redirectResponses[href];
     }
     if (skippedUrls.has(href)) {
       // skippedUrls are URLs that for some reason was deliberately not
@@ -412,9 +414,9 @@ const minimalcss = async options => {
       // remember which URLs we skipped, when we later find all the
       // <link> tags to start analyze, we'd get an error here because
       // we deliberately chose to now parse its CSS.
-      return
+      return;
     }
-    const ast = stylesheetAsts[href]
+    const ast = stylesheetAsts[href];
 
     csstree.walk(ast, {
       visit: 'Rule',
@@ -424,46 +426,48 @@ const minimalcss = async options => {
           csstree.keyword(this.atrule.name).basename === 'keyframes'
         ) {
           // Don't bother inspecting rules that are inside a keyframe.
-          return
+          return;
         }
 
         node.prelude.children.forEach((node, item, list) => {
           // Translate selector's AST to a string and filter pseudos from it
           // This changes things like `a.button:active` to `a.button`
-          const selectorString = utils.reduceCSSSelector(csstree.generate(node))
+          const selectorString = utils.reduceCSSSelector(
+            csstree.generate(node)
+          );
           if (selectorString in decisionsCache === false) {
             decisionsCache[selectorString] = isSelectorMatchToAnyElement(
               selectorString
-            )
+            );
           }
           if (!decisionsCache[selectorString]) {
             // delete selector from a list of selectors
-            list.remove(item)
+            list.remove(item);
           }
-        })
+        });
 
         if (node.prelude.children.isEmpty()) {
           // delete rule from a list
-          list.remove(item)
+          list.remove(item);
         }
       }
-    })
-  })
+    });
+  });
   // Every unique URL in every <link> tag has been checked.
   // We can't simply loop over allHrefs because it might contain
   // entries that *aren't* in stylesheetAsts. For example, a page
   // might have a href in there but it's been deliberately skipped.
   // That's why we need to make a ordered copy of it based on
   // each item existing in stylesheetAsts.
-  const allUsedHrefs = []
+  const allUsedHrefs = [];
   allHrefs.forEach(href => {
     while (redirectResponses[href]) {
-      href = redirectResponses[href]
+      href = redirectResponses[href];
     }
     if (stylesheetAsts[href]) {
-      allUsedHrefs.push(href)
+      allUsedHrefs.push(href);
     }
-  })
+  });
   const allCombinedAst = {
     type: 'StyleSheet',
     loc: null,
@@ -471,17 +475,17 @@ const minimalcss = async options => {
       (children, href) => children.appendList(stylesheetAsts[href].children),
       new csstree.List()
     )
-  }
+  };
 
   // Lift important comments (i.e. /*! comment */) up to the beginning
-  const comments = new csstree.List()
+  const comments = new csstree.List();
   csstree.walk(allCombinedAst, {
     visit: 'Comment',
     enter: (_node, item, list) => {
-      comments.append(list.remove(item))
+      comments.append(list.remove(item));
     }
-  })
-  allCombinedAst.children.prependList(comments)
+  });
+  allCombinedAst.children.prependList(comments);
 
   // Why not just allow the return of the "unminified" CSS (in case
   // some odd ball wants it)?
@@ -492,14 +496,14 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  csso.compress(allCombinedAst)
-  postProcessOptimize(allCombinedAst)
+  csso.compress(allCombinedAst);
+  postProcessOptimize(allCombinedAst);
 
   const returned = {
     finalCss: csstree.generate(allCombinedAst),
     stylesheetContents
-  }
-  return Promise.resolve(returned)
-}
+  };
+  return Promise.resolve(returned);
+};
 
-module.exports = { run: minimalcss }
+module.exports = { run: minimalcss };

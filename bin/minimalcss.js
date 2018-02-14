@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-'use strict'
+'use strict';
 
-const { URL } = require('url')
-const fs = require('fs')
-const minimist = require('minimist')
-const minimalcss = eval('require')('../index')
-const filesize = require('filesize')
+const { URL } = require('url');
+const fs = require('fs');
+const minimist = require('minimist');
+const minimalcss = eval('require')('../index');
+const filesize = require('filesize');
 
-const args = process.argv.slice(2)
+const args = process.argv.slice(2);
 
 const argv = minimist(args, {
   boolean: [
@@ -32,15 +32,15 @@ const argv = minimist(args, {
   },
   unknown: param => {
     if (param.startsWith('-')) {
-      console.warn('Ignored unknown option: ' + param + '\n')
-      return false
+      console.warn('Ignored unknown option: ' + param + '\n');
+      return false;
     }
   }
-})
+});
 
 if (argv['version']) {
-  console.log(minimalcss.version)
-  process.exit(0)
+  console.log(minimalcss.version);
+  process.exit(0);
 }
 
 if (argv['help']) {
@@ -58,32 +58,32 @@ if (argv['help']) {
       "  --nosandbox                   Adds `['--no-sandbox', '--disable-setuid-sandbox']` to puppeteer launch.\n" +
       '  --version or -v               Print minimalcss version.\n' +
       ''
-  )
-  process.exit(0)
+  );
+  process.exit(0);
 }
 
-const urls = argv['_']
+const urls = argv['_'];
 
 urls.forEach(url => {
   try {
-    const parsed = new URL(url)
+    const parsed = new URL(url);
   } catch (ex) {
-    console.error(`${url} is not a valid URL`)
-    process.exit(1)
+    console.error(`${url} is not a valid URL`);
+    process.exit(1);
   }
-})
+});
 
 const parseViewport = asString => {
   if (!asString) {
-    return null
+    return null;
   }
   try {
-    return JSON.parse(asString)
+    return JSON.parse(asString);
   } catch (ex) {
-    console.error(`Unable to parse 'viewport' (${ex.toString()})`)
-    process.exit(2)
+    console.error(`Unable to parse 'viewport' (${ex.toString()})`);
+    process.exit(2);
   }
-}
+};
 
 const options = {
   urls: urls,
@@ -91,60 +91,60 @@ const options = {
   loadimages: argv['loadimages'],
   withoutjavascript: argv['withoutjavascript'],
   skippable: request => {
-    let skips = argv['skip']
+    let skips = argv['skip'];
     if (!skips) {
-      return false
+      return false;
     }
     if (!Array.isArray(skips)) {
-      skips = [skips]
+      skips = [skips];
     }
-    return skips.some(skip => !!request.url().match(skip))
+    return skips.some(skip => !!request.url().match(skip));
   },
   viewport: parseViewport(argv['viewport']),
   puppeteerArgs: argv['nosandbox']
     ? ['--no-sandbox', '--disable-setuid-sandbox']
     : []
-}
+};
 
-const start = Date.now()
+const start = Date.now();
 
 minimalcss
   .minimize(options)
   .then(result => {
-    let output = result.finalCss
-    const end = Date.now()
+    let output = result.finalCss;
+    const end = Date.now();
     if (argv['verbose']) {
-      const now = new Date().toISOString()
-      let comment = `/*\nGenerated ${now} by minimalcss.\n`
-      const seconds = ((end - start) / 1000).toFixed(2)
-      const bytesHuman = filesize(output.length)
-      const stylesheetContents = result.stylesheetContents
-      const stylesheets = Object.keys(stylesheetContents)
+      const now = new Date().toISOString();
+      let comment = `/*\nGenerated ${now} by minimalcss.\n`;
+      const seconds = ((end - start) / 1000).toFixed(2);
+      const bytesHuman = filesize(output.length);
+      const stylesheetContents = result.stylesheetContents;
+      const stylesheets = Object.keys(stylesheetContents);
       const totalSizeBefore = stylesheets.reduce(
         (acc, key) => acc + stylesheetContents[key].length,
         0
-      )
-      const totalSizeBeforeHuman = filesize(totalSizeBefore)
-      comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`
-      comment += `Based on ${stylesheets.length} stylesheets `
-      comment += `totalling ${totalSizeBeforeHuman}.\n`
-      comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n'
-      comment += '*/'
-      output = `${comment}\n${output}`
+      );
+      const totalSizeBeforeHuman = filesize(totalSizeBefore);
+      comment += `Took ${seconds} seconds to generate ${bytesHuman} of CSS.\n`;
+      comment += `Based on ${stylesheets.length} stylesheets `;
+      comment += `totalling ${totalSizeBeforeHuman}.\n`;
+      comment += 'Options: ' + JSON.stringify(options, undefined, 2) + '\n';
+      comment += '*/';
+      output = `${comment}\n${output}`;
     }
     if (argv['output']) {
-      const filename = argv['output']
+      const filename = argv['output'];
       try {
-        fs.writeFileSync(filename, output + '\n', 'utf8')
+        fs.writeFileSync(filename, output + '\n', 'utf8');
       } catch (err) {
-        console.error('Unable to write file: ' + filename + '\n' + err)
-        process.exit(2)
+        console.error('Unable to write file: ' + filename + '\n' + err);
+        process.exit(2);
       }
     } else {
-      console.log(output)
+      console.log(output);
     }
   })
   .catch(error => {
-    console.error(error)
-    process.exit(3)
-  })
+    console.error(error);
+    process.exit(3);
+  });

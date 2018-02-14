@@ -13,8 +13,8 @@
 const reduceCSSSelector = selector => {
   return selector.split(
     /:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
-  )[0]
-}
+  )[0];
+};
 
 /**
  * Remove the ' and/or " at the beginning and end of a string if it has it.
@@ -22,12 +22,12 @@ const reduceCSSSelector = selector => {
  * @return {string}
  */
 const unquoteString = string => {
-  const first = string.charAt(0)
-  const last = string.charAt(string.length - 1)
+  const first = string.charAt(0);
+  const last = string.charAt(string.length - 1);
   if (first === last && (first === '"' || first === "'")) {
-    return string.substring(1, string.length - 1)
+    return string.substring(1, string.length - 1);
   }
-  return string
-}
+  return string;
+};
 
-module.exports = { reduceCSSSelector, unquoteString }
+module.exports = { reduceCSSSelector, unquoteString };
