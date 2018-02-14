@@ -31,9 +31,7 @@
     "@types/puppeteer": "1.0.0",
     "fastify": "0.43.0",
     "fastify-static": "0.8.0",
-    "husky": "0.14.3",
     "jest": "22.3.0",
-    "lint-staged": "6.1.0",
     "prettier": "1.10.2",
     "typescript": "2.7.1"
   },
@@ -43,8 +41,5 @@
     "lintcheck": "scripts/lintcheck.sh",
     "test": "jest",
     "e2e": "./bin/e2e.js"
-  },
-  "lint-staged": {
-    "**/*.js": ["prettier --write", "git add"]
   }
 }
