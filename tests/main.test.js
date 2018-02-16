@@ -191,3 +191,8 @@ test('handles vendor prefixed properties', async () => {
   expect(finalCss).toMatch('-webkit-transition')
   expect(finalCss).toMatch('abracadabra')
 })
+
+test('leaves GET params in urls', async () => {
+  const { finalCss } = await runMinimalcss('get-params-in-url')
+  expect(finalCss).toMatch('/images/small.jpg?a=b')
+})
