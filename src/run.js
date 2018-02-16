@@ -213,7 +213,7 @@ const processPage = ({
                 } else {
                   const resolved = new url.URL(path, responseUrl);
                   if (sameHost) {
-                    path = resolved.pathname;
+                    path = resolved.pathname + resolved.search;
                   } else {
                     path = resolved.href;
                   }
