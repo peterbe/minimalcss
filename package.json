@@ -1,6 +1,6 @@
 {
   "name": "minimalcss",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "./index.js",
   "author": "Peter Bengtsson",
@@ -13,7 +13,12 @@
     "type": "git",
     "url": "https://github.com/peterbe/minimalcss.git"
   },
-  "keywords": ["css", "web-perf", "web-performance", "optimizer"],
+  "keywords": [
+    "css",
+    "web-perf",
+    "web-performance",
+    "optimizer"
+  ],
   "bugs": {
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
