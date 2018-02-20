@@ -33,7 +33,7 @@
     "fastify-static": "0.8.0",
     "jest": "22.3.0",
     "prettier": "1.10.2",
-    "typescript": "2.7.1"
+    "typescript": "2.7.2"
   },
   "scripts": {
     "tsc": "tsc -p .",
