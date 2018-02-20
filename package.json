@@ -13,12 +13,7 @@
     "type": "git",
     "url": "https://github.com/peterbe/minimalcss.git"
   },
-  "keywords": [
-    "css",
-    "web-perf",
-    "web-performance",
-    "optimizer"
-  ],
+  "keywords": ["css", "web-perf", "web-performance", "optimizer"],
   "bugs": {
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
@@ -41,7 +36,6 @@
     "typescript": "2.7.1"
   },
   "scripts": {
-    "precommit": "lint-staged",
     "tsc": "tsc -p .",
     "lintcheck": "scripts/lintcheck.sh",
     "test": "jest",
