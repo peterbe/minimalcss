@@ -1,3 +1,8 @@
+# 0.7.1
+
+* Any query strings in URLs in CSS is now preserved.
+  [pull#148](https://github.com/peterbe/minimalcss/pull/148) Thanks @usebaz
+
 # 0.7.0
 
 * Important fix for how multiple external stylesheets are parsed in the exact
