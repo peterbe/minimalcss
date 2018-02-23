@@ -1,3 +1,9 @@
+# 0.7.2
+
+* Data URIs in external stylesheets lost the `data:` part.
+  [pull@153](https://github.com/peterbe/minimalcss/pull/153)
+  Thanks @stereobooster and @phiresky for reporting.
+
 # 0.7.1
 
 * Any query strings in URLs in CSS is now preserved.
