@@ -46,6 +46,9 @@ test('handles relative paths', async () => {
   expect(finalCss).toMatch(
     'background-image:url(http://127.0.0.1:3000/images/small.jpg)'
   );
+  expect(finalCss).toMatch(
+    'background-image:url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)'
+  );
 });
 
 test('handles JS errors', async () => {

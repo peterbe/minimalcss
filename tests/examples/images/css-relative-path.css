@@ -1,2 +1,9 @@
-body { background: url(small.jpg); }
-p { background-image: url("small.jpg"); }
+body {
+  background: url(small.jpg);
+}
+p {
+  background-image: url('small.jpg');
+}
+.inlineImage {
+  background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+}
