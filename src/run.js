@@ -206,7 +206,7 @@ const processPage = ({
                 }
                 const sameHost =
                   url.parse(responseUrl).host === url.parse(pageUrl).host;
-                if (/^https?:\/\/|^\/\//i.test(path)) {
+                if (/^https?:\/\/|^\/\/|^data:/i.test(path)) {
                   // do nothing
                 } else if (/^\//.test(path) && sameHost) {
                   // do nothing
@@ -217,11 +217,11 @@ const processPage = ({
                   } else {
                     path = resolved.href;
                   }
-                }
-                if (value.type !== 'Raw') {
-                  value.value = `"${path}"`;
-                } else {
-                  value.value = path;
+                  if (value.type !== 'Raw') {
+                    value.value = `"${path}"`;
+                  } else {
+                    value.value = path;
+                  }
                 }
               }
             });
