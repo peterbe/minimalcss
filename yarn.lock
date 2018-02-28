@@ -33,9 +33,9 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/puppeteer@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-1.0.0.tgz#3e8f6c6612ed3ed7503fce4c7b6ef4a191d5e931"
+"@types/puppeteer@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-1.0.1.tgz#3591f19b7716cd50856515068f2519ae182c3dd7"
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
