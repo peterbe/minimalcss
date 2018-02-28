@@ -293,4 +293,4 @@ To check that all your code conforms, run:
 ## License
 
 Copyright (c) 2017-2018 [Peter Bengtsson](https://www.peterbe.com).
-See the [LICENSE](/LICENSE.md) file for license rights and limitations (MIT).
+See the [LICENSE](/LICENSE) file for license rights and limitations (MIT).
