@@ -1,7 +1,12 @@
+# 0.7.3
+
+* Fix for pages that uses `data:text/css ...` as the `href` i `<link>` tags.
+  [pull#159](https://github.com/peterbe/minimalcss/pull/159)
+
 # 0.7.2
 
 * Data URIs in external stylesheets lost the `data:` part.
-  [pull@153](https://github.com/peterbe/minimalcss/pull/153)
+  [pull#153](https://github.com/peterbe/minimalcss/pull/153)
   Thanks @stereobooster and @phiresky for reporting.
 
 # 0.7.1
