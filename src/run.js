@@ -281,7 +281,8 @@ const processPage = ({
             (link.rel === 'stylesheet' ||
               link.href.toLowerCase().endsWith('.css')) &&
             !link.href.toLowerCase().startsWith('blob:') &&
-            link.media !== 'print'
+            link.media !== 'print' &&
+            !link.href.toLowerCase().startsWith('data:')
           ) {
             hrefs.push(link.href);
           }

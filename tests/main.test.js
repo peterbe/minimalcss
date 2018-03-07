@@ -199,3 +199,10 @@ test('leaves GET params in urls', async () => {
   const { finalCss } = await runMinimalcss('get-params-in-url');
   expect(finalCss).toMatch('/images/small.jpg?a=b');
 });
+
+test('avoids link tags that is css data', async () => {
+  const { finalCss } = await runMinimalcss('css-in-link-tag');
+  // Most important is that it doesn't crash.
+  // See https://github.com/peterbe/minimalcss/issues/158
+  expect(finalCss).toMatch('');
+});
