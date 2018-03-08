@@ -34,7 +34,7 @@
     "@types/cheerio": "0.22.7",
     "@types/node": "8.9.4",
     "@types/puppeteer": "1.0.1",
-    "fastify": "1.1.0",
+    "fastify": "1.1.1",
     "fastify-static": "0.8.0",
     "jest": "22.4.2",
     "prettier": "1.11.1",
