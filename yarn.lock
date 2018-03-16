@@ -983,9 +983,9 @@ fastify-static@0.8.0:
     fastify-plugin "^0.2.1"
     send "^0.16.0"
 
-fastify@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.1.0.tgz#0e053c552f3e783af7f0f0dc6e6a83b6926b6332"
+fastify@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.1.1.tgz#c7768bdc7bc069a1527690dfe8f81656e03d278f"
   dependencies:
     "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
