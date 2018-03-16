@@ -166,7 +166,7 @@ key is `urls`. Other optional options are:
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
 * `loadimages` - If set to `true`, images will actually load.
-* `withoutjavascript` - If set to `true` it will _skip_ loading the page first
+* `withoutjavascript` - If set to `false` it will _skip_ loading the page first
   without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
   can be, and then with JavaScript enabled _and_ waiting for network activity
   to be idle.
