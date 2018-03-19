@@ -9,14 +9,7 @@ const cheerio = require('cheerio');
 const utils = require('./utils');
 const url = require('url');
 
-const isOk = status => status === 200 || status === 304;
-
-const isRedirect = status =>
-  status === 301 ||
-  status === 302 ||
-  status === 303 ||
-  status === 307 ||
-  status === 308;
+const isOk = response => response.ok() || response.status() === 304;
 
 /**
  * Take in a csstree AST, mutate it and return a csstree AST.
@@ -194,7 +187,7 @@ const processPage = ({
           return safeReject(
             new Error(`${response.status()} on ${responseUrl}`)
           );
-        } else if (isRedirect(response.status())) {
+        } else if (response.status() >= 300 && response.status() !== 304) {
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.
           // If it already was an absolute URL, it stays like that.
@@ -250,7 +243,7 @@ const processPage = ({
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false);
         response = await page.goto(pageUrl);
-        if (!isOk(response.status())) {
+        if (!isOk(response)) {
           return safeReject(new Error(`${response.status()} on ${pageUrl}`));
         }
         const htmlVanilla = await page.content();
@@ -273,7 +266,7 @@ const processPage = ({
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
       response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
-      if (!isOk(response.status())) {
+      if (!isOk(response)) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
         );
