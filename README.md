@@ -175,6 +175,7 @@ key is `urls`. Other optional options are:
 * `viewport` - viewport object as specified in [page.setViewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport)
 * `puppeteerArgs` - Args sent to puppeteer when launching. [List
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
+* `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
 
 ## Warnings
 

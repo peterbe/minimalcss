@@ -206,3 +206,13 @@ test('avoids link tags that is css data', async () => {
   // See https://github.com/peterbe/minimalcss/issues/158
   expect(finalCss).toMatch('');
 });
+
+test('accept CSSO options', async () => {
+  const cssoOptions = {};
+  let { finalCss } = await runMinimalcss('comments', { cssoOptions });
+  expect(finalCss).toMatch('test css comment');
+
+  cssoOptions.comments = false;
+  ({ finalCss } = await runMinimalcss('comments', { cssoOptions }));
+  expect(finalCss).not.toMatch('test css comment');
+});
