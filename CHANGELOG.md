@@ -1,3 +1,15 @@
+# 0.7.4
+
+* Fix for logic of using the `--withoutjavascript` argument.
+  [pull#163](https://github.com/peterbe/minimalcss/pull/163)
+  Thanks @stereobooster
+
+* Upgrade `puppeteer` dependency to version 1.2.
+
+* Fix for `304 Not Modified` responses that actually don't redirect.
+  [pull#165](https://github.com/peterbe/minimalcss/pull/165)
+  Thanks @stereobooster
+
 # 0.7.3
 
 * Fix for pages that uses `data:text/css ...` as the `href` i `<link>` tags.
