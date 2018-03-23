@@ -1,3 +1,9 @@
+# 0.7.5
+
+* Ability to pass an object of options to `csso.compress()`
+  [pull#167](https://github.com/peterbe/minimalcss/pull/167)
+  Thanks @usebaz
+
 # 0.7.4
 
 * Fix for logic of using the `--withoutjavascript` argument.
