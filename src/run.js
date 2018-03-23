@@ -319,12 +319,13 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string> }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
   const { urls } = options;
   const debug = options.debug || false;
+  const cssoOptions = options.cssoOptions || {};
   const puppeteerArgs = options.puppeteerArgs || [];
   const browser =
     options.browser ||
@@ -502,7 +503,7 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  csso.compress(allCombinedAst);
+  csso.compress(allCombinedAst, cssoOptions);
   postProcessOptimize(allCombinedAst);
 
   const returned = {
