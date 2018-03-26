@@ -1088,6 +1088,10 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
+fast-decode-uri-component@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fast-decode-uri-component/-/fast-decode-uri-component-1.0.0.tgz#7ce10336aa4b26286fee93d71e6785ff0f596a33"
+
 fast-deep-equal@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
@@ -1127,9 +1131,9 @@ fastify-static@0.8.0:
     fastify-plugin "^0.2.1"
     send "^0.16.0"
 
-fastify@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.1.1.tgz#c7768bdc7bc069a1527690dfe8f81656e03d278f"
+fastify@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.2.0.tgz#cb7358cd93517e1c507f2c52b4c0e257c9622c73"
   dependencies:
     "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
@@ -1137,7 +1141,7 @@ fastify@1.1.1:
     avvio "^5.4.0"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.2.0"
-    find-my-way "^1.10.1"
+    find-my-way "^1.11.0"
     flatstr "^1.0.5"
     light-my-request "^2.0.1"
     middie "^3.1.0"
@@ -1196,9 +1200,11 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-find-my-way@^1.10.1:
-  version "1.10.4"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.10.4.tgz#ae9cefd1b7fefce6779e2281fe14fae5251dea77"
+find-my-way@^1.11.0:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.11.1.tgz#638ca077b01a52f3db344c4abec709483b2994a0"
+  dependencies:
+    fast-decode-uri-component "^1.0.0"
 
 find-up@^1.0.0:
   version "1.1.2"
