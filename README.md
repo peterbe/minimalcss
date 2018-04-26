@@ -122,7 +122,7 @@ optimization work.
 ## API
 
 ```javascript
-const minimalcss = require('minimalcss')
+const minimalcss = require('minimalcss');
 ```
 
 ### Get version `minimalcss.version`
@@ -137,13 +137,13 @@ For example:
 
 ```javascript
 minimalcss
-  .minimize({ urls: ['http://peterbecom.dev/css-blocking/ultra-basic.html'] })
+  .minimize({ urls: ['https://example.com/'] })
   .then(result => {
-    console.log('OUTPUT', result.finalCss.length, result.finalCss)
+    console.log('OUTPUT', result.finalCss.length, result.finalCss);
   })
   .catch(error => {
-    console.error(`Failed the minimize CSS: ${error}`)
-  })
+    console.error(`Failed the minimize CSS: ${error}`);
+  });
 ```
 
 That `result` object that is returned by the `minimize` function contains:
@@ -179,6 +179,43 @@ key is `urls`. Other optional options are:
 
 ## Warnings
 
+### Google Fonts
+
+Suppose you have this in your HTML:
+
+```html
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+```
+
+then, `minimalcss` will consider this an external CSS stylesheet, load it
+and include it in the minimal CSS.
+
+The problem is that Google Fonts will respond to that URL dynamically based
+on the user agent. In other words a different CSS payload depending on who's
+asking. So, the user agent when `minimalcss` runs will be whatever
+`puppeteer` uses and it might not be the best CSS for other user agents.
+So to avoid this predicament use the `skippable` option. On the command line
+you can do that like this:
+
+```shell
+./node_modules/.bin/minimalcss --skip fonts.googleapis.com https://example.com
+```
+
+With the API, you can do it like this:
+
+```javascript
+minimalcss
+  .minimize({
+    urls: ['https://example.com'],
+    skippable: request => {
+      return !!request.url().match('fonts.googleapis.com');
+    }
+  })
+  .then(result => {
+    ...
+  });
+```
+
 ### Multiple URLs
 
 `minimalcss` can accept multiple URLs when figuring out the minimal CSS for
@@ -202,9 +239,9 @@ and another URL with...:
 
 When combining these, it will optimize the CSS in this order:
 
-1. `base.css`
-2. `specific.css`
-3. `base.css`
+1.  `base.css`
+2.  `specific.css`
+3.  `base.css`
 
 But if `specific.css` was meant to override something in `base.css` in the
 first URL, that might get undone when `base.css` becomes the last CSS
