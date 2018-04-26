@@ -238,9 +238,9 @@ atob@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.0.3.tgz#19c7a760473774468f20b2d2d03372ad7d4cbf5d"
 
-avvio@^5.4.0:
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.4.1.tgz#4acf3d03e69aa176f90249c30fbe30261021b199"
+avvio@^5.4.3:
+  version "5.4.3"
+  resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.4.3.tgz#a48a676cc05bc087f0e55cc6316052fb0d5049de"
   dependencies:
     debug "^3.1.0"
     fastq "^1.5.0"
@@ -1132,19 +1132,19 @@ fastify-static@0.10.1:
     readable-stream "^2.3.6"
     send "^0.16.0"
 
-fastify@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.3.0.tgz#0cab9a4aba65080d37a73d3659a929e03e2ac53a"
+fastify@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.3.1.tgz#6bccac34821d6658aea07b62a99f034b7cdb1777"
   dependencies:
     "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
     ajv "^6.2.0"
-    avvio "^5.4.0"
+    avvio "^5.4.3"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.2.0"
     find-my-way "^1.11.0"
     flatstr "^1.0.5"
-    light-my-request "^2.0.1"
+    light-my-request "^2.0.2"
     middie "^3.1.0"
     pino "^4.13.0"
     tiny-lru "^1.5.0"
@@ -2241,9 +2241,9 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-light-my-request@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/light-my-request/-/light-my-request-2.0.1.tgz#341c98af9c5d359c4615b3591607fa71ba13b2b3"
+light-my-request@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/light-my-request/-/light-my-request-2.0.2.tgz#19123fb6c6b746a643433d9e3f6dfcf118e95147"
   dependencies:
     ajv "^6.0.0"
     readable-stream "^2.3.3"
