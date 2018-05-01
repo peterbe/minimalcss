@@ -6,7 +6,8 @@
   },
   "scripts": {
     "test": "lerna run test",
-    "lintcheck": "scripts/lintcheck.sh"
+    "lintcheck": "scripts/lintcheck.sh",
+    "ci": "yarn test && yarn lintcheck"
   },
   "workspaces": [
     "packages/*"

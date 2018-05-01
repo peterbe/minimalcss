@@ -9,5 +9,4 @@ cache:
     - packages/minimalcss/node_modules
     - packages/minimalcss-lib/node_modules
 script:
-  - yarn test
-  - yarn lintcheck
+  - yarn ci

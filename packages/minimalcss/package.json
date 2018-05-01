@@ -27,6 +27,6 @@
     "puppeteer": "^1.2.0"
   },
   "scripts": {
-    "test": "./bin/e2e.js"
+    "test": "./tests/e2e.js"
   }
 }
