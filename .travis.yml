@@ -1,16 +1,13 @@
-sudo: required
+sudo: false
 language: node_js
 node_js:
   stable
-services:
-  - docker
-branches:
-  only:
-  - master
-before_install:
- - docker build -t minimalcss:tests .
+cache:
+  yarn: true
+  directories:
+    - node_modules
+    - packages/minimalcss/node_modules
+    - packages/minimalcss-lib/node_modules
 script:
-  - docker container run -it minimalcss:tests yarn tsc
-  - docker container run -it minimalcss:tests yarn lintcheck
-  - docker container run -it minimalcss:tests yarn test
-  - docker container run -it --env CI=$CI minimalcss:tests yarn e2e
+  - yarn test
+  - yarn lintcheck

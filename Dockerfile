@@ -23,5 +23,5 @@ RUN yarn add puppeteer
 WORKDIR /app
 ADD . /app
 
-ENTRYPOINT ["/bin/bash", "/app/tests/run.sh"]
+ENTRYPOINT ["/bin/bash", "/app/packages/minimalcss/tests/run.sh"]
 CMD ["e2e"]
