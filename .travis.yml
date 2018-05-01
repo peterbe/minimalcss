@@ -7,7 +7,6 @@ services:
 branches:
   only:
   - master
-  - /^greenkeeper/.*$/
 before_install:
  - docker build -t minimalcss:tests .
 script:
