@@ -68,8 +68,7 @@ $ ./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutu
 special about `minimalcss` is that it uses the Chrome Headless browser.
 
 * [penthouse](https://github.com/pocketjoso/penthouse) -
-  uses [PhantomJS](http://phantomjs.org/) which is a headless WebKit browser.
-  `PhantomJS` is [no longer maintained](https://groups.google.com/forum/m/#!topic/phantomjs/9aI5d-LDuNE).
+  uses [puppeteer](https://github.com/GoogleChrome/puppeteer) (since version 1.0) and [CSSTree](https://github.com/csstree/csstree).
   Supports only 1 URL at a time and can't you have to first save the CSS files
   it should process.
 
