@@ -18,4 +18,4 @@ See https://prettier.io/docs/en/editors.html#content
     exit 1
 }
 
-prettier --list-different "src/*.js" "tests/*.js" "bin/*.js" || error
+prettier --list-different "packages/**/src/*.js" "packages/**/tests/*.js" "packages/**/bin/*.js" || error
