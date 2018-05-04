@@ -90,13 +90,22 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.0.0, ajv@^6.2.0:
+ajv@^6.0.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.2.1.tgz#28a6abc493a2abe0fb4c8507acaedb43fa550671"
   dependencies:
     fast-deep-equal "^1.0.0"
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
+
+ajv@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.4.0.tgz#d3aff78e9277549771daf0164cff48482b754fc6"
+  dependencies:
+    fast-deep-equal "^1.0.0"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.3.0"
+    uri-js "^3.0.2"
 
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
@@ -770,6 +779,10 @@ deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
 
+deepmerge@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.1.0.tgz#511a54fff405fc346f0240bb270a3e9533a31102"
+
 default-require-extensions@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/default-require-extensions/-/default-require-extensions-1.0.0.tgz#f37ea15d3e13ffd9b437d33e1a75b5fb97874cb8"
@@ -1104,11 +1117,12 @@ fast-json-stable-stringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
 
-fast-json-stringify@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/fast-json-stringify/-/fast-json-stringify-1.2.0.tgz#6f9a77ead0129ea20e18e24a893811dacd58f3ae"
+fast-json-stringify@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/fast-json-stringify/-/fast-json-stringify-1.5.2.tgz#e9d8c1356a7a2ed734925a8fd377fa87fe99f2bc"
   dependencies:
-    ajv "^6.0.0"
+    ajv "^6.4.0"
+    deepmerge "^2.1.0"
 
 fast-levenshtein@~2.0.4:
   version "2.0.6"
@@ -1132,22 +1146,22 @@ fastify-static@0.10.1:
     readable-stream "^2.3.6"
     send "^0.16.0"
 
-fastify@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.3.1.tgz#6bccac34821d6658aea07b62a99f034b7cdb1777"
+fastify@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.4.0.tgz#efbbe78edcce083e9ae86fa317eddffeaa4805cc"
   dependencies:
     "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
-    ajv "^6.2.0"
+    ajv "^6.4.0"
     avvio "^5.4.3"
     end-of-stream "^1.4.1"
-    fast-json-stringify "^1.2.0"
-    find-my-way "^1.11.0"
+    fast-json-stringify "^1.5.2"
+    find-my-way "^1.12.0"
     flatstr "^1.0.5"
     light-my-request "^2.0.2"
     middie "^3.1.0"
-    pino "^4.13.0"
-    tiny-lru "^1.5.0"
+    pino "^4.16.1"
+    tiny-lru "^1.5.2"
 
 fastq@^1.5.0:
   version "1.5.0"
@@ -1201,9 +1215,9 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-find-my-way@^1.11.0:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.11.1.tgz#638ca077b01a52f3db344c4abec709483b2994a0"
+find-my-way@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.12.0.tgz#859ffe3cffd8dde04cec4e36833b3991dd5fa3cc"
   dependencies:
     fast-decode-uri-component "^1.0.0"
 
@@ -2746,19 +2760,19 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
-pino-std-serializers@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-1.0.0.tgz#7607ab8c5b7c32bf7c4dada149da4ce3c14a3b75"
+pino-std-serializers@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.0.0.tgz#63cbacf34bed8c95dd2c67eec824e48b8dd3445f"
 
-pino@^4.13.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-4.14.0.tgz#12f02b17173d6bf0763714fcab6000c04d304abe"
+pino@^4.16.1:
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-4.16.1.tgz#8bcb6b685ee4d4e26adfe79a05f12f6b46962d40"
   dependencies:
     chalk "^2.3.2"
     fast-json-parse "^1.0.3"
     fast-safe-stringify "^1.2.3"
     flatstr "^1.0.5"
-    pino-std-serializers "^1.0.0"
+    pino-std-serializers "^2.0.0"
     pump "^3.0.0"
     quick-format-unescaped "^1.1.2"
     split2 "^2.2.0"
@@ -3450,9 +3464,9 @@ through2@^2.0.2:
     readable-stream "^2.1.5"
     xtend "~4.0.1"
 
-tiny-lru@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-1.5.0.tgz#aa5fb1d22fcdd8aa1ff2d7b04c13357cfc997167"
+tiny-lru@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-1.5.2.tgz#2cef6eab55ff339aee78919262811a4d46d892d1"
 
 tmpl@1.0.x:
   version "1.0.4"
@@ -3560,6 +3574,12 @@ unset-value@^1.0.0:
   dependencies:
     has-value "^0.3.1"
     isobject "^3.0.0"
+
+uri-js@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-3.0.2.tgz#f90b858507f81dea4dcfbb3c4c3dbfa2b557faaa"
+  dependencies:
+    punycode "^2.1.0"
 
 urix@^0.1.0:
   version "0.1.0"
