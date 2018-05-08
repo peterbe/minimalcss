@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "0.22.7",
-    "@types/node": "8.10.12",
+    "@types/node": "8.10.13",
     "@types/puppeteer": "1.2.1",
     "fastify": "1.4.0",
     "fastify-static": "0.10.1",
