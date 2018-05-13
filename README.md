@@ -43,23 +43,13 @@ one "merged" and minified CSS payload.
 Install:
 
 ```
-yarn add minimalcss --dev
+yarn add minimalcss puppeteer --dev
 ```
 
-You can install it globally if you like:
+Or with npm:
 
 ```
-yarn global add minimalcss
-```
-
-```
-npm install [--save-dev|--global] minimalcss
-```
-
-Now you can run it:
-
-```shell
-$ ./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
+npm install [--save-dev] minimalcss puppeteer
 ```
 
 ## Prior art

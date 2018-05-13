@@ -13,12 +13,7 @@
     "type": "git",
     "url": "https://github.com/peterbe/minimalcss.git"
   },
-  "keywords": [
-    "css",
-    "web-perf",
-    "web-performance",
-    "optimizer"
-  ],
+  "keywords": ["css", "web-perf", "web-performance", "optimizer"],
   "bugs": {
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
@@ -27,8 +22,7 @@
     "css-tree": "1.0.0-alpha.28",
     "csso": "~3.5.0",
     "filesize": "^3.5.11",
-    "minimist": "^1.2.0",
-    "puppeteer": "^1.2.0"
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
     "@types/cheerio": "0.22.7",
@@ -38,12 +32,16 @@
     "fastify-static": "0.11.0",
     "jest": "22.4.3",
     "prettier": "1.12.1",
-    "typescript": "2.8.3"
+    "typescript": "2.8.3",
+    "puppeteer": "^1.2.0"
+  },
+  "peerDependencies": {
+    "puppeteer": "^1.2.0"
   },
   "scripts": {
     "tsc": "tsc -p .",
     "lintcheck": "scripts/lintcheck.sh",
     "test": "jest",
-    "e2e": "./bin/e2e.js"
+    "ci": "yarn test && yarn lintcheck && yarn tsc"
   }
 }
