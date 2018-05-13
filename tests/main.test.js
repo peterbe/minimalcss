@@ -16,6 +16,10 @@ fastify.get('/307.html', (req, reply) => {
   reply.redirect(307, '/redirected.html');
 });
 
+fastify.get('/timeout.html', (req, reply) => {
+  setTimeout(() => reply.send('timeout'), 3000);
+});
+
 let browser;
 
 const runMinimalcss = (path, options = {}) => {
@@ -215,4 +219,14 @@ test('accept CSSO options', async () => {
   cssoOptions.comments = false;
   ({ finalCss } = await runMinimalcss('comments', { cssoOptions }));
   expect(finalCss).not.toMatch('test css comment');
+});
+
+test('timeout', async () => {
+  expect.assertions(2);
+  try {
+    await runMinimalcss('timeout', { timeout: 2000 });
+  } catch (e) {
+    expect(e.message).toMatch('Navigation Timeout Exceeded: 2000ms exceeded');
+    expect(e.message).toMatch('For http://localhost:3000/timeout.html');
+  }
 });

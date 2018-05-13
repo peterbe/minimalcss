@@ -175,6 +175,7 @@ key is `urls`. Other optional options are:
 * `puppeteerArgs` - Args sent to puppeteer when launching. [List
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
 * `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
+* `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
 
 ## Warnings
 
