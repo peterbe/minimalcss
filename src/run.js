@@ -132,7 +132,7 @@ const processPage = ({
           const urls = tracker.urls();
           if (urls.length > 1) {
             error.message += `\nFor one of the following urls: ${urls.join(
-              ','
+              ', '
             )}`;
           } else if (urls.length > 0) {
             error.message += `\nFor ${urls[0]}`;
