@@ -20,9 +20,7 @@
   "dependencies": {
     "cheerio": "1.0.0-rc.2",
     "css-tree": "1.0.0-alpha.28",
-    "csso": "~3.5.0",
-    "filesize": "^3.5.11",
-    "minimist": "^1.2.0"
+    "csso": "~3.5.0"
   },
   "devDependencies": {
     "@types/cheerio": "0.22.7",
