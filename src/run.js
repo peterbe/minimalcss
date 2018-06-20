@@ -7,6 +7,7 @@ const csso = require('csso');
 const csstree = require('css-tree');
 const cheerio = require('cheerio');
 const utils = require('./utils');
+const { createTracker } = require('./tracker');
 const url = require('url');
 
 const isOk = response => response.ok() || response.status() === 304;
@@ -124,8 +125,20 @@ const processPage = ({
     // a second time.
     let fulfilledPromise = false;
 
+    const tracker = createTracker(page);
     const safeReject = error => {
       if (!fulfilledPromise) {
+        if (error.message.startsWith('Navigation Timeout Exceeded')) {
+          const urls = tracker.urls();
+          if (urls.length > 1) {
+            error.message += `\nTracked URLs that have not finished: ${urls.join(
+              ', '
+            )}`;
+          } else if (urls.length > 0) {
+            error.message += `\nFor ${urls[0]}`;
+          }
+        }
+        tracker.dispose();
         reject(error);
       }
     };
@@ -144,6 +157,10 @@ const processPage = ({
 
       if (options.viewport) {
         await page.setViewport(options.viewport);
+      }
+
+      if (options.timeout !== undefined) {
+        page.setDefaultNavigationTimeout(options.timeout);
       }
 
       // A must or else you can't do console.log from within page.evaluate()
@@ -311,7 +328,10 @@ const processPage = ({
         allHrefs.push(href);
       });
 
-      if (!fulfilledPromise) resolve();
+      if (!fulfilledPromise) {
+        tracker.dispose();
+        resolve();
+      }
     } catch (e) {
       return safeReject(e);
     }
