@@ -1,3 +1,11 @@
+/**
+ * Sets up event listeners on the Browser.Page instance to maintain a set
+ * of URLs that have started but never finished or failed.
+ *
+ * @param {Object} page
+ * @return Object
+ */
+
 const createTracker = page => {
   const requests = new Set();
   const onStarted = request => requests.add(request);
