@@ -242,7 +242,7 @@ test('timeout error for resources', async () => {
   } catch (e) {
     expect(e.message).toMatch('Navigation Timeout Exceeded: 200ms exceeded');
     expect(e.message).toMatch(
-      'For one of the following urls: http://localhost:3000/timeout.css?1, http://localhost:3000/timeout.css?2'
+      'Tracked URLs that have not finished: http://localhost:3000/timeout.css?1, http://localhost:3000/timeout.css?2'
     );
   }
 });
