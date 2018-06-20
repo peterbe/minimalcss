@@ -131,7 +131,7 @@ const processPage = ({
         if (error.message.startsWith('Navigation Timeout Exceeded')) {
           const urls = tracker.urls();
           if (urls.length > 1) {
-            error.message += `\nFor one of the following urls: ${urls.join(
+            error.message += `\nTracked URLs that have not finished: ${urls.join(
               ', '
             )}`;
           } else if (urls.length > 0) {
