@@ -1151,9 +1151,9 @@ fastify-static@0.12.0:
     readable-stream "^2.3.6"
     send "^0.16.0"
 
-fastify@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.6.0.tgz#f7512fec8d375377eb3f16978af4d1aae03e317b"
+fastify@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.7.0.tgz#dab4d9b27808f9e458db9128cca1124f6f83fa2e"
   dependencies:
     "@types/pino" "^4.7.1"
     abstract-logging "^1.0.0"
@@ -1161,7 +1161,7 @@ fastify@1.6.0:
     avvio "^5.4.3"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.5.2"
-    find-my-way "^1.12.0"
+    find-my-way "^1.14.0"
     flatstr "^1.0.5"
     light-my-request "^2.0.2"
     middie "^3.1.0"
@@ -1220,11 +1220,13 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-find-my-way@^1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.12.0.tgz#859ffe3cffd8dde04cec4e36833b3991dd5fa3cc"
+find-my-way@^1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.14.0.tgz#107b89780836fb9ca0f2d42d7390b27f648540c5"
   dependencies:
     fast-decode-uri-component "^1.0.0"
+    safe-regex "^1.1.0"
+    semver-store "^0.2.0"
 
 find-up@^1.0.0:
   version "1.1.2"
@@ -3131,6 +3133,10 @@ sane@^2.0.0:
 sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
+
+semver-store@^0.2.0:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/semver-store/-/semver-store-0.2.2.tgz#e6c65e4e94e2e5f662e1efaaa8112dae302cbdcf"
 
 "semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.4.1, semver@^5.5.0:
   version "5.5.0"
