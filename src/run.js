@@ -456,6 +456,14 @@ const minimalcss = async options => {
           return;
         }
 
+        if (!node.prelude.children) {
+          throw new Error(
+            `Invalid CSS found while evaluating ${href}: "${
+              node.prelude.value
+            }"`
+          );
+        }
+
         node.prelude.children.forEach((node, item, list) => {
           // Translate selector's AST to a string and filter pseudos from it
           // This changes things like `a.button:active` to `a.button`
