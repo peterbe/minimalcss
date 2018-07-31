@@ -41,23 +41,21 @@ function openUrl(url, ...options) {
 }
 
 // Simplest form of opening
-openUrl('https://en.wikipedia.org/wiki/List_of_HTTP_status_codes').then(
-  spawned => {
-    const css = spawned.stdout.toString();
-    assert(
-      css.length > 20000 && css.length < 30000,
-      'Expect CSS to be between 20,000...30,000'
-    );
-  }
-);
+openUrl('https://minimalcss.app/').then(spawned => {
+  const css = spawned.stdout.toString();
+  assert(
+    css.length > 8000 && css.length < 10000,
+    'Expect CSS to be between 8,000...10,000'
+  );
+});
 
 // Open with -o
-openUrl('https://nodejs.org/', '-o', '/tmp/nodejs.css').then(spawned => {
+openUrl('https://travis-ci.org/', '-o', '/tmp/travisci.css').then(spawned => {
   const stdout = spawned.stdout.toString();
   assert(!stdout.trim(), 'Output should be empty');
-  const css = fs.readFileSync('/tmp/nodejs.css').toString();
+  const css = fs.readFileSync('/tmp/travisci.css').toString();
   assert(
-    css.length > 1000 && css.length < 15000,
+    css.length > 10000 && css.length < 40000,
     'Expect CSS to be between 1K...15K'
   );
 });
