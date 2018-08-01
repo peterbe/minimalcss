@@ -218,6 +218,10 @@ const processPage = ({
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
+            // Double semicolons can crash csso.
+            while (/;\s*;/.test(text)) {
+              text = text.replace(/;\s*;/g, ';');
+            }
             const ast = csstree.parse(text);
             csstree.walk(ast, node => {
               if (node.type === 'Url') {
