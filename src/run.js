@@ -218,7 +218,9 @@ const processPage = ({
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
-            // Double semicolons can crash csso.
+            // Semicolon sequences can crash CSSO, so we remove them.
+            // https://github.com/peterbe/minimalcss/issues/243
+            // https://github.com/css/csso/issues/378
             while (/;\s*;/.test(text)) {
               text = text.replace(/;\s*;/g, ';');
             }
