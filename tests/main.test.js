@@ -225,6 +225,23 @@ test('accept CSSO options', async () => {
   expect(finalCss).not.toMatch('test css comment');
 });
 
+test('handles extra semicolons', async () => {
+  // Extra semicolons can cause csso.minify() to throw:
+  // [TypeError: Cannot read property '0' of undefined]
+  // https://github.com/peterbe/minimalcss/issues/243
+  // https://github.com/css/csso/issues/378
+  expect.assertions(2);
+  let error;
+  try {
+    const { finalCss } = await runMinimalcss('extra-semicolons');
+    expect(finalCss).toMatch('a,p{color:red;background-color:red}');
+  } catch (e) {
+    error = e;
+  } finally {
+    expect(error).toBeUndefined();
+  }
+});
+
 test('timeout error for page', async () => {
   expect.assertions(2);
   try {
