@@ -234,7 +234,7 @@ test('handles extra semicolons', async () => {
   let error;
   try {
     const { finalCss } = await runMinimalcss('extra-semicolons');
-    expect(finalCss).toMatch('a,p{color:red;background-color:red}');
+    expect(finalCss).toMatch('a{color:red}');
   } catch (e) {
     error = e;
   } finally {
