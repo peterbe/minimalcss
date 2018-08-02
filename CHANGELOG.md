@@ -1,3 +1,18 @@
+# 0.7.7
+
+* Throw explicit errors on invalid CSS
+  [pull#237](https://github.com/peterbe/minimalcss/pull/237)
+  Thanks @harrygreen
+
+# 0.7.6
+
+* List what timed out. Useful for debugging which resources failed.
+  [pull#199](https://github.com/peterbe/minimalcss/pull/199)
+  Thanks @stereobooster
+
+* Upgrade to puppeteer 1.4.0
+  [pull#214](https://github.com/peterbe/minimalcss/pull/214)
+
 # 0.7.5
 
 * Ability to pass an object of options to `csso.compress()`
