@@ -30,4 +30,18 @@ const unquoteString = string => {
   return string;
 };
 
-module.exports = { reduceCSSSelector, unquoteString };
+/**
+ * Semicolon sequences can crash CSSO, so we remove them from CSS text.
+ * github.com/peterbe/minimalcss/issues/243
+ * github.com/css/csso/issues/378
+ * @param {string} css
+ * @return {string}
+ */
+const removeSequentialSemis = css => {
+  while (/;\s*;/.test(css)) {
+    css = css.replace(/;\s*;/g, ';');
+  }
+  return css;
+}
+
+module.exports = { reduceCSSSelector, removeSequentialSemis, unquoteString };
