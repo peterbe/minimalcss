@@ -344,7 +344,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
@@ -462,33 +462,37 @@ const minimalcss = async options => {
         }
 
         if (!node.prelude.children) {
-          throw new Error(
-            `Invalid CSS found while evaluating ${href}: "${
-              node.prelude.value
-            }"`
-          );
-        }
-
-        node.prelude.children.forEach((node, item, list) => {
-          // Translate selector's AST to a string and filter pseudos from it
-          // This changes things like `a.button:active` to `a.button`
-          const selectorString = utils.reduceCSSSelector(
-            csstree.generate(node)
-          );
-          if (selectorString in decisionsCache === false) {
-            decisionsCache[selectorString] = isSelectorMatchToAnyElement(
-              selectorString
-            );
+          const cssErrorMessage = `Invalid CSS found while evaluating ${href}: "${
+            node.prelude.value
+          }"`;
+          if (options.ignoreCSSErrors) {
+            console.warn(cssErrorMessage);
+            list.remove(item);
+          } else {
+            throw new Error(cssErrorMessage);
           }
-          if (!decisionsCache[selectorString]) {
-            // delete selector from a list of selectors
+        } else {
+          node.prelude.children.forEach((node, item, list) => {
+            // Translate selector's AST to a string and filter pseudos from it
+            // This changes things like `a.button:active` to `a.button`
+            const selectorString = utils.reduceCSSSelector(
+              csstree.generate(node)
+            );
+            if (selectorString in decisionsCache === false) {
+              decisionsCache[selectorString] = isSelectorMatchToAnyElement(
+                selectorString
+              );
+            }
+            if (!decisionsCache[selectorString]) {
+              // delete selector from a list of selectors
+              list.remove(item);
+            }
+          });
+
+          if (node.prelude.children.isEmpty()) {
+            // delete rule from a list
             list.remove(item);
           }
-        });
-
-        if (node.prelude.children.isEmpty()) {
-          // delete rule from a list
-          list.remove(item);
         }
       }
     });
