@@ -1,3 +1,9 @@
+# 0.7.8
+
+* New option `ignoreCSSErrors` to ignore possible CSS parsing errors.
+  [pull#249](https://github.com/peterbe/minimalcss/pull/249)
+  Thanks @stereobooster
+
 # 0.7.7
 
 * Throw explicit errors on invalid CSS
