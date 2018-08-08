@@ -128,7 +128,6 @@ const processPage = ({
     const tracker = createTracker(page);
     const safeReject = error => {
       if (fulfilledPromise) return;
-      fulfilledPromise = true;
       if (error.message.startsWith('Navigation Timeout Exceeded')) {
         const urls = tracker.urls();
         if (urls.length > 1) {
@@ -139,6 +138,7 @@ const processPage = ({
           error.message += `\nFor ${urls[0]}`;
         }
       }
+      fulfilledPromise = true;
       tracker.dispose();
       reject(error);
     };
@@ -285,7 +285,21 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+      try {
+        response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+      } catch (e) {
+        if (
+          options.timeoutAsWarning &&
+          e.message &&
+          e.message.startsWith('Navigation Timeout Exceeded') &&
+          tracker.urls().length === 0
+        ) {
+          // This is workaround for the bug in puppeter, when there are
+          // no open connections but puppeteer reports it as timeout anyway.
+          // https://github.com/GoogleChrome/puppeteer/issues/1908#issuecomment-390214976
+          console.warn(e.message);
+        }
+      }
       if (!isOk(response)) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
@@ -339,7 +353,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, timeoutAsWarning?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {

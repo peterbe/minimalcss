@@ -176,6 +176,7 @@ key is `urls`. Other optional options are:
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
 * `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
 * `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
+*  `timeoutAsWarning` - This is workaround for the [bug in puppeteer](https://github.com/GoogleChrome/puppeteer/issues/1908#issuecomment-390214976), when there are no open connections but puppeteer reports it as timeout anyway. If you set it to true minimalcss will report timeouts as warnings instead of rejection. Take a note real timeouts still be reported as errors.
 
 ## Warnings
 
