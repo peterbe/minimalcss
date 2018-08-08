@@ -42,6 +42,6 @@ const removeSequentialSemis = css => {
     css = css.replace(/;\s*;/g, ';');
   }
   return css;
-}
+};
 
 module.exports = { reduceCSSSelector, removeSequentialSemis, unquoteString };
