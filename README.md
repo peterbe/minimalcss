@@ -308,17 +308,6 @@ yarn jest
 
 Best way to get into writing tests is to look at existing tests and copy.
 
-### Type checking
-
-We use ES6+ with jsdoc comments and TypeScript to do static type checking,
-like [puppeeteer does](https://github.com/GoogleChrome/puppeteer/pull/986/files).
-
-Run `tsc` to check types.
-
-```sh
-yarn tsc
-```
-
 ### Prettier
 
 All code is expected to conform with [Prettier](https://prettier.io/) according
