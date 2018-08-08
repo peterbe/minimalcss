@@ -230,16 +230,8 @@ test('handles extra semicolons', async () => {
   // [TypeError: Cannot read property '0' of undefined]
   // https://github.com/peterbe/minimalcss/issues/243
   // https://github.com/css/csso/issues/378
-  expect.assertions(2);
-  let error;
-  try {
-    const { finalCss } = await runMinimalcss('extra-semicolons');
-    expect(finalCss).toMatch('a{color:red}');
-  } catch (e) {
-    error = e;
-  } finally {
-    expect(error).toBeUndefined();
-  }
+  const { finalCss } = await runMinimalcss('extra-semicolons');
+  expect(finalCss).toMatch('a{color:red}');
 });
 
 test('timeout error for page', async () => {
