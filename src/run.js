@@ -128,7 +128,6 @@ const processPage = ({
     const tracker = createTracker(page);
     const safeReject = error => {
       if (fulfilledPromise) return;
-      fulfilledPromise = true;
       if (error.message.startsWith('Navigation Timeout Exceeded')) {
         const urls = tracker.urls();
         if (urls.length > 1) {
@@ -137,8 +136,15 @@ const processPage = ({
           )}`;
         } else if (urls.length > 0) {
           error.message += `\nFor ${urls[0]}`;
+        } else if (options.timeoutAsWarning) {
+          // This is workaround for the bug in puppeter, when there are
+          // no open connections but puppeteer reports it as timeout anyway.
+          // https://github.com/GoogleChrome/puppeteer/issues/1908#issuecomment-390214976
+          console.warn(error.message);
+          return;
         }
       }
+      fulfilledPromise = true;
       tracker.dispose();
       reject(error);
     };
@@ -339,7 +345,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, timeoutAsWarning?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
