@@ -176,6 +176,7 @@ key is `urls`. Other optional options are:
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
 * `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
 * `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
+* `ignoreCSSErrors` - By default, any CSS parsing error throws an error in minimalcss. If you know it's safe to ignore (for example, third-party CSS resources), set this to true.
 
 ## Warnings
 

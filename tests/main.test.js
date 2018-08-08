@@ -145,7 +145,7 @@ test('form elements', async () => {
   expect(finalCss).toMatch('option:selected');
 });
 
-test.only('invalid css', async () => {
+test('invalid css', async () => {
   expect.assertions(1);
 
   try {
@@ -157,6 +157,13 @@ test.only('invalid css', async () => {
       `Invalid CSS found while evaluating ${expectedUrl}: "${expectedInvalidCSS}"`
     );
   }
+});
+
+test('ignoreCSSErrors', async () => {
+  const { finalCss } = await runMinimalcss('invalid-css', {
+    ignoreCSSErrors: true
+  });
+  expect(finalCss).toEqual('');
 });
 
 test('handles 307 CSS file', async () => {
