@@ -127,20 +127,20 @@ const processPage = ({
 
     const tracker = createTracker(page);
     const safeReject = error => {
-      if (!fulfilledPromise) {
-        if (error.message.startsWith('Navigation Timeout Exceeded')) {
-          const urls = tracker.urls();
-          if (urls.length > 1) {
-            error.message += `\nTracked URLs that have not finished: ${urls.join(
-              ', '
-            )}`;
-          } else if (urls.length > 0) {
-            error.message += `\nFor ${urls[0]}`;
-          }
+      if (fulfilledPromise) return;
+      fulfilledPromise = true;
+      if (error.message.startsWith('Navigation Timeout Exceeded')) {
+        const urls = tracker.urls();
+        if (urls.length > 1) {
+          error.message += `\nTracked URLs that have not finished: ${urls.join(
+            ', '
+          )}`;
+        } else if (urls.length > 0) {
+          error.message += `\nFor ${urls[0]}`;
         }
-        tracker.dispose();
-        reject(error);
       }
+      tracker.dispose();
+      reject(error);
     };
 
     const debug = options.debug || false;
