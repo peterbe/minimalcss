@@ -136,12 +136,6 @@ const processPage = ({
           )}`;
         } else if (urls.length > 0) {
           error.message += `\nFor ${urls[0]}`;
-        } else if (options.timeoutAsWarning) {
-          // This is workaround for the bug in puppeter, when there are
-          // no open connections but puppeteer reports it as timeout anyway.
-          // https://github.com/GoogleChrome/puppeteer/issues/1908#issuecomment-390214976
-          console.warn(error.message);
-          return;
         }
       }
       fulfilledPromise = true;
@@ -291,7 +285,21 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+      try {
+        response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+      } catch (e) {
+        if (
+          options.timeoutAsWarning &&
+          e.message &&
+          e.message.startsWith('Navigation Timeout Exceeded') &&
+          tracker.urls().length === 0
+        ) {
+          // This is workaround for the bug in puppeter, when there are
+          // no open connections but puppeteer reports it as timeout anyway.
+          // https://github.com/GoogleChrome/puppeteer/issues/1908#issuecomment-390214976
+          console.warn(e.message);
+        }
+      }
       if (!isOk(response)) {
         return safeReject(
           new Error(`${response.status()} on ${pageUrl} (second time)`)
