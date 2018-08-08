@@ -10,7 +10,6 @@ branches:
 before_install:
  - docker build -t minimalcss:tests .
 script:
-  - docker container run -it minimalcss:tests yarn tsc
   - docker container run -it minimalcss:tests yarn lintcheck
   - docker container run -it minimalcss:tests yarn test
   - docker container run -it --env CI=$CI minimalcss:tests yarn e2e
