@@ -78,15 +78,15 @@ const minimalcss = async options => {
 
     await page.setRequestInterception(true)
     page.on('request', request => {
-      if (/data:image\//.test(request.url())) {
+      if (/data:image\//.test(request.url)) {
         // don't need to download those
         request.abort()
       } else if (
         !loadimages &&
-        /\.(png|jpg|jpeg|gif|webp)$/.test(request.url().split('?')[0])
+        /\.(png|jpg|jpeg|gif|webp)$/.test(request.url.split('?')[0])
       ) {
         request.abort()
-      } else if (stylesheetAsts[request.url()]) {
+      } else if (stylesheetAsts[request.url]) {
         // no point downloading this again
         request.abort()
       } else if (options.skippable && options.skippable(request)) {
@@ -95,9 +95,9 @@ const minimalcss = async options => {
         // problem later when we loop through all <link ref="stylesheet">
         // tags.
         // So put in an empty (but not falsy!) object for this URL.
-        if (request.url().match(/\.css/i)) {
-          stylesheetAsts[request.url()] = {}
-          stylesheetContents[request.url()] = ''
+        if (request.url.match(/\.css/i)) {
+          stylesheetAsts[request.url] = {}
+          stylesheetContents[request.url] = ''
         }
         request.abort()
       } else {
@@ -107,10 +107,10 @@ const minimalcss = async options => {
 
     // To build up a map of all downloaded CSS
     page.on('response', response => {
-      const responseUrl = response.url()
-      const ct = response.headers()['content-type'] || ''
-      if (!response.ok()) {
-        throw new Error(`${response.status()} on ${responseUrl}`)
+      const responseUrl = response.url
+      const ct = response.headers['content-type'] || ''
+      if (!response.ok) {
+        throw new Error(`${response.status} on ${responseUrl}`)
       }
       if (ct.indexOf('text/css') > -1 || /\.css$/i.test(responseUrl)) {
         response.text().then(text => {
@@ -157,8 +157,8 @@ const minimalcss = async options => {
       // First, go to the page with JavaScript disabled.
       await page.setJavaScriptEnabled(false)
       response = await page.goto(pageUrl)
-      if (!response.ok()) {
-        throw new Error(`${response.status()} on ${pageUrl}`)
+      if (!response.ok) {
+        throw new Error(`${response.status} on ${pageUrl}`)
       }
       const htmlVanilla = await page.content()
       doms.push(cheerio.load(htmlVanilla))
@@ -182,8 +182,8 @@ const minimalcss = async options => {
     response = await page.goto(pageUrl, {
       waitUntil: ['domcontentloaded', 'networkidle2']
     })
-    if (!response.ok()) {
-      throw new Error(`${response.status()} on ${pageUrl} (second time)`)
+    if (!response.ok) {
+      throw new Error(`${response.status} on ${pageUrl} (second time)`)
     }
     const evalNetworkIdle = await page.evaluate(() => {
       // The reason for NOT using a Set here is that that might not be

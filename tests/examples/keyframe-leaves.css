@@ -1,0 +1,8 @@
+@keyframes RotateSlot {
+  3% { margin-top: -2em }
+  from { transform: rotate(0deg)}
+}
+
+.SomeSelector {
+  animation: RotateSlot infinite 5s linear;
+}
