@@ -7,7 +7,7 @@ const csso = require('csso');
 const csstree = require('css-tree');
 const cheerio = require('cheerio');
 const utils = require('./utils');
-const { createTracker } = require('./tracker');
+const { createTracker, augmentTimeoutError } = require('./tracker');
 const url = require('url');
 
 const isOk = response => response.ok() || response.status() === 304;
@@ -129,16 +129,7 @@ const processPage = ({
     const safeReject = error => {
       if (fulfilledPromise) return;
       fulfilledPromise = true;
-      if (error.message.startsWith('Navigation Timeout Exceeded')) {
-        const urls = tracker.urls();
-        if (urls.length > 1) {
-          error.message += `\nTracked URLs that have not finished: ${urls.join(
-            ', '
-          )}`;
-        } else if (urls.length > 0) {
-          error.message += `\nFor ${urls[0]}`;
-        }
-      }
+      error.message = augmentTimeoutError(error.message, tracker);
       tracker.dispose();
       reject(error);
     };
@@ -164,10 +155,11 @@ const processPage = ({
       }
 
       // A must or else you can't do console.log from within page.evaluate()
-      page.on('console', msg => {
+      page.on('console', async (msg) => {
         if (debug) {
-          for (let i = 0; i < msg.args.length; ++i) {
-            console.log(`${i}: ${msg.args[i]}`);
+          const args = await utils.consoleMessageToArguments(msg);
+          for (let i = 0; i < args.length; ++i) {
+            console.log(`${i}: ${args[i]}`);
           }
         }
       });

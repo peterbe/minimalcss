@@ -5,7 +5,6 @@
  * @param {Object} page
  * @return Object
  */
-
 const createTracker = page => {
   const requests = new Set();
   const onStarted = request => requests.add(request);
@@ -23,4 +22,27 @@ const createTracker = page => {
   };
 };
 
-module.exports = { createTracker };
+/**
+ * Adds information about timed out URLs if given message is about Timeout.
+ *
+ * @param {string} message error message
+ * @param {Object} tracker ConnectionTracker
+ * @returns {string}
+ */
+const augmentTimeoutError = (message, tracker) => {
+  if (message.startsWith('Navigation Timeout Exceeded')) {
+    const urls = tracker.urls();
+    if (urls.length > 1) {
+      message += `\nTracked URLs that have not finished: ${urls.join(
+        ', '
+      )}`;
+    } else if (urls.length > 0) {
+      message += `\nFor ${urls[0]}`;
+    } else {
+      message += `\nBut there are no pending connections`;
+    }
+  }
+  return message
+}
+
+module.exports = { createTracker, augmentTimeoutError };

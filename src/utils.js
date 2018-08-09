@@ -30,4 +30,20 @@ const unquoteString = string => {
   return string;
 };
 
-module.exports = { reduceCSSSelector, unquoteString };
+/**
+ * Convert ConosleMessage to array of values which were passed to console.
+ *
+ * @param {ConosleMessage} msg
+ * @returns {Promise<Array<any>>}
+ */
+const consoleMessageToArguments = (msg) =>{
+  const text = msg.text();
+  if (text !== 'JSHandle@object') {
+    return Promise.resolve([text]);
+  } else {
+    return Promise.all(msg.args().map(x => x.jsonValue()));
+  }
+});
+
+module.exports = { reduceCSSSelector, unquoteString, consoleMessageToArguments };
+
