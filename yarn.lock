@@ -1138,18 +1138,18 @@ fast-safe-stringify@^1.0.8, fast-safe-stringify@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-1.2.3.tgz#9fe22c37fb2f7f86f06b8f004377dbf8f1ee7bc1"
 
-fastify-plugin@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-1.0.0.tgz#cc28954bf256df6ba141e30966ab5c4be61a3400"
+fastify-plugin@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-1.2.0.tgz#b87274ad9d14e41efcd3240c64f5dee4c39b2154"
   dependencies:
     semver "^5.5.0"
 
-fastify-static@0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.12.0.tgz#024d6cf37a6b64bb4486921bdc88315c7c98799c"
+fastify-static@0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.13.0.tgz#32edb9f42162bd23cc1ddf8ed1f9ea39675187bc"
   dependencies:
-    fastify-plugin "^1.0.0"
-    readable-stream "^2.3.6"
+    fastify-plugin "^1.2.0"
+    readable-stream "^3.0.0"
     send "^0.16.0"
 
 fastify@1.9.0:
@@ -2980,6 +2980,14 @@ readable-stream@^2.3.6:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
+readable-stream@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.0.1.tgz#a209a46ad933f9c8146591ac2c56ca0e39c141cf"
+  dependencies:
+    inherits "^2.0.3"
+    string_decoder "^1.1.1"
+    util-deprecate "^1.0.1"
+
 realpath-native@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/realpath-native/-/realpath-native-1.0.0.tgz#7885721a83b43bd5327609f0ddecb2482305fdf0"
@@ -3418,15 +3426,15 @@ string-width@^2.0.0, string-width@^2.1.1:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string_decoder@~1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.3.tgz#0fc67d7c141825de94282dd536bec6b9bce860ab"
+string_decoder@^1.1.1, string_decoder@~1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
   dependencies:
     safe-buffer "~5.1.0"
 
-string_decoder@~1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+string_decoder@~1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.3.tgz#0fc67d7c141825de94282dd536bec6b9bce860ab"
   dependencies:
     safe-buffer "~5.1.0"
 
@@ -3649,7 +3657,7 @@ use@^3.1.0:
   dependencies:
     kind-of "^6.0.2"
 
-util-deprecate@~1.0.1:
+util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
 
