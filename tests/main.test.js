@@ -166,6 +166,13 @@ test('ignoreCSSErrors', async () => {
   expect(finalCss).toEqual('');
 });
 
+test('ignoreJSErrors', async () => {
+  const { finalCss } = await runMinimalcss('jserror', {
+    ignoreJSErrors: true
+  });
+  expect(finalCss).toEqual('');
+});
+
 test('handles 307 CSS file', async () => {
   const { finalCss } = await runMinimalcss('307css');
   expect(finalCss).toEqual('p{color:violet}');

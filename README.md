@@ -159,7 +159,7 @@ key is `urls`. Other optional options are:
 * `debug` - all console logging during page rendering are included in the
   stdout. Also, any malformed selector that cause errors in `document.querySelector`
   will be raised as new errors.
-* `skippable` - function wich takes
+* `skippable` - function which takes
   [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request)
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
@@ -176,7 +176,10 @@ key is `urls`. Other optional options are:
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
 * `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
 * `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
-* `ignoreCSSErrors` - By default, any CSS parsing error throws an error in minimalcss. If you know it's safe to ignore (for example, third-party CSS resources), set this to true.
+* `ignoreCSSErrors` - By default, any CSS parsing error throws an error in `minimalcss`. If you know it's safe to ignore (for example, third-party CSS resources), set this to true.
+* `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer 
+will be thrown by `minimalcss`. If you know it's safe to ignore errors (for example, on
+third-party webpages), set this to true.
 
 ## Warnings
 
