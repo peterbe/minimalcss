@@ -1,3 +1,9 @@
+# 0.7.9
+
+* New option `ignoreJSErrors` to ignore possible JavaScript errors.
+  [pull#253](https://github.com/peterbe/minimalcss/pull/253)
+  Thanks @jc275
+
 # 0.7.8
 
 * New option `ignoreCSSErrors` to ignore possible CSS parsing errors.
