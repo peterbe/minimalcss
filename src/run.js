@@ -254,7 +254,11 @@ const processPage = ({
       });
 
       page.on('pageerror', error => {
-        safeReject(error);
+        if (options.ignoreJSErrors) {
+          console.warn(error);
+        } else {
+          safeReject(error);
+        }
       });
 
       let response;
@@ -339,7 +343,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
