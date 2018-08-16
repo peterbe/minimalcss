@@ -218,6 +218,10 @@ const processPage = ({
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
+            // Semicolon sequences can crash CSSO,
+            // so we remove the from the CSS text.
+            // https://github.com/peterbe/minimalcss/issues/243
+            // https://github.com/css/csso/issues/378
             text = utils.removeSequentialSemis(text);
             const ast = csstree.parse(text);
             csstree.walk(ast, node => {
