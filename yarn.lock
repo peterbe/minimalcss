@@ -1144,9 +1144,9 @@ fastify-plugin@^1.2.0:
   dependencies:
     semver "^5.5.0"
 
-fastify-static@0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.13.0.tgz#32edb9f42162bd23cc1ddf8ed1f9ea39675187bc"
+fastify-static@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-0.14.0.tgz#e8f914cce72a8d6e40abfeb896c07458d4eaa3fe"
   dependencies:
     fastify-plugin "^1.2.0"
     readable-stream "^3.0.0"
