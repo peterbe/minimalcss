@@ -31,9 +31,8 @@ const unquoteString = string => {
 };
 
 /**
- * Semicolon sequences can crash CSSO, so we remove them from CSS text.
- * github.com/peterbe/minimalcss/issues/243
- * github.com/css/csso/issues/378
+ * Removes all sequences of two-or-more semicolons separated by zero-or-more
+ * whitespace, replacing each sequence with a single semicolon.
  * @param {string} css
  * @return {string}
  */
