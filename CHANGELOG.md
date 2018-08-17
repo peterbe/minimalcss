@@ -1,3 +1,5 @@
+# 0.7.10
+
 * Not crash if the CSS contains multiple semicolons which crashes
   csso (https://github.com/css/csso/issues/378)
   [pull#259](https://github.com/peterbe/minimalcss/pull/259)
