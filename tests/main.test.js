@@ -274,3 +274,8 @@ test('timeout error for resources', async () => {
     );
   }
 });
+
+test('handles #fragments in stylesheet hrefs', async () => {
+  const { finalCss } = await runMinimalcss('url-fragment');
+  expect(finalCss).toMatch('p{color:red}');
+});
