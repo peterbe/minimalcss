@@ -1,3 +1,10 @@
+* Stylesheet `link` tags whose `href` URL contains a `#fragment-example`
+  would cause an error because puppeteer doesn't include it in the
+  `response.url()`.
+  [pull#255](https://github.com/peterbe/minimalcss/pull/255)
+  Thanks @jc275
+
+
 # 0.7.9
 
 * New option `ignoreJSErrors` to ignore possible JavaScript errors.
