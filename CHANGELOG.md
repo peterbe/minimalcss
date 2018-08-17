@@ -1,9 +1,13 @@
+* Not crash if the CSS contains multiple semicolons which crashes
+  csso (https://github.com/css/csso/issues/378)
+  [pull#259](https://github.com/peterbe/minimalcss/pull/259)
+  Thanks @jc275
+
 * Stylesheet `link` tags whose `href` URL contains a `#fragment-example`
   would cause an error because puppeteer doesn't include it in the
   `response.url()`.
   [pull#255](https://github.com/peterbe/minimalcss/pull/255)
   Thanks @jc275
-
 
 # 0.7.9
 
