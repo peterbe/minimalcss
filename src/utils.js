@@ -30,4 +30,17 @@ const unquoteString = string => {
   return string;
 };
 
-module.exports = { reduceCSSSelector, unquoteString };
+/**
+ * Removes all sequences of two-or-more semicolons separated by zero-or-more
+ * whitespace, replacing each sequence with a single semicolon.
+ * @param {string} css
+ * @return {string}
+ */
+const removeSequentialSemis = css => {
+  while (/;\s*;/.test(css)) {
+    css = css.replace(/;\s*;/g, ';');
+  }
+  return css;
+};
+
+module.exports = { reduceCSSSelector, removeSequentialSemis, unquoteString };
