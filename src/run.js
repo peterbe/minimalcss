@@ -315,34 +315,76 @@ const processPage = ({
         );
       }
       const evalWithJavascript = await page.evaluate(() => {
+        const html = document.documentElement.outerHTML;
         // The reason for NOT using a Set here is that that might not be
         // supported in ES5.
         const hrefs = [];
-        // Loop over all the 'link' elements in the document and
-        // for each, collect the URL of all the ones we're going to assess.
-        Array.from(document.querySelectorAll('link')).forEach(link => {
-          if (
-            link.href &&
-            (link.rel === 'stylesheet' ||
-              link.href.toLowerCase().endsWith('.css')) &&
-            !link.href.toLowerCase().startsWith('blob:') &&
-            link.media !== 'print' &&
-            !link.href.toLowerCase().startsWith('data:')
-          ) {
-            // Fragments are omitted from puppeteer's response.url(),
-            // so we need to strip them here, otherwise the hrefs
-            // won't always match when we check for missing ASTs.
-            hrefs.push(link.href.split('#')[0]);
+        const styles = [];
+        const isCssStyleTag = elem =>
+          elem.tagName === 'STYLE' &&
+          (!elem.type || elem.type.toLowerCase() === 'text/css');
+        const isStylesheetLink = elem =>
+          elem.tagName === 'LINK' &&
+          elem.href &&
+          (elem.rel.toLowerCase() === 'stylesheet' ||
+            elem.href.toLowerCase().endsWith('.css')) &&
+          !(
+            elem.href.toLowerCase().startsWith('data:') ||
+            elem.href.toLowerCase().startsWith('blob:') ||
+            elem.media.toLowerCase() === 'print'
+          );
+        // #fragments are omitted from puppeteer's response.url(), so
+        // we need to strip them from stylesheet links, otherwise the
+        // hrefs won't always match when we check for missing ASTs.
+        const defragment = href => href.split('#')[0];
+        const pageUrl = defragment(window.location.href);
+        // Create a unique identifier for each style tag by appending
+        // an xpath-like fragment to the page URL.  This allows us to
+        // preserve the relative ordering of external stylesheets and
+        // inline style tags.
+        const styleTagUri = () => `${pageUrl}#style[${styles.length}]`;
+        // Loop over all 'link' and 'style' elements in the document,
+        // in order of appearance. For each element, collect the URI
+        // of all the ones we're going to assess. For style elements,
+        // also extract each tag's content.
+        Array.from(document.querySelectorAll('link, style')).forEach(elem => {
+          if (isStylesheetLink(elem)) {
+            const href = defragment(elem.href);
+            hrefs.push(href);
+          } else if (isCssStyleTag(elem)) {
+            const href = styleTagUri();
+            const text = elem.innerHTML;
+            styles.push({ href, text });
+            hrefs.push(href);
           }
         });
-        return {
-          html: document.documentElement.outerHTML,
-          hrefs
-        };
+        return { html, hrefs, styles };
       });
 
       const htmlWithJavascript = evalWithJavascript.html;
       doms.push(cheerio.load(htmlWithJavascript));
+
+      if (options.styletags) {
+        // Parse each style tag as if it were an external stylesheet.
+        evalWithJavascript.styles.forEach(({ href, text }) => {
+          processStylesheet({
+            text,
+            pageUrl,
+            stylesheetAsts,
+            stylesheetContents,
+            responseUrl: href
+          });
+        });
+      } else {
+        // Remove each style tag URI from the list of hrefs.
+        evalWithJavascript.styles.forEach(({ href }) => {
+          evalWithJavascript.hrefs.splice(
+            evalWithJavascript.hrefs.indexOf(href),
+            1
+          );
+        });
+      }
+
       evalWithJavascript.hrefs.forEach(href => {
         // The order of allHrefs is important! That's what browsers do.
         // But we can't blindly using allHrefs.push() because the href
@@ -365,7 +407,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
