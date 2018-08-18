@@ -107,6 +107,49 @@ const postProcessOptimize = ast => {
   });
 };
 
+const processStylesheet = ({
+  text,
+  pageUrl,
+  responseUrl,
+  stylesheetAsts,
+  stylesheetContents
+}) => {
+  // Semicolon sequences can crash CSSO,
+  // so we remove them from the CSS text.
+  // https://github.com/peterbe/minimalcss/issues/243
+  // https://github.com/css/csso/issues/378
+  text = utils.removeSequentialSemis(text);
+  const ast = csstree.parse(text);
+  csstree.walk(ast, node => {
+    if (node.type !== 'Url') return;
+    const value = node.value;
+    let path = value.value;
+    if (value.type !== 'Raw') {
+      path = path.substr(1, path.length - 2);
+    }
+    const sameHost = url.parse(responseUrl).host === url.parse(pageUrl).host;
+    if (/^https?:\/\/|^\/\/|^data:/i.test(path)) {
+      // do nothing
+    } else if (/^\//.test(path) && sameHost) {
+      // do nothing
+    } else {
+      const resolved = new url.URL(path, responseUrl);
+      if (sameHost) {
+        path = resolved.pathname + resolved.search;
+      } else {
+        path = resolved.href;
+      }
+      if (value.type !== 'Raw') {
+        value.value = `"${path}"`;
+      } else {
+        value.value = path;
+      }
+    }
+  });
+  stylesheetAsts[responseUrl] = ast;
+  stylesheetContents[responseUrl] = text;
+};
+
 const processPage = ({
   page,
   options,
@@ -218,42 +261,13 @@ const processPage = ({
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           response.text().then(text => {
-            // Semicolon sequences can crash CSSO,
-            // so we remove the from the CSS text.
-            // https://github.com/peterbe/minimalcss/issues/243
-            // https://github.com/css/csso/issues/378
-            text = utils.removeSequentialSemis(text);
-            const ast = csstree.parse(text);
-            csstree.walk(ast, node => {
-              if (node.type === 'Url') {
-                let value = node.value;
-                let path = value.value;
-                if (value.type !== 'Raw') {
-                  path = path.substr(1, path.length - 2);
-                }
-                const sameHost =
-                  url.parse(responseUrl).host === url.parse(pageUrl).host;
-                if (/^https?:\/\/|^\/\/|^data:/i.test(path)) {
-                  // do nothing
-                } else if (/^\//.test(path) && sameHost) {
-                  // do nothing
-                } else {
-                  const resolved = new url.URL(path, responseUrl);
-                  if (sameHost) {
-                    path = resolved.pathname + resolved.search;
-                  } else {
-                    path = resolved.href;
-                  }
-                  if (value.type !== 'Raw') {
-                    value.value = `"${path}"`;
-                  } else {
-                    value.value = path;
-                  }
-                }
-              }
+            processStylesheet({
+              text,
+              pageUrl,
+              responseUrl,
+              stylesheetAsts,
+              stylesheetContents
             });
-            stylesheetAsts[responseUrl] = ast;
-            stylesheetContents[responseUrl] = text;
           });
         }
       });
