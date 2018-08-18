@@ -73,6 +73,13 @@ test('cares only about external CSS files', async () => {
   expect(finalCss).toEqual('.external{color:red}');
 });
 
+test('cares about style tags and external CSS files', async () => {
+  const { finalCss } = await runMinimalcss('css-in-js', {
+    styletags: true
+  });
+  expect(finalCss).toEqual('.cssinjs1,.external,.inline{color:red}');
+});
+
 test('handles 404 CSS file', async () => {
   expect.assertions(1);
   try {
