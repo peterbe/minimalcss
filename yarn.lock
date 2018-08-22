@@ -1152,9 +1152,9 @@ fastify-static@0.14.0:
     readable-stream "^3.0.0"
     send "^0.16.0"
 
-fastify@1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.9.0.tgz#8ce7c4e4eb06077f45aa56c514c1498a42a71039"
+fastify@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.10.0.tgz#26f662346d73d36f89ce93a886853a6b79b34eb4"
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
@@ -1164,9 +1164,10 @@ fastify@1.9.0:
     fast-json-stringify "^1.5.4"
     find-my-way "^1.15.0"
     flatstr "^1.0.8"
-    light-my-request "^2.0.3"
+    light-my-request "^3.0.0"
     middie "^3.1.0"
     pino "^4.17.3"
+    proxy-addr "^2.0.3"
     tiny-lru "^1.6.1"
 
 fastq@^1.6.0:
@@ -1283,6 +1284,10 @@ form-data@~2.3.1:
     asynckit "^0.4.0"
     combined-stream "1.0.6"
     mime-types "^2.1.12"
+
+forwarded@~0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -1601,6 +1606,10 @@ invariant@^2.2.2, invariant@^2.2.4:
 invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
+
+ipaddr.js@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.8.0.tgz#eaa33d6ddd7ace8f7f6fe0c9ca0440e706738b1e"
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -2292,13 +2301,12 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-light-my-request@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/light-my-request/-/light-my-request-2.0.3.tgz#c1889b3226ea2182d7f11113e0a0de9ee4ba1b29"
+light-my-request@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/light-my-request/-/light-my-request-3.0.0.tgz#04d56619baa46724487120fbe3c5e94331c549cf"
   dependencies:
     ajv "^6.0.0"
-    readable-stream "^2.3.6"
-    safe-buffer "^5.1.2"
+    readable-stream "^3.0.0"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -2870,6 +2878,13 @@ prompts@^0.1.9:
     clorox "^1.0.1"
     sisteransi "^0.1.0"
 
+proxy-addr@^2.0.3:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-2.0.4.tgz#ecfc733bf22ff8c6f407fa275327b9ab67e48b93"
+  dependencies:
+    forwarded "~0.1.2"
+    ipaddr.js "1.8.0"
+
 proxy-from-env@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.0.0.tgz#33c50398f70ea7eb96d21f7b817630a55791c7ee"
@@ -2966,18 +2981,6 @@ readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.6, readable
     process-nextick-args "~2.0.0"
     safe-buffer "~5.1.1"
     string_decoder "~1.0.3"
-    util-deprecate "~1.0.1"
-
-readable-stream@^2.3.6:
-  version "2.3.6"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.3"
-    isarray "~1.0.0"
-    process-nextick-args "~2.0.0"
-    safe-buffer "~5.1.1"
-    string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
 readable-stream@^3.0.0:
@@ -3146,10 +3149,6 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.5.4, rimraf@^2.6.1:
 safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
-
-safe-buffer@^5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
 
 safe-regex@^1.1.0:
   version "1.1.0"
@@ -3426,7 +3425,7 @@ string-width@^2.0.0, string-width@^2.1.1:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string_decoder@^1.1.1, string_decoder@~1.1.1:
+string_decoder@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
   dependencies:
