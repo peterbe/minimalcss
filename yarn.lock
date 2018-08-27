@@ -232,9 +232,9 @@ atob@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.0.3.tgz#19c7a760473774468f20b2d2d03372ad7d4cbf5d"
 
-avvio@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.6.0.tgz#b9a5a38b7c5e816e4875e0efb3edfb1a4f1fcc1b"
+avvio@^5.8.0:
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/avvio/-/avvio-5.8.0.tgz#f3d2031ac8543448747b77a88a0b18ced015591e"
   dependencies:
     debug "^3.1.0"
     fastq "^1.6.0"
@@ -1152,14 +1152,14 @@ fastify-static@0.14.0:
     readable-stream "^3.0.0"
     send "^0.16.0"
 
-fastify@1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.10.0.tgz#26f662346d73d36f89ce93a886853a6b79b34eb4"
+fastify@1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.11.0.tgz#0a2ed6dd5677aa5fee0b6b5540503eb107f93be3"
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
     ajv "^6.5.2"
-    avvio "^5.6.0"
+    avvio "^5.8.0"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.5.4"
     find-my-way "^1.15.0"
