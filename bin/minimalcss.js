@@ -17,6 +17,7 @@ const argv = minimist(args, {
     'verbose',
     'debug',
     'loadimages',
+    'styletags',
     'withoutjavascript',
     'nosandbox'
   ],
@@ -51,6 +52,7 @@ if (argv['help']) {
       '  --verbose                     Include a comment about the options and the date it was generated.\n' +
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
       '  --loadimages                  By default, all images are NOT downloaded. This reverses that.\n' +
+      '  --styletags                   By default, all <style> tags are ignored. This will include them.\n' +
       '  --withoutjavascript           The CSS is evaluated against the DOM twice, first with no JavaScript, ' +
       'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
