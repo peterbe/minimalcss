@@ -1152,9 +1152,9 @@ fastify-static@0.14.0:
     readable-stream "^3.0.0"
     send "^0.16.0"
 
-fastify@1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.11.0.tgz#0a2ed6dd5677aa5fee0b6b5540503eb107f93be3"
+fastify@1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.11.1.tgz#b8fb1817932adf13d57e4a5370b8df0bc0c979a0"
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
