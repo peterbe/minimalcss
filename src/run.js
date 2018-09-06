@@ -188,6 +188,7 @@ const processPage = ({
 
     const debug = options.debug || false;
     const loadimages = options.loadimages || false;
+    const styletags = options.styletags || false;
     const withoutjavascript =
       options.withoutjavascript === undefined
         ? true
@@ -364,7 +365,7 @@ const processPage = ({
       const htmlWithJavascript = evalWithJavascript.html;
       doms.push(cheerio.load(htmlWithJavascript));
 
-      if (options.styletags) {
+      if (styletags) {
         // Parse each style tag as if it were an external stylesheet.
         evalWithJavascript.styles.forEach(({ href, text }) => {
           processStylesheet({
