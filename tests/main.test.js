@@ -83,7 +83,7 @@ test('cares about style tags and external CSS files', async () => {
   // and inline 'style' attributes, both present on the page and
   // injected using JavaScript.
   // This test asserts that selectors from stylesheets and <style>
-  // tags are both included in the final CSS, while selectors from
+  // tags are both included in the final CSS, while rules from
   // inline 'style' attributes are NOT included.
   const { finalCss } = await runMinimalcss('css-in-js', {
     styletags: true
