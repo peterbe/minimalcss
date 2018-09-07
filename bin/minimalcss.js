@@ -19,7 +19,8 @@ const argv = minimist(args, {
     'loadimages',
     'styletags',
     'withoutjavascript',
-    'nosandbox'
+    'nosandbox',
+    'enableserviceworkers'
   ],
   string: ['output', 'skip', 'viewport'],
   default: {
@@ -53,6 +54,7 @@ if (argv['help']) {
       '  --debug or -d                 Print all console logging during page rendering to stdout.\n' +
       '  --loadimages                  By default, all images are NOT downloaded. This reverses that.\n' +
       '  --styletags                   By default, all <style> tags are ignored. This will include them.\n' +
+      '  --enableserviceworkers        By default, use of Service Workers is disable. This flag enables them.\n' +
       '  --withoutjavascript           The CSS is evaluated against the DOM twice, first with no JavaScript, ' +
       'then with. This disables the load without JavaScript.\n' +
       '  --skip                        String to match in URL to ignore download. Repeatable. E.g. --skip google-analyics.com\n' +
@@ -105,7 +107,8 @@ const options = {
   viewport: parseViewport(argv['viewport']),
   puppeteerArgs: argv['nosandbox']
     ? ['--no-sandbox', '--disable-setuid-sandbox']
-    : []
+    : [],
+  enableServiceWorkers: argv['enableserviceworkers']
 };
 
 const start = Date.now();

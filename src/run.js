@@ -408,14 +408,18 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
   const { urls } = options;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
+  const enableServiceWorkers = options.enableServiceWorkers || false;
   const puppeteerArgs = options.puppeteerArgs || [];
+  if (!enableServiceWorkers) {
+    puppeteerArgs.push('--enable-features=NetworkService');
+  }
   const browser =
     options.browser ||
     (await puppeteer.launch({
@@ -436,6 +440,9 @@ const minimalcss = async options => {
     for (let i = 0; i < urls.length; i++) {
       const pageUrl = urls[i];
       const page = await browser.newPage();
+      if (!enableServiceWorkers) {
+        await page._client.send('ServiceWorker.disable');
+      }
       try {
         await processPage({
           page,

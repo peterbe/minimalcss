@@ -177,10 +177,11 @@ key is `urls`. Other optional options are:
 * `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
 * `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
 * `ignoreCSSErrors` - By default, any CSS parsing error throws an error in `minimalcss`. If you know it's safe to ignore (for example, third-party CSS resources), set this to `true`.
-* `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer 
+* `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer
 will be thrown by `minimalcss`. If you know it's safe to ignore errors (for example, on
 third-party webpages), set this to `true`.
 * `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
+* `enableServiceWorkers` - By default all Service Workers are disabled. This option enables them as is.
 
 ## Warnings
 
