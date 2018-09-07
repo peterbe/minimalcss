@@ -1,3 +1,10 @@
+# 0.7.x
+
+* Ability to also extract the CSS of all `style` tags with the `styletags`
+  option.
+  [pull#260](https://github.com/peterbe/minimalcss/pull/260)
+  Thanks @jc275
+
 # 0.7.10
 
 * Not crash if the CSS contains multiple semicolons which crashes
