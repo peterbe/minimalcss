@@ -69,8 +69,26 @@ test('handles JS errors', async () => {
 });
 
 test('cares only about external CSS files', async () => {
+  // The css-in-js fixture has external stylesheets, <style> tags,
+  // and inline 'style' attributes, both present on the page and
+  // injected using JavaScript.
+  // This test asserts that selectors from <style> tags and
+  // inline 'style' attributes are NOT included in the final CSS.
   const { finalCss } = await runMinimalcss('css-in-js');
   expect(finalCss).toEqual('.external{color:red}');
+});
+
+test('cares about style tags and external CSS files', async () => {
+  // The css-in-js fixture has external stylesheets, <style> tags,
+  // and inline 'style' attributes, both present on the page and
+  // injected using JavaScript.
+  // This test asserts that selectors from stylesheets and <style>
+  // tags are both included in the final CSS, while rules from
+  // inline 'style' attributes are NOT included.
+  const { finalCss } = await runMinimalcss('css-in-js', {
+    styletags: true
+  });
+  expect(finalCss).toEqual('.cssinjs1,.external,.inline{color:red}');
 });
 
 test('handles 404 CSS file', async () => {
