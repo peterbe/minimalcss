@@ -91,6 +91,7 @@ const options = {
   urls: urls,
   debug: argv['debug'],
   loadimages: argv['loadimages'],
+  styletags: argv['styletags'],
   withoutjavascript: argv['withoutjavascript'],
   skippable: request => {
     let skips = argv['skip'];
