@@ -1,4 +1,8 @@
-# 0.7.x
+# 0.8.0
+
+* By default, Service Workers are disabled. This new feature requires an
+  upgrade of puppeteer to `^1.8.0`.
+  [pull#265](https://github.com/peterbe/minimalcss/pull/265)
 
 * Ability to also extract the CSS of all `style` tags with the `styletags`
   option.
