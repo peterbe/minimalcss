@@ -325,6 +325,8 @@ const processPage = ({
           elem.tagName === 'STYLE' &&
           (!elem.type || elem.type.toLowerCase() === 'text/css');
         const isStylesheetLink = elem =>
+          elem.rel !== 'preload' &&
+          elem.rel !== 'prefetch' &&
           elem.tagName === 'LINK' &&
           elem.href &&
           (elem.rel.toLowerCase() === 'stylesheet' ||
@@ -334,9 +336,6 @@ const processPage = ({
             elem.href.toLowerCase().startsWith('blob:') ||
             elem.media.toLowerCase() === 'print'
           );
-
-        const isResourceHinted = elem =>
-          elem.rel === 'preload' || elem.rel === 'prefetch';
 
         // #fragments are omitted from puppeteer's response.url(), so
         // we need to strip them from stylesheet links, otherwise the
@@ -353,9 +352,6 @@ const processPage = ({
         // of all the ones we're going to assess. For style elements,
         // also extract each tag's content.
         Array.from(document.querySelectorAll('link, style')).forEach(elem => {
-          if (isResourceHinted(elem)) {
-            return;
-          }
           if (isStylesheetLink(elem)) {
             const href = defragment(elem.href);
             hrefs.push(href);
