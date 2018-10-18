@@ -306,3 +306,9 @@ test('handles #fragments in stylesheet hrefs', async () => {
   const { finalCss } = await runMinimalcss('url-fragment');
   expect(finalCss).toMatch('p{color:red}');
 });
+
+test('ignore resource hinted (preloaded or prefetched) css', async () => {
+  const { finalCss } = await runMinimalcss('resource-hinted-css');
+  expect(finalCss).toMatch('p{color:red}');
+});
+
