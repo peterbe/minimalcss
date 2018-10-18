@@ -336,8 +336,7 @@ const processPage = ({
           );
 
         const isResourceHinted = elem =>
-          (elem.rel === 'preload' ||
-          elem.rel === 'prefetch');
+          elem.rel === 'preload' || elem.rel === 'prefetch';
 
         // #fragments are omitted from puppeteer's response.url(), so
         // we need to strip them from stylesheet links, otherwise the
