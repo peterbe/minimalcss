@@ -324,16 +324,15 @@ const processPage = ({
         const isCssStyleTag = elem =>
           elem.tagName === 'STYLE' &&
           (!elem.type || elem.type.toLowerCase() === 'text/css');
+
         const isStylesheetLink = elem =>
           elem.tagName === 'LINK' &&
           elem.href &&
-          (elem.rel.toLowerCase() === 'stylesheet' ||
-            elem.href.toLowerCase().endsWith('.css')) &&
-          !(
-            elem.href.toLowerCase().startsWith('data:') ||
-            elem.href.toLowerCase().startsWith('blob:') ||
-            elem.media.toLowerCase() === 'print'
-          );
+          elem.rel.toLowerCase() === 'stylesheet' &&
+          !elem.href.toLowerCase().startsWith('data:') &&
+          !elem.href.toLowerCase().startsWith('blob:') &&
+          elem.media.toLowerCase() !== 'print';
+
         // #fragments are omitted from puppeteer's response.url(), so
         // we need to strip them from stylesheet links, otherwise the
         // hrefs won't always match when we check for missing ASTs.
