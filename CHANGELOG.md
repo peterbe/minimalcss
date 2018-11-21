@@ -1,3 +1,10 @@
+# 0.8.1
+
+* Ignore `<link rel="preload">` and `<link rel="prefetch">` tags whose
+  `href` value was a `.css` extension.
+  [pull#275](https://github.com/peterbe/minimalcss/pull/275)
+  Thanks @nicolas-t
+
 # 0.8.0
 
 * By default, Service Workers are disabled. This new feature requires an
