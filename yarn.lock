@@ -81,7 +81,7 @@ agent-base@^4.1.0:
   dependencies:
     es6-promisify "^5.0.0"
 
-ajv@^6.0.0, ajv@^6.5.4, ajv@^6.5.5:
+ajv@6.5.5, ajv@^6.0.0, ajv@^6.5.4, ajv@^6.5.5:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
   integrity sha512-7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==
@@ -1237,14 +1237,14 @@ fastify-static@0.14.0:
     readable-stream "^3.0.0"
     send "^0.16.0"
 
-fastify@1.13.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.13.0.tgz#1e68bd7bc69257afa989f6ae94c885255087a403"
-  integrity sha512-0aqsHEk2WtgGxPVDTOqDLv5XLHQE2EuH7eCq4XRLLnktLehNvr3/Afi/nEn6pPoLiVGMrbWHv4l1+wDhiSIFoA==
+fastify@1.13.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.13.1.tgz#9e16a8d05133a405d9ba88e96e9cb246f70f9f99"
+  integrity sha512-Ctpv8/tVMS0xocMOEC9KsKbIiVpdNK+bxgsV2cZHM6QzuEgdAyJv6oJzBO/6kpKp8OP0ywhuOXsw8Z4WJhAO8w==
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
-    ajv "^6.5.4"
+    ajv "6.5.5"
     avvio "^5.8.0"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.8.0"
@@ -1254,7 +1254,7 @@ fastify@1.13.0:
     middie "^3.1.0"
     pino "^4.17.3"
     proxy-addr "^2.0.3"
-    tiny-lru "^1.6.1"
+    tiny-lru "^2.0.0"
 
 fastq@^1.6.0:
   version "1.6.0"
@@ -3858,10 +3858,10 @@ through2@^2.0.2:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
 
-tiny-lru@^1.6.1:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-1.6.4.tgz#ee5226a29a7b734ef8aee47673dd5079bf987441"
-  integrity sha512-Et+J3Css66XPSLWjLF9wmgbECsGiExlEL+jxsFerTQF6N6dpxswDTPAfIrAbQKO5c1uhgq2xvo5zMk1W+kBDNA==
+tiny-lru@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-2.0.0.tgz#1491ae2bd82d658246290fe48334039836cc6146"
+  integrity sha512-LcvsiH/JYkeItdNK5w8EJjlHcOuaULkpjA97cfLBMvylHKlXAcccNFqKUw4EGhbYaFnhn6q7xqfTyO0xIOj59Q==
 
 tmpl@1.0.x:
   version "1.0.4"
