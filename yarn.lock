@@ -81,10 +81,20 @@ agent-base@^4.1.0:
   dependencies:
     es6-promisify "^5.0.0"
 
-ajv@6.5.5, ajv@^6.0.0, ajv@^6.5.4, ajv@^6.5.5:
+ajv@^6.0.0, ajv@^6.5.4, ajv@^6.5.5:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
   integrity sha512-7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==
+  dependencies:
+    fast-deep-equal "^2.0.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
+ajv@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.1.tgz#6360f5ed0d80f232cc2b294c362d5dc2e538dd61"
+  integrity sha512-ZoJjft5B+EJBjUyu9C9Hc0OZyPZSSlOF+plzouTrg6UlA8f+e/n8NIgBFG/9tppJtpPWfthHakK7juJdNDODww==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -1237,19 +1247,19 @@ fastify-static@1.0.0:
     readable-stream "^3.0.2"
     send "^0.16.0"
 
-fastify@1.13.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.13.1.tgz#9e16a8d05133a405d9ba88e96e9cb246f70f9f99"
-  integrity sha512-Ctpv8/tVMS0xocMOEC9KsKbIiVpdNK+bxgsV2cZHM6QzuEgdAyJv6oJzBO/6kpKp8OP0ywhuOXsw8Z4WJhAO8w==
+fastify@1.13.2:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.13.2.tgz#a819d86db2f2d6952954ec1d3f8ef41a177dd7d8"
+  integrity sha512-SM1iXPaI690mKkWdP9s74SzBn9f0WQG7e7h6Cnd+MqNZ+FqNidhGGUIl7IuYkf1NYi0z0oQoKZp1IBMZ0S75Nw==
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
-    ajv "6.5.5"
+    ajv "^6.6.1"
     avvio "^5.8.0"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.8.0"
-    find-my-way "^1.15.3"
-    flatstr "^1.0.8"
+    find-my-way "^1.16.0"
+    flatstr "^1.0.9"
     light-my-request "^3.0.0"
     middie "^3.1.0"
     pino "^4.17.3"
@@ -1316,10 +1326,10 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-find-my-way@^1.15.3:
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.15.4.tgz#3b1da909347022e0b5ed94ecaaabf6d99096edd6"
-  integrity sha512-3XPCOhoGMPK6ELgUHd5BuNxsL+fTNM0EIrTlcLwjT2uZq22UHL4IQt5N54PIQblk164ioZATRov9mcuA4RB3eA==
+find-my-way@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.16.0.tgz#9d10d76894bbb286d60ec74085f3c70277f891b6"
+  integrity sha512-Y9nEAVrgi33SJIGpzITdKQ0Z784/mqLzP7Y5r2Q0hTTXnrvoQJW9cYpt1JiOhFOQfwvxM4/LulwfGIWpugrBkA==
   dependencies:
     fast-decode-uri-component "^1.0.0"
     safe-regex "^1.1.0"
@@ -1340,10 +1350,15 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-flatstr@^1.0.5, flatstr@^1.0.8:
+flatstr@^1.0.5:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/flatstr/-/flatstr-1.0.8.tgz#0e849229751f2b9f6a0919f8e81e1229e84ba901"
   integrity sha512-YXblbv/vc1zuVVUtnKl1hPqqk7TalZCppnKE7Pr8FI/Rp48vzckS/4SJ4Y9O9RNiI82Vcw/FydmtqdQOg1Dpqw==
+
+flatstr@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/flatstr/-/flatstr-1.0.9.tgz#0950d56fec02de1030c1311847ecd58c25690eb9"
+  integrity sha512-qFlJnOBWDfIaunF54/lBqNKmXOI0HqNhu+mHkLmbaBXlS71PUd9OjFOdyevHt/aHoHB1+eW7eKHgRKOG5aHSpw==
 
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
