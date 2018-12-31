@@ -31,3 +31,31 @@ test('Test removeSequentialSemis', () => {
   // multiple semicolon sequences
   expect(f('a;b;;c;;;d;;;;')).toEqual('a;b;c;d;');
 });
+
+test('Test selectorParentSelectors', async () => {
+  const f = utils.selectorParentSelectors;
+  // Simplest possible
+  expect(f('.foo .bar')).toEqual(['.foo']);
+  // Slightly less simple
+  expect(f('.foo .bar .baz')).toEqual(['.foo', '.foo .bar']);
+  // Empty array
+  expect(f('.foo')).toEqual([]);
+  // Less trivial
+  expect(f('.ui.dropdown>.dropdown.icon:before')).toEqual(['.ui.dropdown']);
+  expect(f('.ui.vertical.menu .dropdown.item>.dropdown.icon:before')).toEqual([
+    '.ui.vertical.menu',
+    '.ui.vertical.menu .dropdown.item'
+  ]);
+  expect(
+    f(
+      '.ui.search.selection>.icon.input:not([class*="left icon"])>.icon~.remove.icon'
+    )
+  ).toEqual([
+    '.ui.search.selection',
+    '.ui.search.selection>.icon.input:not([class*="left icon"])',
+    '.ui.search.selection>.icon.input:not([class*="left icon"])>.icon'
+  ]);
+  expect(f('.ui[class*="right aligned"].search>.results')).toEqual([
+    '.ui[class*="right aligned"].search'
+  ]);
+});

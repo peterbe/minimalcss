@@ -1,0 +1,14 @@
+#foo
+.link, #foo  p  {
+  color: red;
+}
+
+.one {
+  color: red;
+}
+.one .two {
+  color: orange;
+}
+.one .two .three {
+  color: green;
+}

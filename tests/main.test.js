@@ -163,6 +163,11 @@ test('form elements', async () => {
   expect(finalCss).toMatch('option:selected');
 });
 
+test('nested selectors and domLookupsTotal', async () => {
+  const { finalCss } = await runMinimalcss('nested-selectors');
+  expect(finalCss).toMatch('#foo p{color:red}');
+});
+
 test('invalid css', async () => {
   expect.assertions(1);
 
