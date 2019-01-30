@@ -34,7 +34,7 @@
     "fastify": "1.13.4",
     "fastify-static": "1.1.0",
     "jest": "24.0.0",
-    "prettier": "1.16.1"
+    "prettier": "1.16.2"
   },
   "scripts": {
     "tsc": "tsc -p .",
