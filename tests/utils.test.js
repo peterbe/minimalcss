@@ -32,8 +32,8 @@ test('Test removeSequentialSemis', () => {
   expect(f('a;b;;c;;;d;;;;')).toEqual('a;b;c;d;');
 });
 
-test('Test selectorParentSelectors', async () => {
-  const f = utils.selectorParentSelectors;
+test('Test parentSelectors', async () => {
+  const f = utils.parentSelectors;
   // Simplest possible
   expect(f('.foo .bar')).toEqual(['.foo']);
   // Slightly less simple

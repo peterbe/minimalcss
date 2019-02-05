@@ -498,16 +498,6 @@ const minimalcss = async options => {
     // this selector string.
     return doms.some(dom => {
       try {
-        // console.log(
-        //   'SELECTOR:',
-        //   selectorString,
-        //   selectorString in decisionsCache
-        // );
-        if (selectorString in decisionsCache) {
-          throw new Error(
-            `Selector (${selectorString}) has already been added to the decisionsCache.`
-          );
-        }
         return dom(selectorString).length > 0;
       } catch (ex) {
         // Be conservative. If we can't understand the selector,
@@ -565,19 +555,17 @@ const minimalcss = async options => {
             // Before we begin, do a little warmup of the decision cache.
             // From a given selector, e.g. `div.foo p.bar`, we can first look
             // up if there's an point by first doing a lookup for `div.foo`
-            // because if that doesn't exist we *know*  we can igmore more
+            // because if that doesn't exist we *know*  we can ignore more
             // "deeper" selectors like `div.foo p.bar` and `div.foo span a`.
-            const selectorParentSelectors = utils.selectorParentSelectors(
-              selectorString
-            );
+            const parentSelectors = utils.getParentSelectors(selectorString);
 
             // If "selectorString" was `.foo .bar span`, then
-            // this `selectorParentSelectors` array will be
+            // this `parentSelectors` array will be
             // `['.foo', '.foo .bar']`.
             // If `selectorString` was just `.foo`, then
-            // this `selectorParentSelectors` array will be `[]`.
+            // this `parentSelectors` array will be `[]`.
             let bother = true;
-            selectorParentSelectors.forEach(selectorParentString => {
+            parentSelectors.forEach(selectorParentString => {
               if (bother) {
                 // Is it NOT in the decision cache?
                 if (selectorParentString in decisionsCache === false) {

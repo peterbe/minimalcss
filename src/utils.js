@@ -67,7 +67,7 @@ const removeSequentialSemis = css => {
  * @param {string} selector
  * @return {string[]}
  */
-function selectorParentSelectors(selector) {
+function getParentSelectors(selector) {
   if (!selector) return [];
   const parentSelectors = [];
   const selectorAst = csstree.parse(selector, { context: 'selector' });
@@ -93,5 +93,5 @@ module.exports = {
   reduceCSSSelector,
   removeSequentialSemis,
   unquoteString,
-  selectorParentSelectors
+  getParentSelectors
 };
