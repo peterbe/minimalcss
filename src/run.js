@@ -485,9 +485,13 @@ const minimalcss = async options => {
     );
   }
 
+  // This is the protection against ever looking up the same CSS selector
+  // more than once. We can confidently pre-populate it with a couple that
+  // we're confident about.
+  const decisionsCache = { '*': true, body: true, html: true, '': true };
+
   // Now, let's loop over ALL links and process their ASTs compared to
   // the DOMs.
-  const decisionsCache = {};
   const isSelectorMatchToAnyElement = selectorString => {
     // Here's the crucial part. Decide whether to keep the selector
     // Find at least 1 DOM that contains an object that matches
@@ -519,7 +523,6 @@ const minimalcss = async options => {
       return;
     }
     const ast = stylesheetAsts[href];
-
     csstree.walk(ast, {
       visit: 'Rule',
       enter: function(node, item, list) {
@@ -548,6 +551,40 @@ const minimalcss = async options => {
             const selectorString = utils.reduceCSSSelector(
               csstree.generate(node)
             );
+
+            // Before we begin, do a little warmup of the decision cache.
+            // From a given selector, e.g. `div.foo p.bar`, we can first look
+            // up if there's an point by first doing a lookup for `div.foo`
+            // because if that doesn't exist we *know*  we can ignore more
+            // "deeper" selectors like `div.foo p.bar` and `div.foo span a`.
+            const parentSelectors = utils.getParentSelectors(selectorString);
+
+            // If "selectorString" was `.foo .bar span`, then
+            // this `parentSelectors` array will be
+            // `['.foo', '.foo .bar']`.
+            // If `selectorString` was just `.foo`, then
+            // this `parentSelectors` array will be `[]`.
+            let bother = true;
+            parentSelectors.forEach(selectorParentString => {
+              if (bother) {
+                // Is it NOT in the decision cache?
+                if (selectorParentString in decisionsCache === false) {
+                  decisionsCache[
+                    selectorParentString
+                  ] = isSelectorMatchToAnyElement(selectorParentString);
+                }
+                // What was the outcome of that? And if the outcome was
+                // that it was NOT there, set the 'bother' to false which
+                // will popoulate the decision cache immediately.
+                if (!decisionsCache[selectorParentString]) {
+                  bother = false;
+                  decisionsCache[selectorString] = false;
+                }
+              } else {
+                decisionsCache[selectorParentString] = false;
+              }
+            });
+
             if (selectorString in decisionsCache === false) {
               decisionsCache[selectorString] = isSelectorMatchToAnyElement(
                 selectorString
@@ -612,9 +649,9 @@ const minimalcss = async options => {
   // it too.
   csso.compress(allCombinedAst, cssoOptions);
   postProcessOptimize(allCombinedAst);
-
+  const finalCss = csstree.generate(allCombinedAst);
   const returned = {
-    finalCss: csstree.generate(allCombinedAst),
+    finalCss,
     stylesheetContents
   };
   return Promise.resolve(returned);
