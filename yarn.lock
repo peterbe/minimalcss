@@ -430,6 +430,11 @@ boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
+bourne@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/bourne/-/bourne-1.1.1.tgz#fb222298a549723b51623512e654db116cbc547b"
+  integrity sha512-Ou0l3W8+n1FuTOoIfIrCk9oF9WVWc+9fKoAl67XQr9Ws0z7LgILRZ7qtc9xdT4BveSKtnYXfKPgn8pFAqeQRew==
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
@@ -1189,18 +1194,19 @@ fastify-static@1.1.0:
     readable-stream "^3.0.2"
     send "^0.16.0"
 
-fastify@1.13.4:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.13.4.tgz#a48a1244921c2d4fb092f6ee419be18c3483df1a"
-  integrity sha512-3L791cNhfhbh5erCUnHLxCcUeHcgO8yPoN0QRvzaA/5wSSnYcjm9n+ewFsXTnwJoVidmoUqnjgmTPqUpIXoeYg==
+fastify@1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.14.1.tgz#90d204c4827af41bcc3cc16d3f3cdc103690680d"
+  integrity sha512-QPvT8sxWhXZKoosCaxEEuRubmiwM7pApTGaInXjUDdStEOvtryFeXuD40yRZvM7Xi5DE21Z3SoxYYLXX0u5v9w==
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
     ajv "^6.6.1"
     avvio "^5.8.0"
+    bourne "^1.1.0"
     end-of-stream "^1.4.1"
     fast-json-stringify "^1.8.0"
-    find-my-way "^1.16.0"
+    find-my-way "^1.18.0"
     flatstr "^1.0.9"
     light-my-request "^3.0.0"
     middie "^3.1.0"
@@ -1252,10 +1258,10 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-find-my-way@^1.16.0:
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.16.0.tgz#9d10d76894bbb286d60ec74085f3c70277f891b6"
-  integrity sha512-Y9nEAVrgi33SJIGpzITdKQ0Z784/mqLzP7Y5r2Q0hTTXnrvoQJW9cYpt1JiOhFOQfwvxM4/LulwfGIWpugrBkA==
+find-my-way@^1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/find-my-way/-/find-my-way-1.18.0.tgz#a21507071cce27e2ed54d7d487b871260f556197"
+  integrity sha512-crxfbRd8Rssex2ZvCvPI1VmeB8t3SyFjwTLAGgr0t+Q1X/SHFYL5cIF7PpcoaUeDJeBkRBKLELopjjk/Ai6V/w==
   dependencies:
     fast-decode-uri-component "^1.0.0"
     safe-regex "^1.1.0"
