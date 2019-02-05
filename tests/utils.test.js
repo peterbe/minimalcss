@@ -33,7 +33,7 @@ test('Test removeSequentialSemis', () => {
 });
 
 test('Test parentSelectors', async () => {
-  const f = utils.parentSelectors;
+  const f = utils.getParentSelectors;
   // Simplest possible
   expect(f('.foo .bar')).toEqual(['.foo']);
   // Slightly less simple
