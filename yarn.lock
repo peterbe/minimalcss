@@ -1177,21 +1177,21 @@ fast-safe-stringify@^1.0.8, fast-safe-stringify@^1.2.3:
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-1.2.3.tgz#9fe22c37fb2f7f86f06b8f004377dbf8f1ee7bc1"
   integrity sha512-QJYT/i0QYoiZBQ71ivxdyTqkwKkQ0oxACXHYxH2zYHJEgzi2LsbjgvtzTbLi1SZcF190Db2YP7I7eTsU2egOlw==
 
-fastify-plugin@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-1.2.1.tgz#77bd6c517de0096bf26deb28d1b7c87080c1ba59"
-  integrity sha512-TLmXpp3PEsD3MFSV3FBiH70hkalvgZ8Qmg3hr1FcJpZFaPwxoWUDoFdXZrguY+2gBVQgkFtrM47aWL5lNHqg+Q==
+fastify-plugin@^1.4.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-1.5.0.tgz#4bea12c54112f4749c17f3a1f17356cbdfa661af"
+  integrity sha512-bXKSTR4Q1lxERf1p/10Aakga570XtcxCCvPR1gby5js1XOtg7E8UV+aHHEPbGowQGV/KVb7ARBROhPk2I4DfBw==
   dependencies:
     semver "^5.5.0"
 
-fastify-static@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-1.1.0.tgz#ca0fe5599b4010bd3539c3b74874868798d84c27"
-  integrity sha512-cIo/96xyhZWmzL7dSJoIvmoJ1KxVW8a28cOqzFy6KYZ+ysb7Evx0TaiqMtLJnlevOUFASsutJG7GETXPeYVtPQ==
+fastify-static@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-2.3.0.tgz#26144dba3ead1e5e71d87fdf64207d9dd93404d3"
+  integrity sha512-G45SLqujBhZuGxyWShK/wihCahUwFzIF9o96X740UQQg9/O6hy+OVRV+W3dA/bX7tqRAPGSUsObsZNxnyNLkVw==
   dependencies:
-    fastify-plugin "^1.2.0"
+    fastify-plugin "^1.4.0"
     glob "^7.1.3"
-    readable-stream "^3.0.2"
+    readable-stream "^3.1.1"
     send "^0.16.0"
 
 fastify@1.14.1:
@@ -3120,10 +3120,19 @@ readable-stream@^2.0.1, readable-stream@^2.0.6, readable-stream@^2.2.2, readable
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^3.0.0, readable-stream@^3.0.2, readable-stream@^3.0.6:
+readable-stream@^3.0.0, readable-stream@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.0.6.tgz#351302e4c68b5abd6a2ed55376a7f9a25be3057a"
   integrity sha512-9E1oLoOWfhSXHGv6QlwXJim7uNzd9EVlWK+21tCU9Ju/kR0/p2AZYPz4qSchgO8PlLIH4FpZYfzwS+rEksZjIg==
+  dependencies:
+    inherits "^2.0.3"
+    string_decoder "^1.1.1"
+    util-deprecate "^1.0.1"
+
+readable-stream@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.1.1.tgz#ed6bbc6c5ba58b090039ff18ce670515795aeb06"
+  integrity sha512-DkN66hPyqDhnIQ6Jcsvx9bFjhw214O4poMBcIMgPVpQvNy9a0e0Uhg5SqySyDKAmUlwt8LonTBz1ezOnM8pUdA==
   dependencies:
     inherits "^2.0.3"
     string_decoder "^1.1.1"
