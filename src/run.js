@@ -488,6 +488,10 @@ const minimalcss = async options => {
   // This is the protection against ever looking up the same CSS selector
   // more than once. We can confidently pre-populate it with a couple that
   // we're confident about.
+  // The `''` selector is odd looking but comes from `:before` which is a
+  // valid CSS selector.
+  // See https://codepen.io/peterbe/pen/YBLyOd and
+  // https://github.com/Semantic-Org/Semantic-UI/blob/master/dist/components/reset.min.css
   const decisionsCache = { '*': true, body: true, html: true, '': true };
 
   // Now, let's loop over ALL links and process their ASTs compared to
