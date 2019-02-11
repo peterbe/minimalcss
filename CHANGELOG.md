@@ -1,3 +1,9 @@
+# 0.8.2
+
+* Big optimization. By looking up the "parent CSS selector" pre-emptively
+  it can quickly discard repeated "child CSS selectors".
+  [pull#296](https://github.com/peterbe/minimalcss/pull/296)
+
 # 0.8.1
 
 * Ignore `<link rel="preload">` and `<link rel="prefetch">` tags whose
