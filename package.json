@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "fastify": "1.14.1",
-    "fastify-static": "1.1.0",
+    "fastify-static": "2.3.2",
     "jest": "24.1.0",
     "prettier": "1.16.4"
   },
