@@ -31,7 +31,7 @@
     "puppeteer": "^1.8.0"
   },
   "devDependencies": {
-    "fastify": "1.14.1",
+    "fastify": "1.14.2",
     "fastify-static": "1.1.0",
     "jest": "24.1.0",
     "prettier": "1.16.4"
