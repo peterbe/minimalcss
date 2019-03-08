@@ -33,7 +33,7 @@
   "devDependencies": {
     "fastify": "1.14.3",
     "fastify-static": "1.1.0",
-    "jest": "24.3.0",
+    "jest": "24.3.1",
     "prettier": "1.16.4"
   },
   "scripts": {
