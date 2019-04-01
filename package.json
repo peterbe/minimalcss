@@ -1,6 +1,6 @@
 {
   "name": "minimalcss",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "./index.js",
   "author": "Peter Bengtsson",
