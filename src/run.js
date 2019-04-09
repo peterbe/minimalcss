@@ -193,7 +193,7 @@ const processPage = ({
       options.withoutjavascript === undefined
         ? true
         : !!options.withoutjavascript;
-	const isJavaScriptEnabled = (options.isJavaScriptEnabled === undefined) || !!options.isJavaScriptEnabled;
+	const disableJavaScript = !!options.disableJavaScript;
 
     try {
       if (options.userAgent) {
@@ -284,8 +284,8 @@ const processPage = ({
 
       let response;
 
-	  if (!isJavaScriptEnabled) {
-		page.setJavaScriptEnabled(false);
+	  if (disableJavaScript) {
+		await page.setJavaScriptEnabled(false);
 	  } else if (withoutjavascript) {
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false);
@@ -410,7 +410,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, isJavaScriptEnabled?: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {

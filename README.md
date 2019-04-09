@@ -182,7 +182,8 @@ will be thrown by `minimalcss`. If you know it's safe to ignore errors (for exam
 third-party webpages), set this to `true`.
 * `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
 * `enableServiceWorkers` - By default all Service Workers are disabled. This option enables them as is.
-* `isJavaScriptEnabled` - By default JavaScript is enabled. This option allows disable JavaScript.
+* `disableJavaScript` - By default JavaScript is enabled. If set to `true` it will ignore `withoutjavascript` option and loading the page only one time
+  without JavaScript.
 
 ## Warnings
 

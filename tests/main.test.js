@@ -320,9 +320,9 @@ test('ignore resource hinted (preloaded or prefetched) css', async () => {
 test('cares about static styles when JavaScript disabled', async () => {
   const { finalCss } = await runMinimalcss('dynamic-css', {
     styletags: true,
-	isJavaScriptEnabled: false,
+	disableJavaScript: true,
   });
-  
+
   expect(finalCss).toEqual('.inline{color:red}');
 });
 
