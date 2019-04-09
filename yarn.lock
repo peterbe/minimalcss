@@ -1421,10 +1421,10 @@ fastify-static@1.1.0:
     readable-stream "^3.0.2"
     send "^0.16.0"
 
-fastify@1.14.4:
-  version "1.14.4"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.14.4.tgz#1f9081cef497479b52fd52146196f4ef3f33079d"
-  integrity sha512-hR2EX0RSUQC5IwkCxulaWqM+FyQhMtg/c+phgsSl3xksNZUV3bleFZO0BSquPPBEXWcLt14EiyCPdgFL5AbFRA==
+fastify@1.14.5:
+  version "1.14.5"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-1.14.5.tgz#9c322e271096b3708baff8070217a4f4cdf96eca"
+  integrity sha512-cZrrPgH+UuexY9CTvwl7zCw7hkJUOzDwqHtxZaWo0Fa9LgO+jhSRQ8S03xEXRDRtAsHny237I5Zc2ZEt/YEUSQ==
   dependencies:
     "@types/pino" "^4.16.0"
     abstract-logging "^1.0.0"
