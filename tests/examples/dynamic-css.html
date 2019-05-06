@@ -7,23 +7,10 @@
     </style>
   </head>
   <body>
-    <p class="external">external</p>
-    <p class="inline">inline</p>
     <script type="text/javascript">
-      (() => {
-        const css = '.external { color: red }',
-            head = document.head || document.getElementsByTagName('head')[0],
-            style = document.createElement('style');
-
-        style.type = 'text/css';
-        if (style.styleSheet){
-          style.styleSheet.cssText = css;
-        } else {
-          style.appendChild(document.createTextNode(css));
-        }
-
-        head.appendChild(style);
-      })();
+      const p = document.createElement('p');
+      p.classList.add('inline');
+      document.body.appendChild(p);
     </script>
   </body>
 </html>

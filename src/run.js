@@ -193,7 +193,7 @@ const processPage = ({
       options.withoutjavascript === undefined
         ? true
         : !!options.withoutjavascript;
-	const disableJavaScript = !!options.disableJavaScript;
+    const disableJavaScript = !!options.disableJavaScript;
 
     try {
       if (options.userAgent) {
@@ -285,7 +285,7 @@ const processPage = ({
       let response;
 
 	  if (disableJavaScript) {
-		await page.setJavaScriptEnabled(false);
+        await page.setJavaScriptEnabled(false);
 	  } else if (withoutjavascript) {
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false);
