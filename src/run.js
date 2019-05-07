@@ -284,9 +284,9 @@ const processPage = ({
 
       let response;
 
-	  if (disableJavaScript) {
+      if (disableJavaScript) {
         await page.setJavaScriptEnabled(false);
-	  } else if (withoutjavascript) {
+      } else if (withoutjavascript) {
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false);
         response = await page.goto(pageUrl);
