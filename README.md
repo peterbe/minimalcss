@@ -13,7 +13,7 @@ This minimal CSS is also known as [critical path CSS](https://developers.google.
 and ultimately a web performance technique to make web pages load faster
 at initial load.
 
-## What does it do?
+## What does it do
 
 You supply a list of URLs that it opens (one at a time) and for each page
 it downloads all external CSS files (e.g.
@@ -42,24 +42,24 @@ one "merged" and minified CSS payload.
 
 Install:
 
-```
+```bash
 yarn add minimalcss --dev
 ```
 
 You can install it globally if you like:
 
-```
+```bash
 yarn global add minimalcss
 ```
 
-```
+```bash
 npm install [--save-dev|--global] minimalcss
 ```
 
 Now you can run it:
 
-```shell
-$ ./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
+```bash
+./node_modules/.bin/minimalcss https://example.com/ https://example.com/aboutus > minimal.min.css
 ```
 
 ## Prior art

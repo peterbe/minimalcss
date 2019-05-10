@@ -23,7 +23,7 @@
     "url": "https://github.com/peterbe/minimalcss/issues"
   },
   "dependencies": {
-    "cheerio": "1.0.0-rc.2",
+    "cheerio": "1.0.0-rc.3",
     "css-tree": "1.0.0-alpha.28",
     "csso": "~3.5.0",
     "filesize": "^4.0.0",
@@ -31,15 +31,15 @@
     "puppeteer": "^1.8.0"
   },
   "devDependencies": {
-    "fastify": "1.14.4",
+    "fastify": "1.14.6",
     "fastify-static": "1.1.0",
-    "jest": "24.5.0",
-    "prettier": "1.16.4"
+    "jest": "24.8.0",
+    "prettier": "1.17.0"
   },
   "scripts": {
     "tsc": "tsc -p .",
     "lintcheck": "scripts/lintcheck.sh",
     "test": "jest",
-    "e2e": "./bin/e2e.js"
+    "e2e": "scripts/e2e.js"
   }
 }
