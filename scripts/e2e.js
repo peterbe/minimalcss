@@ -44,8 +44,8 @@ function openUrl(url, ...options) {
 openUrl('https://minimalcss.app/').then(spawned => {
   const css = spawned.stdout.toString();
   assert(
-    css.length > 8000 && css.length < 10000,
-    'Expect CSS to be between 8,000...10,000'
+    css.length > 7000 && css.length < 10000,
+    'Expect CSS to be between 7,000...10,000'
   );
 });
 
