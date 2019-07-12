@@ -539,9 +539,7 @@ const minimalcss = async options => {
         }
 
         if (!node.prelude.children) {
-          const cssErrorMessage = `Invalid CSS found while evaluating ${href}: "${
-            node.prelude.value
-          }"`;
+          const cssErrorMessage = `Invalid CSS found while evaluating ${href}: "${node.prelude.value}"`;
           if (options.ignoreCSSErrors) {
             console.warn(cssErrorMessage);
             list.remove(item);
