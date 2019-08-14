@@ -1,3 +1,9 @@
+# 0.8.3
+
+* You can now render exclusively with JavaScript disabled.
+  [pull#312](https://github.com/peterbe/minimalcss/pull/312)
+  Thanks @VladislavTkachuk
+
 # 0.8.2
 
 * Big optimization. By looking up the "parent CSS selector" pre-emptively
