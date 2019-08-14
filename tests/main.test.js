@@ -316,3 +316,19 @@ test('ignore resource hinted (preloaded or prefetched) css', async () => {
   const { finalCss } = await runMinimalcss('resource-hinted-css');
   expect(finalCss).toMatch('p{color:red}');
 });
+
+test('cares about static styles when JavaScript disabled', async () => {
+  const { finalCss } = await runMinimalcss('dynamic-css', {
+    disableJavaScript: true
+  });
+
+  expect(finalCss).toEqual('');
+});
+
+test('cares about static and dynamic styles when JavaScript enabled', async () => {
+  const { finalCss } = await runMinimalcss('dynamic-css', {
+    disableJavaScript: false
+  });
+
+  expect(finalCss).toEqual('.inline{color:red}');
+});

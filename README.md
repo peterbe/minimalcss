@@ -169,6 +169,7 @@ key is `urls`. Other optional options are:
   without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
   can be, and then with JavaScript enabled _and_ waiting for network activity
   to be idle.
+* `disableJavaScript` - By default JavaScript is enabled. If set to `true` it will ignore `withoutjavascript` option and loading the page only one time without JavaScript.
 * `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
 * `userAgent` - specific user agent to use (string)
 * `viewport` - viewport object as specified in [page.setViewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport)
