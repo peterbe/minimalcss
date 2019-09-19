@@ -127,7 +127,7 @@ const processStylesheet = ({
     if (value.type !== 'Raw') {
       path = path.substr(1, path.length - 2);
     }
-    const sameHost = url.parse(responseUrl).host === url.parse(pageUrl).host;
+    const sameHost = isSameHost(responseUrl, pageUrl);
     if (/^https?:\/\/|^\/\/|^data:/i.test(path)) {
       // do nothing
     } else if (/^\//.test(path) && sameHost) {
@@ -148,6 +148,10 @@ const processStylesheet = ({
   });
   stylesheetAsts[responseUrl] = ast;
   stylesheetContents[responseUrl] = text;
+};
+
+const isSameHost = (url1, url2) => {
+  return url.parse(url1).host === url.parse(url2).host;
 };
 
 const processPage = ({
@@ -221,7 +225,11 @@ const processPage = ({
       page.on('request', request => {
         const resourceType = request.resourceType();
         const requestUrl = request.url();
-        if (/data:image\//.test(requestUrl)) {
+        if (resourceType === 'document' && !isSameHost(requestUrl, pageUrl)) {
+          // Iframes within the document are resourceType==='document' and
+          // don't want to consider its internal stylesheets.
+          request.abort();
+        } else if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort();
         } else if (!loadimages && resourceType === 'image') {
