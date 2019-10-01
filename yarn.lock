@@ -1378,10 +1378,10 @@ fd-slicer@~1.0.1:
   dependencies:
     pend "~1.2.0"
 
-filesize@^4.0.0:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/filesize/-/filesize-4.1.2.tgz#fcd570af1353cea97897be64f56183adb995994b"
-  integrity sha512-iSWteWtfNcrWQTkQw8ble2bnonSl7YJImsn9OZKpE2E4IHhXI78eASpDYUljXZZdYj36QsEKjOs/CsiDqmKMJw==
+filesize@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-5.0.0.tgz#acf19f37396eb20d3128bd3ee09f926be2c6eb17"
+  integrity sha512-AcAcgAQSLPQrywmZRrmLxeoa2bvAf7km2y0ihJH2zqYicBlaJk2SjymRSt1CVhNf80jtqJ4vEbuTlaem+U/XQQ==
 
 fill-range@^4.0.0:
   version "4.0.0"
