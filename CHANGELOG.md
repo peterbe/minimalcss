@@ -1,3 +1,5 @@
+* Upgrade dependency on `css-tree` to `1.0.0-alpha.37`
+
 * Upgrade dependency on `csso` to `~4.0.2`
 
 # 0.8.3
