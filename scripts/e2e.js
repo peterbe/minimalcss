@@ -6,8 +6,7 @@ const inCI = process.env.CI || false;
 
 function assert(truth, failure) {
   if (!truth) {
-    console.error(failure);
-    process.exit(1);
+    throw new Error(failure);
   }
 }
 function assertStatus(spawned) {
@@ -50,22 +49,24 @@ openUrl('https://minimalcss.app/').then(spawned => {
 });
 
 // Open with -o
-openUrl('https://travis-ci.org/', '-o', '/tmp/travisci.css').then(spawned => {
-  const stdout = spawned.stdout.toString();
-  assert(!stdout.trim(), 'Output should be empty');
-  const css = fs.readFileSync('/tmp/travisci.css').toString();
-  assert(
-    css.length > 10000 && css.length < 40000,
-    'Expect CSS to be between 1K...15K'
-  );
-});
+openUrl('https://developer.mozilla.org/', '-o', '/tmp/mdn.css').then(
+  spawned => {
+    const stdout = spawned.stdout.toString();
+    assert(!stdout.trim(), 'Output should be empty');
+    const css = fs.readFileSync('/tmp/mdn.css').toString();
+    assert(
+      css.length > 10000 && css.length < 30000,
+      'Expect CSS to be between 10K...30K'
+    );
+  }
+);
 
 // With verbose output
-openUrl('https://news.ycombinator.com/', '--verbose').then(spawned => {
+openUrl('https://developer.mozilla.org/', '--verbose').then(spawned => {
   const css = spawned.stdout.toString();
   assert(/\/\*\nGenerated /.test(css), 'Expected verbose leading comment');
   assert(
-    css.length > 1000 && css.length < 3000,
-    'Expect CSS to be between 1K...3K'
+    css.length > 10000 && css.length < 30000,
+    'Expect CSS to be between 10K...30K'
   );
 });
