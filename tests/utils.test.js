@@ -20,18 +20,6 @@ test('Test reduceCSSSelector', async () => {
   expect(f("a[href^='javascript:']:after")).toEqual("a[href^='javascript:']");
 });
 
-test('Test removeSequentialSemis', () => {
-  const f = utils.removeSequentialSemis;
-  // empty string
-  expect(f('')).toEqual('');
-  // more than two semicolons
-  expect(f(';;;')).toEqual(';');
-  // whitespace between semicolons
-  expect(f(';\r\n\t;')).toEqual(';');
-  // multiple semicolon sequences
-  expect(f('a;b;;c;;;d;;;;')).toEqual('a;b;c;d;');
-});
-
 test('Test parentSelectors', async () => {
   const f = utils.getParentSelectors;
   // Simplest possible

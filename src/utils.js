@@ -47,19 +47,6 @@ const unquoteString = memoize(string => {
 });
 
 /**
- * Removes all sequences of two-or-more semicolons separated by zero-or-more
- * whitespace, replacing each sequence with a single semicolon.
- * @param {string} css
- * @return {string}
- */
-const removeSequentialSemis = css => {
-  while (/;\s*;/.test(css)) {
-    css = css.replace(/;\s*;/g, ';');
-  }
-  return css;
-};
-
-/**
  * Given a string CSS selector (e.g. '.foo .bar .baz') return it with the
  * last piece (split by whitespace) omitted (e.g. '.foo .bar').
  * If there is no parent, return an empty string.
@@ -91,7 +78,6 @@ function getParentSelectors(selector) {
 
 module.exports = {
   reduceCSSSelector,
-  removeSequentialSemis,
   unquoteString,
   getParentSelectors
 };
