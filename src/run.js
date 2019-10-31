@@ -114,11 +114,6 @@ const processStylesheet = ({
   stylesheetAsts,
   stylesheetContents
 }) => {
-  // Semicolon sequences can crash CSSO,
-  // so we remove them from the CSS text.
-  // https://github.com/peterbe/minimalcss/issues/243
-  // https://github.com/css/csso/issues/378
-  text = utils.removeSequentialSemis(text);
   const ast = csstree.parse(text);
   csstree.walk(ast, node => {
     if (node.type !== 'Url') return;
@@ -652,7 +647,7 @@ const minimalcss = async options => {
   // When ultimately, what was need is `p { color: blue; font-weight: bold}`.
   // The csso.minify() function will solve this, *and* whitespace minify
   // it too.
-  csso.compress(allCombinedAst, cssoOptions);
+  csso.syntax.compress(allCombinedAst, cssoOptions);
   postProcessOptimize(allCombinedAst);
   const finalCss = csstree.generate(allCombinedAst);
   const returned = {
