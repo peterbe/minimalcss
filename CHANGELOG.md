@@ -1,3 +1,5 @@
+* Upgrade dependency on `csso` to `~4.0.2`
+
 # 0.8.3
 
 * You can now render exclusively with JavaScript disabled.
