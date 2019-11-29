@@ -1351,10 +1351,10 @@ fastify-plugin@^1.6.0:
   dependencies:
     semver "^6.0.0"
 
-fastify-static@2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-2.5.0.tgz#7b36b83250e1a3e008043c5ab7ba4295ba895017"
-  integrity sha512-j0H+izfYHzlXtrMJG/3d7Z2SRhTm17HDiOZll/kWKF26GcsRTJttZneAJaF07XW/uQY9HrBRmSEwmlNG2+0b3A==
+fastify-static@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/fastify-static/-/fastify-static-2.5.1.tgz#c73146503a119d7a7553fd549d899f5e4fbabdff"
+  integrity sha512-aPpyT+ADHtZ/i35Ly6Cyyz9DA6HRwgJr0bJEMucmTxaXBIO5LaEsIOTzTP+U0/UBScer/mL4x2eSHp9l6WTnkw==
   dependencies:
     fastify-plugin "^1.6.0"
     glob "^7.1.4"
