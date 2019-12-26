@@ -405,15 +405,18 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string> }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
-  const { urls } = options;
+  const { urls, whitelist = [] } = options;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
   const puppeteerArgs = options.puppeteerArgs || [];
+  const isInWhiteList = selector =>
+    whitelist.some(rule => new RegExp(rule).test(selector));
+
   if (!enableServiceWorkers) {
     puppeteerArgs.push('--enable-features=NetworkService');
   }
@@ -498,6 +501,10 @@ const minimalcss = async options => {
     // Here's the crucial part. Decide whether to keep the selector
     // Find at least 1 DOM that contains an object that matches
     // this selector string.
+    if (isInWhiteList(selectorString)) {
+      return true;
+    }
+
     return doms.some(dom => {
       try {
         return dom(selectorString).length > 0;
