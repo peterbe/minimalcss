@@ -409,13 +409,13 @@ const processPage = ({
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
  */
 const minimalcss = async options => {
-  const { urls, whitelist = [] } = options;
+  const { urls } = options;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
   const puppeteerArgs = options.puppeteerArgs || [];
-  const isInWhiteList = selector =>
-    whitelist.some(rule => new RegExp(rule).test(selector));
+  const whitelist = options.whitelist || [];
+  const whitelistRules = whitelist.map(rule => new RegExp(rule));
 
   if (!enableServiceWorkers) {
     puppeteerArgs.push('--enable-features=NetworkService');
@@ -498,13 +498,12 @@ const minimalcss = async options => {
   // Now, let's loop over ALL links and process their ASTs compared to
   // the DOMs.
   const isSelectorMatchToAnyElement = selectorString => {
+    if (whitelistRules.some(regex => regex.test(selectorString))) {
+      return true;
+    }
     // Here's the crucial part. Decide whether to keep the selector
     // Find at least 1 DOM that contains an object that matches
     // this selector string.
-    if (isInWhiteList(selectorString)) {
-      return true;
-    }
-
     return doms.some(dom => {
       try {
         return dom(selectorString).length > 0;
