@@ -1,3 +1,9 @@
+# 0.8.4
+
+* Ability to pass a list of whitelist selector regexes
+  [pull#344](https://github.com/peterbe/minimalcss/pull/344)
+  Thanks @AlexDubok
+
 * Upgrade dependency on `css-tree` to `1.0.0-alpha.37`
 
 * Upgrade dependency on `csso` to `~4.0.2`
