@@ -1,4 +1,4 @@
-# 0.8.4
+# 0.9.0
 
 * Ability to pass a list of whitelist selector regexes
   [pull#344](https://github.com/peterbe/minimalcss/pull/344)
