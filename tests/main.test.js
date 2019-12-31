@@ -332,3 +332,11 @@ test('cares about static and dynamic styles when JavaScript enabled', async () =
 
   expect(finalCss).toEqual('.inline{color:red}');
 });
+
+test('does not remove whitelisted css selectors', async () => {
+  const { finalCss } = await runMinimalcss('whitelist-css', {
+    whitelist: ['\\.icon-.*']
+  });
+
+  expect(finalCss).toEqual('.icon-arrow{width:10px}.icon-search{width:20px}');
+});

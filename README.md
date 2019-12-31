@@ -183,6 +183,7 @@ will be thrown by `minimalcss`. If you know it's safe to ignore errors (for exam
 third-party webpages), set this to `true`.
 * `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
 * `enableServiceWorkers` - By default all Service Workers are disabled. This option enables them as is.
+* `whitelist` - Array of css selectors that should be left in final CSS. RegExp patterns are supported (e.g. `['sidebar', icon-.*, .*-error]`).
 
 ## Warnings
 
