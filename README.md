@@ -67,20 +67,20 @@ Now you can run it:
 `minimalcss` isn't the first library to perform this task. What's unique and
 special about `minimalcss` is that it uses the Chrome Headless browser.
 
-- [penthouse](https://github.com/pocketjoso/penthouse) -
+* [penthouse](https://github.com/pocketjoso/penthouse) -
   uses [puppeteer](https://github.com/GoogleChrome/puppeteer) (since version 1.0) and [CSSTree](https://github.com/csstree/csstree).
   Supports only 1 URL at a time and can't you have to first save the CSS files
   it should process.
 
-- [critical](https://github.com/addyosmani/critical) - uses `penthouse`
+* [critical](https://github.com/addyosmani/critical) - uses `penthouse`
   (see above) with its "flaws" meaning you can only do 1 URL (or HTML string)
   and you have to prepare the CSS files too.
 
-- [UnCSS](https://github.com/giakki/uncss) - uses [jsdom](https://github.com/tmpvar/jsdom)
+* [UnCSS](https://github.com/giakki/uncss) - uses [jsdom](https://github.com/tmpvar/jsdom)
   to render and execute JavaScript. Supports supplying multiple URLs but still
   requires to manually supply the CSS files to process.
 
-- [mincss](https://github.com/peterbe/mincss) - Python project that uses
+* [mincss](https://github.com/peterbe/mincss) - Python project that uses
   [lxml.html](http://lxml.de/lxmlhtml.html) to analyze the HTML statically
   (by doing a `GET` of the URL as if done by a server). I.e.
   it can't load the HTML as a real browser would and thus does not support a
@@ -89,26 +89,26 @@ special about `minimalcss` is that it uses the Chrome Headless browser.
 
 ## Killer features
 
-- You don't need to specify where the CSS is. It gets downloaded and parsed
+* You don't need to specify where the CSS is. It gets downloaded and parsed
   automatically.
 
-- It uses [puppeteer](https://github.com/GoogleChrome/puppeteer) and
+* It uses [puppeteer](https://github.com/GoogleChrome/puppeteer) and
   [CSSTree](https://github.com/csstree/csstree) which are both high quality
   projects that are solid and well tested.
 
-- The CSS selectors downloaded is compared to the DOM before _and_ after
+* The CSS selectors downloaded is compared to the DOM before _and_ after
   JavaScript code has changed the DOM. That means you can extract the
   critical CSS needed to display properly before the JavaScript has kicked in.
 
-- Ability to analyze the remaining CSS selectors to see which keyframe
+* Ability to analyze the remaining CSS selectors to see which keyframe
   animations that they use and use this to delete keyframe definitions
   that are no longer needed.
 
-- You can specify a [viewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport),
+* You can specify a [viewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport),
   which might cause the page to render slightly different. It does not
   create the minimal CSS _only_ on DOM that is visible though.
 
-- If the CSS contains `@font-face { ... }` rules whose name is never
+* If the CSS contains `@font-face { ... }` rules whose name is never
   used in any remaining CSS selector, the whole `font-face` block is removed.
 
 ## Help needed
@@ -147,44 +147,43 @@ minimalcss
 
 That `result` object that is returned by the `minimize` function contains:
 
-- `finalCss` - the minified minimal CSS as a string.
-- `stylesheetContents` - an object of stylesheet URLs as keys and their
+* `finalCss` - the minified minimal CSS as a string.
+* `stylesheetContents` - an object of stylesheet URLs as keys and their
   content as text.
-- `htmlContents` - an array of HTML codes of each URL.
 
 ## API Options
 
 Calling `minimalcss.run(options)` takes an object whose only mandatory
 key is `urls`. Other optional options are:
 
-- `debug` - all console logging during page rendering are included in the
+* `debug` - all console logging during page rendering are included in the
   stdout. Also, any malformed selector that cause errors in `document.querySelector`
   will be raised as new errors.
-- `skippable` - function which takes
+* `skippable` - function which takes
   [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request)
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
-- `loadimages` - If set to `true`, images will actually load.
-- `withoutjavascript` - If set to `false` it will _skip_ loading the page first
+* `loadimages` - If set to `true`, images will actually load.
+* `withoutjavascript` - If set to `false` it will _skip_ loading the page first
   without JavaScript. By default `minimalcss` will evaluate the DOM as plain as
   can be, and then with JavaScript enabled _and_ waiting for network activity
   to be idle.
-- `disableJavaScript` - By default JavaScript is enabled. If set to `true` it will ignore `withoutjavascript` option and loading the page only one time without JavaScript.
-- `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
-- `userAgent` - specific user agent to use (string)
-- `viewport` - viewport object as specified in [page.setViewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport)
-- `puppeteerArgs` - Args sent to puppeteer when launching. [List
+* `disableJavaScript` - By default JavaScript is enabled. If set to `true` it will ignore `withoutjavascript` option and loading the page only one time without JavaScript.
+* `browser` - Instance of a [Browser](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser), which will be used instead of launching another one.
+* `userAgent` - specific user agent to use (string)
+* `viewport` - viewport object as specified in [page.setViewport](https://github.com/GoogleChrome/puppeteer/blob/v1.0.0/docs/api.md#pagesetviewportviewport)
+* `puppeteerArgs` - Args sent to puppeteer when launching. [List
   of strings for headless Chrome](https://peter.sh/experiments/chromium-command-line-switches/).
-- `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
-- `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
-- `ignoreCSSErrors` - By default, any CSS parsing error throws an error in `minimalcss`. If you know it's safe to ignore (for example, third-party CSS resources), set this to `true`.
-- `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer
-  will be thrown by `minimalcss`. If you know it's safe to ignore errors (for example, on
-  third-party webpages), set this to `true`.
-- `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
-- `enableServiceWorkers` - By default all Service Workers are disabled. This option enables them as is.
-- `whitelist` - Array of css selectors that should be left in final CSS. RegExp patterns are supported (e.g. `['sidebar', icon-.*, .*-error]`).
+* `cssoOptions` - CSSO compress function [options](https://github.com/css/csso#compressast-options)
+* `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
+* `ignoreCSSErrors` - By default, any CSS parsing error throws an error in `minimalcss`. If you know it's safe to ignore (for example, third-party CSS resources), set this to `true`.
+* `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer
+will be thrown by `minimalcss`. If you know it's safe to ignore errors (for example, on
+third-party webpages), set this to `true`.
+* `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
+* `enableServiceWorkers` - By default all Service Workers are disabled. This option enables them as is.
+* `whitelist` - Array of css selectors that should be left in final CSS. RegExp patterns are supported (e.g. `['sidebar', icon-.*, .*-error]`).
 
 ## Warnings
 
@@ -193,7 +192,7 @@ key is `urls`. Other optional options are:
 Suppose you have this in your HTML:
 
 ```html
-<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 ```
 
 then, `minimalcss` will consider this an external CSS stylesheet, load it
@@ -233,8 +232,8 @@ you have one URL with this HTML:
 
 ```html
 <head>
-  <link rel="stylesheet" href="base.css" />
-  <link rel="stylesheet" href="specific.css" />
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="specific.css">
 </head>
 ```
 
@@ -242,7 +241,7 @@ and another URL with...:
 
 ```html
 <head>
-  <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="base.css">
 </head>
 ```
 
@@ -281,9 +280,7 @@ you might have an inline style sheet that looks like this:
 
 ```html
 <style type="text/css">
-  div.something {
-    font-family: MyName;
-  }
+div.something { font-family: MyName; }
 </style>
 ```
 
