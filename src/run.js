@@ -406,7 +406,7 @@ const processPage = ({
 /**
  *
  * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string> }} options
- * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string } }>
+ * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, htmlContents: Array<string> }>
  */
 const minimalcss = async options => {
   const { urls } = options;
@@ -656,9 +656,11 @@ const minimalcss = async options => {
   csso.syntax.compress(allCombinedAst, cssoOptions);
   postProcessOptimize(allCombinedAst);
   const finalCss = csstree.generate(allCombinedAst);
+  const htmlContents = doms.map(dom => dom.html());
   const returned = {
     finalCss,
-    stylesheetContents
+    stylesheetContents,
+    htmlContents
   };
   return Promise.resolve(returned);
 };
