@@ -167,7 +167,7 @@ const processPage = ({
     const safeReject = error => {
       if (fulfilledPromise) return;
       fulfilledPromise = true;
-      if (error.message.startsWith('Navigation Timeout Exceeded')) {
+      if (error.message.startsWith('Navigation timeout')) {
         const urls = tracker.urls();
         if (urls.length > 1) {
           error.message += `\nTracked URLs that have not finished: ${urls.join(
