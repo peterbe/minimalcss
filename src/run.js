@@ -656,11 +656,10 @@ const minimalcss = async options => {
   csso.syntax.compress(allCombinedAst, cssoOptions);
   postProcessOptimize(allCombinedAst);
   const finalCss = csstree.generate(allCombinedAst);
-  const htmlContents = doms.map(dom => dom.html());
   const returned = {
     finalCss,
     stylesheetContents,
-    htmlContents
+    doms
   };
   return Promise.resolve(returned);
 };
