@@ -290,7 +290,7 @@ test('timeout error for page', async () => {
   try {
     await runMinimalcss('timeout', { timeout: 200 });
   } catch (e) {
-    expect(e.message).toMatch('Navigation Timeout Exceeded: 200ms exceeded');
+    expect(e.message).toMatch('Navigation timeout of 200 ms exceeded');
     expect(e.message).toMatch('For http://localhost:3000/timeout.html');
   }
 });
@@ -300,7 +300,7 @@ test('timeout error for resources', async () => {
   try {
     await runMinimalcss('with-timeout', { timeout: 200 });
   } catch (e) {
-    expect(e.message).toMatch('Navigation Timeout Exceeded: 200ms exceeded');
+    expect(e.message).toMatch('Navigation timeout of 200 ms exceeded');
     expect(e.message).toMatch(
       'Tracked URLs that have not finished: http://localhost:3000/timeout.css?1, http://localhost:3000/timeout.css?2'
     );
