@@ -26,7 +26,7 @@
     "cheerio": "1.0.0-rc.3",
     "css-tree": "1.0.0-alpha.37",
     "csso": "~4.0.2",
-    "filesize": "^4.0.0",
+    "filesize": "^6.0.0",
     "minimist": "^1.2.0",
     "puppeteer": "^2.0.0"
   },
