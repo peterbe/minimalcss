@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 const minimalcss = require('../index');
 
 fastify.register(require('fastify-static'), {
-  root: path.join(__dirname, 'examples')
+  root: path.join(__dirname, 'examples'),
 });
 
 // Important that the URL doesn't end with .css
@@ -35,7 +35,7 @@ const runMinimalcss = (path, options = {}) => {
 beforeAll(async () => {
   await fastify.listen(3000);
   browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 });
 
@@ -86,7 +86,7 @@ test('cares about style tags and external CSS files', async () => {
   // tags are both included in the final CSS, while rules from
   // inline 'style' attributes are NOT included.
   const { finalCss } = await runMinimalcss('css-in-js', {
-    styletags: true
+    styletags: true,
   });
   expect(finalCss).toEqual('.cssinjs1,.external,.inline{color:red}');
 });
@@ -184,14 +184,14 @@ test('invalid css', async () => {
 
 test('ignoreCSSErrors', async () => {
   const { finalCss } = await runMinimalcss('invalid-css', {
-    ignoreCSSErrors: true
+    ignoreCSSErrors: true,
   });
   expect(finalCss).toEqual('');
 });
 
 test('ignoreJSErrors', async () => {
   const { finalCss } = await runMinimalcss('jserror', {
-    ignoreJSErrors: true
+    ignoreJSErrors: true,
   });
   expect(finalCss).toEqual('');
 });
@@ -208,9 +208,9 @@ test('handles 307 HTML file', async () => {
 
 test("deliberately skipped .css shouldn't error", async () => {
   const { finalCss } = await runMinimalcss('skippable-stylesheets', {
-    skippable: request => {
+    skippable: (request) => {
       return request.url().search(/must-skip.css/) > -1;
-    }
+    },
   });
   expect(finalCss).toEqual('p{color:brown}');
 });
@@ -319,7 +319,7 @@ test('ignore resource hinted (preloaded or prefetched) css', async () => {
 
 test('cares about static styles when JavaScript disabled', async () => {
   const { finalCss } = await runMinimalcss('dynamic-css', {
-    disableJavaScript: true
+    disableJavaScript: true,
   });
 
   expect(finalCss).toEqual('');
@@ -327,7 +327,7 @@ test('cares about static styles when JavaScript disabled', async () => {
 
 test('cares about static and dynamic styles when JavaScript enabled', async () => {
   const { finalCss } = await runMinimalcss('dynamic-css', {
-    disableJavaScript: false
+    disableJavaScript: false,
   });
 
   expect(finalCss).toEqual('.inline{color:red}');
@@ -335,7 +335,7 @@ test('cares about static and dynamic styles when JavaScript enabled', async () =
 
 test('does not remove whitelisted css selectors', async () => {
   const { finalCss } = await runMinimalcss('whitelist-css', {
-    whitelist: ['\\.icon-.*']
+    whitelist: ['\\.icon-.*'],
   });
 
   expect(finalCss).toEqual('.icon-arrow{width:10px}.icon-search{width:20px}');

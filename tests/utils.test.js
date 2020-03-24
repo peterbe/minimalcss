@@ -32,7 +32,7 @@ test('Test parentSelectors', async () => {
   expect(f('.ui.dropdown>.dropdown.icon:before')).toEqual(['.ui.dropdown']);
   expect(f('.ui.vertical.menu .dropdown.item>.dropdown.icon:before')).toEqual([
     '.ui.vertical.menu',
-    '.ui.vertical.menu .dropdown.item'
+    '.ui.vertical.menu .dropdown.item',
   ]);
   expect(
     f(
@@ -41,9 +41,9 @@ test('Test parentSelectors', async () => {
   ).toEqual([
     '.ui.search.selection',
     '.ui.search.selection>.icon.input:not([class*="left icon"])',
-    '.ui.search.selection>.icon.input:not([class*="left icon"])>.icon'
+    '.ui.search.selection>.icon.input:not([class*="left icon"])>.icon',
   ]);
   expect(f('.ui[class*="right aligned"].search>.results')).toEqual([
-    '.ui[class*="right aligned"].search'
+    '.ui[class*="right aligned"].search',
   ]);
 });

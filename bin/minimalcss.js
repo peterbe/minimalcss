@@ -20,7 +20,7 @@ const argv = minimist(args, {
     'styletags',
     'withoutjavascript',
     'nosandbox',
-    'enableserviceworkers'
+    'enableserviceworkers',
   ],
   string: ['output', 'skip', 'viewport'],
   default: {
@@ -30,14 +30,14 @@ const argv = minimist(args, {
     debug: 'd',
     help: 'h',
     version: 'v',
-    output: 'o'
+    output: 'o',
   },
-  unknown: param => {
+  unknown: (param) => {
     if (param.startsWith('-')) {
       console.warn('Ignored unknown option: ' + param + '\n');
       return false;
     }
-  }
+  },
 });
 
 if (argv['version']) {
@@ -68,7 +68,7 @@ if (argv['help']) {
 
 const urls = argv['_'];
 
-urls.forEach(url => {
+urls.forEach((url) => {
   try {
     const parsed = new URL(url);
   } catch (ex) {
@@ -77,7 +77,7 @@ urls.forEach(url => {
   }
 });
 
-const parseViewport = asString => {
+const parseViewport = (asString) => {
   if (!asString) {
     return null;
   }
@@ -95,7 +95,7 @@ const options = {
   loadimages: argv['loadimages'],
   styletags: argv['styletags'],
   withoutjavascript: argv['withoutjavascript'],
-  skippable: request => {
+  skippable: (request) => {
     let skips = argv['skip'];
     if (!skips) {
       return false;
@@ -103,20 +103,20 @@ const options = {
     if (!Array.isArray(skips)) {
       skips = [skips];
     }
-    return skips.some(skip => !!request.url().match(skip));
+    return skips.some((skip) => !!request.url().match(skip));
   },
   viewport: parseViewport(argv['viewport']),
   puppeteerArgs: argv['nosandbox']
     ? ['--no-sandbox', '--disable-setuid-sandbox']
     : [],
-  enableServiceWorkers: argv['enableserviceworkers']
+  enableServiceWorkers: argv['enableserviceworkers'],
 };
 
 const start = Date.now();
 
 minimalcss
   .minimize(options)
-  .then(result => {
+  .then((result) => {
     let output = result.finalCss;
     const end = Date.now();
     if (argv['verbose']) {
@@ -150,7 +150,7 @@ minimalcss
       console.log(output);
     }
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
     process.exit(3);
   });
