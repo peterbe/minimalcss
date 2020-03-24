@@ -6,7 +6,7 @@ const csstree = require('css-tree');
  */
 function memoize(fn) {
   const cache = {};
-  return argument => {
+  return (argument) => {
     if (argument in cache === false) {
       cache[argument] = fn(argument);
     }
@@ -26,7 +26,7 @@ function memoize(fn) {
  * @param {string} selector
  * @return {string}
  */
-const reduceCSSSelector = memoize(selector => {
+const reduceCSSSelector = memoize((selector) => {
   return selector.split(
     /:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
   )[0];
@@ -37,7 +37,7 @@ const reduceCSSSelector = memoize(selector => {
  * @param {string} string
  * @return {string}
  */
-const unquoteString = memoize(string => {
+const unquoteString = memoize((string) => {
   const first = string.charAt(0);
   const last = string.charAt(string.length - 1);
   if (first === last && (first === '"' || first === "'")) {
@@ -79,5 +79,5 @@ function getParentSelectors(selector) {
 module.exports = {
   reduceCSSSelector,
   unquoteString,
-  getParentSelectors
+  getParentSelectors,
 };
