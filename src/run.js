@@ -244,9 +244,13 @@ const processPage = ({
         const responseUrl = response.url();
         const resourceType = response.request().resourceType();
         if (response.status() >= 400) {
-          return safeReject(
-            new Error(`${response.status()} on ${responseUrl}`)
-          );
+          if (options.ignoreRequestErrors) {
+            skippedUrls.add(responseUrl);
+          } else {
+            return safeReject(
+              new Error(`${response.status()} on ${responseUrl}`)
+            );
+          }
         } else if (response.status() >= 300 && response.status() !== 304) {
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.

@@ -179,6 +179,7 @@ key is `urls`. Other optional options are:
 * `timeout` - Maximum navigation time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
 * `ignoreCSSErrors` - By default, any CSS parsing error throws an error in `minimalcss`. If you know it's safe to ignore (for example, third-party CSS resources), set this to `true`.
 * `ignoreJSErrors` - By default, any JavaScript error encountered by puppeteer
+* `ignoreRequestErrors` - When CSS files return 404 or another request error `minimalcss` will ignore this instead of throwing an error.
 will be thrown by `minimalcss`. If you know it's safe to ignore errors (for example, on
 third-party webpages), set this to `true`.
 * `styletags` - If set to `true`, on-page `<style>` tags are parsed along with external stylesheets. By default, only external stylesheets are parsed.
