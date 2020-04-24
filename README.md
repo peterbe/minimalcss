@@ -323,7 +323,16 @@ to the the `.prettierrc` file in the root of the project.
 
 To check that all your code conforms, run:
 
-    yarn lintcheck
+```sh
+yarn lintcheck
+```
+
+## Use without a server
+
+[This blog post](https://www.peterbe.com/plog/how-to-use-minimalcss-without-a-server)
+demonstrates technique to use `minimalcss` when you don't yet have a server.
+Using the `http-server` package you can start a server right before you run
+and shut down as soon as you're done.
 
 ## License
 
