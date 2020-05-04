@@ -28,7 +28,7 @@
     "csso": "~4.0.2",
     "filesize": "^6.0.0",
     "minimist": "^1.2.0",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^3.0.0"
   },
   "devDependencies": {
     "fastify": "2.14.0",
