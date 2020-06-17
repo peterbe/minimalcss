@@ -160,7 +160,7 @@ key is `urls`. Other optional options are:
   stdout. Also, any malformed selector that cause errors in `document.querySelector`
   will be raised as new errors.
 * `skippable` - function which takes
-  [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request)
+  [request](https://pptr.dev/#?product=Puppeteer&show=api-class-httprequest)
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
