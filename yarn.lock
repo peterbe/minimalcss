@@ -842,7 +842,7 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-avvio@^6.3.1:
+avvio@^6.4.1:
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/avvio/-/avvio-6.4.1.tgz#bb4127ca8b9b9c322d742a9b40962dfdca5d68b1"
   integrity sha512-jeZaUK+F7MuWSNT3VHfltskPJZKqVeTWQqBA4SDaDoLaQ0lb5TOgLeQT1BEuhTIUNISCDCGY3zjYyVmQQ48gKA==
@@ -1694,14 +1694,14 @@ fastify-static@2.7.0:
     readable-stream "^3.4.0"
     send "^0.16.0"
 
-fastify@2.14.1:
-  version "2.14.1"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-2.14.1.tgz#2946e8e9adebcd1b4f634178c8fb7162fb816cf4"
-  integrity sha512-nSL8AgIdFCpZmFwjqB5Zzv+3/1KpwwVtB/h88Q4Og8njYbkddKGpuQlQ2tHUULXPTJrLZ7wop6olzx6HEbHdpw==
+fastify@2.15.1:
+  version "2.15.1"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-2.15.1.tgz#195a068bca87c7b57a83fe81f0aa66e86c6a3992"
+  integrity sha512-pEE1pa5j/vtZeZTbPpFgsJgzLbThcYgiLDw2yZIG8qNZ5LkF1Ew2vbv9k3nTXNxGEPYFBbyNTCKRSj3JbX+FhA==
   dependencies:
     abstract-logging "^2.0.0"
     ajv "^6.12.0"
-    avvio "^6.3.1"
+    avvio "^6.4.1"
     fast-json-stringify "^1.18.0"
     find-my-way "^2.2.2"
     flatstr "^1.0.12"
