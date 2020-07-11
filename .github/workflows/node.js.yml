@@ -36,5 +36,5 @@ jobs:
           ${{ runner.os }}-yarn-
     - run: yarn
     - run: yarn lintcheck
-    - run: yarn test
+    - run: yarn test --runInBand
     - run: yarn e2e
