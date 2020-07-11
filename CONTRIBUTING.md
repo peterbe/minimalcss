@@ -5,12 +5,12 @@ The README has instructions about how to do testing and lint checking.
 Generally you do:
 
 ```sh
-$ git clone https://github.com/peterbe/minimalcss.git
-$ cd minimalcss
-$ ./bin/minimalcss.js https://news.ycombinator.com
+git clone https://github.com/peterbe/minimalcss.git
+cd minimalcss
+./bin/minimalcss.js https://news.ycombinator.com
 ```
 
-If you make a PR, Travis will run unit tests, lint checks and end-to-end
+If you make a PR, GitHub Actions will run unit tests, lint checks and end-to-end
 testing. Hopefully it's clear from any errors there what needs to be done.
 
 ## Style guide
