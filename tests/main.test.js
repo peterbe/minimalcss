@@ -28,7 +28,7 @@ let browser;
 
 const runMinimalcss = (path, options = {}) => {
   options.browser = browser;
-  options.urls = [`http://localhost:3000/${path}.html`];
+  options.url = `http://localhost:3000/${path}.html`;
   return minimalcss.minimize(options);
 };
 
