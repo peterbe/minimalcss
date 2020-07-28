@@ -101,7 +101,7 @@ test('handles 404 CSS file', async () => {
 });
 
 test('ignore 404 CSS file when `ignoreRequestErrors` is enabled', async () => {
-  const { finalCss } = await runMinimalcss('404css', {
+  const { finalCss } = await runMinimalcss('404css-ignore', {
     ignoreRequestErrors: true,
   });
 
