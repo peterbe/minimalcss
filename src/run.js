@@ -244,9 +244,13 @@ const processPage = ({
         const responseUrl = response.url();
         const resourceType = response.request().resourceType();
         if (response.status() >= 400) {
-          return safeReject(
-            new Error(`${response.status()} on ${responseUrl}`)
-          );
+          if (options.ignoreRequestErrors) {
+            skippedUrls.add(responseUrl);
+          } else {
+            return safeReject(
+              new Error(`${response.status()} on ${responseUrl}`)
+            );
+          }
         } else if (response.status() >= 300 && response.status() !== 304) {
           // If the 'Location' header points to a relative URL,
           // convert it to an absolute URL.
@@ -405,7 +409,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string> }} options
+ * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
