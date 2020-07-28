@@ -136,7 +136,7 @@ For example:
 
 ```javascript
 minimalcss
-  .minimize({ urls: ['https://example.com/'] })
+  .minimize({ url: 'https://example.com/' })
   .then(result => {
     console.log('OUTPUT', result.finalCss.length, result.finalCss);
   })
@@ -151,10 +151,21 @@ That `result` object that is returned by the `minimize` function contains:
 * `stylesheetContents` - an object of stylesheet URLs as keys and their
   content as text.
 
+Optionally, you can supply a list of URLs like this:
+
+```javascript
+minimalcss
+  .minimize({ urls: ['https://example.com/page1', 'https://example.com/page2'] })
+  ...
+```
+
+and `minimalcss` will try to merge the minimal critical CSS across all pages.
+But we aware that this can be "dangerous" because of the inherit order of CSS.
+
 ## API Options
 
 Calling `minimalcss.run(options)` takes an object whose only mandatory
-key is `urls`. Other optional options are:
+key is `urls` or `url`. Other optional options are:
 
 * `debug` - all console logging during page rendering are included in the
   stdout. Also, any malformed selector that cause errors in `document.querySelector`
@@ -215,7 +226,7 @@ With the API, you can do it like this:
 ```javascript
 minimalcss
   .minimize({
-    urls: ['https://example.com'],
+    url: 'https://example.com',
     skippable: request => {
       return !!request.url().match('fonts.googleapis.com');
     }
@@ -248,9 +259,9 @@ and another URL with...:
 
 When combining these, it will optimize the CSS in this order:
 
-1.  `base.css`
-2.  `specific.css`
-3.  `base.css`
+1. `base.css`
+2. `specific.css`
+3. `base.css`
 
 But if `specific.css` was meant to override something in `base.css` in the
 first URL, that might get undone when `base.css` becomes the last CSS

@@ -409,11 +409,19 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
+ * @param {{ urls: Array<string>, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
-  const { urls } = options;
+  const { urls = [], url = '' } = options;
+  if (url) {
+    urls.push(url);
+  }
+  if (!urls.length) {
+    throw new Error(
+      "no URLs supplied (hint: use 'urls' (array) or 'url' (string)"
+    );
+  }
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
