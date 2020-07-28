@@ -100,6 +100,14 @@ test('handles 404 CSS file', async () => {
   }
 });
 
+test('ignore 404 CSS file when `ignoreRequestErrors` is enabled', async () => {
+  const { finalCss } = await runMinimalcss('404css', {
+    ignoreRequestErrors: true,
+  });
+
+  expect(finalCss).toEqual('p{color:red}');
+});
+
 test('media queries print removed', async () => {
   const { finalCss } = await runMinimalcss('media-queries-print');
   expect(finalCss).toEqual('');
