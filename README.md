@@ -1,6 +1,6 @@
 # minimalcss
 
-[![Build Status](https://travis-ci.org/peterbe/minimalcss.svg?branch=master)](https://travis-ci.org/peterbe/minimalcss)
+![Build status](https://github.com/peterbe/minimalcss/workflows/Node.js%20CI/badge.svg)
 [![NPM version](https://img.shields.io/npm/v/minimalcss.svg)](https://www.npmjs.com/package/minimalcss)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](#badge)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovateapp.com/)
@@ -160,7 +160,7 @@ key is `urls`. Other optional options are:
   stdout. Also, any malformed selector that cause errors in `document.querySelector`
   will be raised as new errors.
 * `skippable` - function which takes
-  [request](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-request)
+  [request](https://pptr.dev/#?product=Puppeteer&show=api-class-httprequest)
   as an argument and returns boolean. If it returns true then given request
   will be aborted (skipped). Can be used to block requests to Google Analytics
   etc.
@@ -324,7 +324,16 @@ to the the `.prettierrc` file in the root of the project.
 
 To check that all your code conforms, run:
 
-    yarn lintcheck
+```sh
+yarn lintcheck
+```
+
+## Use without a server
+
+[This blog post](https://www.peterbe.com/plog/how-to-use-minimalcss-without-a-server)
+demonstrates technique to use `minimalcss` when you don't yet have a server.
+Using the `http-server` package you can start a server right before you run
+and shut down as soon as you're done.
 
 ## License
 

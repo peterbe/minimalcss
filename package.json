@@ -1,6 +1,6 @@
 {
   "name": "minimalcss",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "./index.js",
   "author": "Peter Bengtsson",
@@ -31,10 +31,10 @@
     "puppeteer": "^2.0.0"
   },
   "devDependencies": {
-    "fastify": "2.12.0",
-    "fastify-static": "2.6.0",
-    "jest": "25.2.3",
-    "prettier": "2.0.2"
+    "fastify": "3.0.1",
+    "fastify-static": "3.1.0",
+    "jest": "26.1.0",
+    "prettier": "2.0.5"
   },
   "scripts": {
     "tsc": "tsc -p .",

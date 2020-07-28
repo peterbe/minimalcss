@@ -1,3 +1,7 @@
+# 0.10.0
+
+* Upgrade dependency on `puppeteer` to `^2.0.0`
+
 # 0.9.0
 
 * Ability to pass a list of whitelist selector regexes
