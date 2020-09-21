@@ -1,3 +1,14 @@
+# 0.11.0
+
+* The main parameter `urls` can no be a string called just `url`. You just
+  need to either use `urls` (array) or `url` (string).
+
+* New `ignoreRequestErrors` option to ignore HTTP responses that are `>=400`.
+  [pull#365](https://github.com/peterbe/minimalcss/pull/365)
+  Thanks @Fgruntjes
+
+* (Chore) Switching from TravisCI to GitHub Actions
+
 # 0.10.0
 
 * Upgrade dependency on `puppeteer` to `^2.0.0`
