@@ -1,3 +1,7 @@
+# 0.11.2
+
+* Add a `.npmignore` to avoid shipping tests and backup files.
+
 # 0.11.1
 
 * Upgrade sub-dependency `find-my-way`
