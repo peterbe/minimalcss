@@ -3,3 +3,6 @@
 dummy*
 hack*
 coverage
+/tests
+scripts/lintcheck.sh
+/.github
