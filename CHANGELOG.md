@@ -1,3 +1,8 @@
+# 0.11.1
+
+* Upgrade sub-dependency `find-my-way`
+  [pull#407](https://github.com/peterbe/minimalcss/pull/407)
+
 # 0.11.0
 
 * The main parameter `urls` can no be a string called just `url`. You just
