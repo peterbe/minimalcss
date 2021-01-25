@@ -274,9 +274,7 @@ const processPage = ({
       });
 
       page.on('pageerror', (error) => {
-        if (options.ignoreJSErrors) {
-          console.warn(error);
-        } else {
+        if (!options.ignoreJSErrors) {
           safeReject(error);
         }
       });
@@ -557,7 +555,6 @@ const minimalcss = async (options) => {
         if (!node.prelude.children) {
           const cssErrorMessage = `Invalid CSS found while evaluating ${href}: "${node.prelude.value}"`;
           if (options.ignoreCSSErrors) {
-            console.warn(cssErrorMessage);
             list.remove(item);
           } else {
             throw new Error(cssErrorMessage);
