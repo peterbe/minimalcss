@@ -60,28 +60,7 @@ const postProcessOptimize = (ast) => {
 
   // Now figure out what font-families are at all used in the AST.
   const activeFontFamilyNames = new Set();
-  csstree.walk(ast, {
-    visit: 'Declaration',
-    enter: function (node) {
-      // walker pass through `font-family` declarations inside @font-face too
-      // this condition filter them, to walk through declarations
-      // inside a rules only.
-      if (this.rule) {
-        csstree.lexer
-          .findDeclarationValueFragments(node, 'Type', 'family-name')
-          .forEach((entry) => {
-            const name = utils.unquoteString(
-              csstree.generate({
-                type: 'Value',
-                children: entry.nodes,
-              })
-            );
-            activeFontFamilyNames.add(name);
-          });
-      }
-    },
-  });
-
+  
   // Walk into every font-family rule and inspect if we uses its declarations
   csstree.walk(ast, {
     visit: 'Atrule',
@@ -274,9 +253,7 @@ const processPage = ({
       });
 
       page.on('pageerror', (error) => {
-        if (options.ignoreJSErrors) {
-          console.warn(error);
-        } else {
+        if (!options.ignoreJSErrors) {
           safeReject(error);
         }
       });
@@ -557,7 +534,6 @@ const minimalcss = async (options) => {
         if (!node.prelude.children) {
           const cssErrorMessage = `Invalid CSS found while evaluating ${href}: "${node.prelude.value}"`;
           if (options.ignoreCSSErrors) {
-            console.warn(cssErrorMessage);
             list.remove(item);
           } else {
             throw new Error(cssErrorMessage);
