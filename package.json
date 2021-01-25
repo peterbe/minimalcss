@@ -1,5 +1,5 @@
 {
-  "name": "minimalcss",
+  "name": "@finder/minimalcss",
   "version": "0.11.2",
   "description": "Extract the minimal CSS used in a set of URLs with puppeteer",
   "main": "./index.js",
