@@ -60,28 +60,7 @@ const postProcessOptimize = (ast) => {
 
   // Now figure out what font-families are at all used in the AST.
   const activeFontFamilyNames = new Set();
-  // csstree.walk(ast, {
-  //   visit: 'Declaration',
-  //   enter: function (node) {
-  //     // walker pass through `font-family` declarations inside @font-face too
-  //     // this condition filter them, to walk through declarations
-  //     // inside a rules only.
-  //     if (this.rule) {
-  //       csstree.lexer
-  //         .findDeclarationValueFragments(node, 'Type', 'family-name')
-  //         .forEach((entry) => {
-  //           const name = utils.unquoteString(
-  //             csstree.generate({
-  //               type: 'Value',
-  //               children: entry.nodes,
-  //             })
-  //           );
-  //           activeFontFamilyNames.add(name);
-  //         });
-  //     }
-  //   },
-  // });
-
+  
   // Walk into every font-family rule and inspect if we uses its declarations
   csstree.walk(ast, {
     visit: 'Atrule',
