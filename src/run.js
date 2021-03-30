@@ -126,6 +126,7 @@ const processStylesheet = ({
 
 const processPage = ({
   page,
+  htmlContent,
   options,
   pageUrl,
   stylesheetAsts,
@@ -265,9 +266,16 @@ const processPage = ({
       } else if (withoutjavascript) {
         // First, go to the page with JavaScript disabled.
         await page.setJavaScriptEnabled(false);
-        response = await page.goto(pageUrl);
-        if (!isOk(response)) {
-          return safeReject(new Error(`${response.status()} on ${pageUrl}`));
+
+        if (htmlContent) {
+          response = await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+        } else {
+          response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+          if (!isOk(response)) {
+            return safeReject(
+              new Error(`${response.status()} on ${pageUrl} (second time)`)
+            );
+          }
         }
         const htmlVanilla = await page.content();
         doms.push(cheerio.load(htmlVanilla));
@@ -288,12 +296,18 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
-      if (!isOk(response)) {
-        return safeReject(
-          new Error(`${response.status()} on ${pageUrl} (second time)`)
-        );
+      
+      if (htmlContent) {
+        response = await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      } else {
+        response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+        if (!isOk(response)) {
+          return safeReject(
+            new Error(`${response.status()} on ${pageUrl} (second time)`)
+          );
+        }
       }
+
       const evalWithJavascript = await page.evaluate(() => {
         const html = document.documentElement.outerHTML;
         // The reason for NOT using a Set here is that that might not be
@@ -386,7 +400,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
+ * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
@@ -399,6 +413,7 @@ const minimalcss = async (options) => {
       "no URLs supplied (hint: use 'urls' (array) or 'url' (string)"
     );
   }
+  const htmlContent = options.htmlContent || null;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
@@ -435,6 +450,7 @@ const minimalcss = async (options) => {
       try {
         await processPage({
           page,
+          htmlContent,
           options,
           pageUrl,
           stylesheetAsts,
