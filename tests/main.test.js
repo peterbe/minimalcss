@@ -41,7 +41,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await fastify.close();
-  await browser.close();
+  if (browser) {
+    await browser.close();
+  }
 });
 
 test('handles relative paths', async () => {
