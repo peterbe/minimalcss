@@ -40,7 +40,7 @@ function openUrl(url, ...options) {
 }
 
 // Simplest form of opening
-openUrl('https://minimalcss.app/').then(spawned => {
+openUrl('https://minimalcss.app/').then((spawned) => {
   const css = spawned.stdout.toString();
   assert(
     css.length > 7000 && css.length < 10000,
@@ -50,7 +50,7 @@ openUrl('https://minimalcss.app/').then(spawned => {
 
 // Open with -o
 openUrl('https://developer.mozilla.org/', '-o', '/tmp/mdn.css').then(
-  spawned => {
+  (spawned) => {
     const stdout = spawned.stdout.toString();
     assert(!stdout.trim(), 'Output should be empty');
     const css = fs.readFileSync('/tmp/mdn.css').toString();
@@ -62,7 +62,7 @@ openUrl('https://developer.mozilla.org/', '-o', '/tmp/mdn.css').then(
 );
 
 // With verbose output
-openUrl('https://developer.mozilla.org/', '--verbose').then(spawned => {
+openUrl('https://developer.mozilla.org/', '--verbose').then((spawned) => {
   const css = spawned.stdout.toString();
   assert(/\/\*\nGenerated /.test(css), 'Expected verbose leading comment');
   assert(
