@@ -440,9 +440,7 @@ const minimalcss = async (options) => {
   const skippedUrls = new Set();
 
   try {
-    // Note! This opens one URL at a time synchronous
-    for (let i = 0; i < urls.length; i++) {
-      const pageUrl = urls[i];
+    for (const pageUrl of urls) {
       const page = await browser.newPage();
       if (!enableServiceWorkers) {
         await page._client.send('ServiceWorker.disable');
