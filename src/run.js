@@ -268,9 +268,9 @@ const processPage = ({
         await page.setJavaScriptEnabled(false);
 
         if (htmlContent) {
-          response = await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+          response = await page.setContent(htmlContent, { waitUntil: 'load' });
         } else {
-          response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+          response = await page.goto(pageUrl, { waitUntil: 'load' });
           if (!isOk(response)) {
             return safeReject(
               new Error(`${response.status()} on ${pageUrl} (second time)`)
@@ -298,17 +298,15 @@ const processPage = ({
       // possible assets to load.
 
       if (htmlContent) {
-        response = await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+        response = await page.setContent(htmlContent, { waitUntil: 'load' });
       } else {
-        response = await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+        response = await page.goto(pageUrl, { waitUntil: 'load' });
         if (!isOk(response)) {
           return safeReject(
             new Error(`${response.status()} on ${pageUrl} (second time)`)
           );
         }
       }
-
-      await page.waitForNavigation();
 
       const evalWithJavascript = await page.evaluate(() => {
         const html = document.documentElement.outerHTML;
