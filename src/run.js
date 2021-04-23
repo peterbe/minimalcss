@@ -60,7 +60,7 @@ const postProcessOptimize = (ast) => {
 
   // Now figure out what font-families are at all used in the AST.
   const activeFontFamilyNames = new Set();
-  
+
   // Walk into every font-family rule and inspect if we uses its declarations
   csstree.walk(ast, {
     visit: 'Atrule',
@@ -296,7 +296,7 @@ const processPage = ({
       // Second, goto the page and evaluate it with JavaScript.
       // The 'waitUntil' option determines how long we wait for all
       // possible assets to load.
-      
+
       if (htmlContent) {
         response = await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
       } else {
@@ -307,6 +307,8 @@ const processPage = ({
           );
         }
       }
+
+      await page.waitForNavigation();
 
       const evalWithJavascript = await page.evaluate(() => {
         const html = document.documentElement.outerHTML;
@@ -440,9 +442,7 @@ const minimalcss = async (options) => {
   const skippedUrls = new Set();
 
   try {
-    // Note! This opens one URL at a time synchronous
-    for (let i = 0; i < urls.length; i++) {
-      const pageUrl = urls[i];
+    for (const pageUrl of urls) {
       const page = await browser.newPage();
       if (!enableServiceWorkers) {
         await page._client.send('ServiceWorker.disable');
