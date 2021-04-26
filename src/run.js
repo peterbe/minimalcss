@@ -127,6 +127,7 @@ const processStylesheet = ({
 const processPage = ({
   page,
   htmlContent,
+  host,
   options,
   pageUrl,
   stylesheetAsts,
@@ -198,6 +199,7 @@ const processPage = ({
       page.on('request', (request) => {
         const resourceType = request.resourceType();
         const requestUrl = request.url();
+
         if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort();
@@ -217,8 +219,18 @@ const processPage = ({
           skippedUrls.add(requestUrl);
           request.abort();
         } else {
-          request.continue();
+          if (host) {
+            const headers = request.headers();
+            headers['Host'] = host;
+            
+            request.continue({
+              headers
+            });
+          } else {
+            request.continue();
+          }
         }
+
       });
 
       // To build up a map of all downloaded CSS
@@ -408,7 +420,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean }} options
+ * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean, host?: string }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
@@ -422,6 +434,7 @@ const minimalcss = async (options) => {
     );
   }
   const htmlContent = options.htmlContent || null;
+  const host = options.host || null;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
@@ -457,6 +470,7 @@ const minimalcss = async (options) => {
         await processPage({
           page,
           htmlContent,
+          host,
           options,
           pageUrl,
           stylesheetAsts,
