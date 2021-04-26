@@ -245,8 +245,7 @@ const processPage = ({
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
           if (debug) {
-            console.log('Page closure status', closedPages.has(pageUrl) ? 'closed' : 'open');
-            console.log('All closed pages', closedPages);
+            console.log(`Page closure status: "${closedPages.has(pageUrl) ? 'closed' : 'open'}"`);
           }
 
           // page has been closed already
@@ -480,7 +479,7 @@ const minimalcss = async (options) => {
 
         closedPages.add(pageUrl);
         if (debug) {
-          console.log('Page has been closed', pageUrl);
+          console.log(`Page ${pageUrl} has been closed`);
         }
       }
     }
