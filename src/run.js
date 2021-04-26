@@ -135,6 +135,7 @@ const processPage = ({
   allHrefs,
   redirectResponses,
   skippedUrls,
+  closedPages
 }) =>
   new Promise(async (resolve, reject) => {
     // If anything goes wrong, for example a `pageerror` event or
@@ -243,6 +244,16 @@ const processPage = ({
           ).toString();
           redirectResponses[responseUrl] = redirectsTo;
         } else if (resourceType === 'stylesheet') {
+          if (debug) {
+            console.log('Page closure status', closedPages.has(pageUrl) ? 'closed' : 'open');
+            console.log('All closed pages', closedPages);
+          }
+
+          // page has been closed already
+          if (closedPages.has(pageUrl)) {
+            return;
+          }
+
           response.text().then((text) => {
             processStylesheet({
               text,
@@ -440,6 +451,7 @@ const minimalcss = async (options) => {
   const allHrefs = [];
   const redirectResponses = {};
   const skippedUrls = new Set();
+  const closedPages = new Set();
 
   try {
     for (const pageUrl of urls) {
@@ -459,11 +471,17 @@ const minimalcss = async (options) => {
           allHrefs,
           redirectResponses,
           skippedUrls,
+          closedPages
         });
       } catch (e) {
         throw e;
       } finally {
         await page.close();
+
+        closedPages.add(pageUrl);
+        if (debug) {
+          console.log('Page has been closed', pageUrl);
+        }
       }
     }
   } catch (e) {
