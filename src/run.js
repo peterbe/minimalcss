@@ -219,13 +219,9 @@ const processPage = ({
           skippedUrls.add(requestUrl);
           request.abort();
         } else {
-          if (headers) {
-            const modifiedHeaders = {...request.headers(), ...headers} ;
-            
-            request.continue(modifiedHeaders);
-          } else {
-            request.continue();
-          }
+          const requestHeaders = {...request.headers(), ...headers} ;
+          
+          request.continue(requestHeaders);
         }
 
       });
