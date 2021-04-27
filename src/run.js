@@ -249,15 +249,18 @@ const processPage = ({
             return;
           }
 
-          response.text().then((text) => {
-            processStylesheet({
-              text,
-              pageUrl,
-              responseUrl,
-              stylesheetAsts,
-              stylesheetContents,
-            });
-          });
+          response.text()
+            .then((text) => {
+              processStylesheet({
+                  text,
+                  pageUrl,
+                  responseUrl,
+                  stylesheetAsts,
+                  stylesheetContents,
+                }
+              )
+            })
+            .catch((reason) => debug && console.log(`Cannot get text() from the response: ${ reason }`));
         }
       });
 
