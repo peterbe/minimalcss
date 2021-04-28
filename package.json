@@ -28,7 +28,8 @@
     "csso": "4.0.3",
     "filesize": "^6.0.0",
     "minimist": "^1.2.0",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.0.0",
+    "puppeteer-page-proxy": "^1.2.8"
   },
   "devDependencies": {
     "fastify": "3.4.1",
