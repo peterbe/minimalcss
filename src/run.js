@@ -128,6 +128,7 @@ const processStylesheet = ({
 const processPage = ({
   page,
   htmlContent,
+  headers,
   proxyUrl,
   options,
   pageUrl,
@@ -224,7 +225,9 @@ const processPage = ({
           skippedUrls.add(requestUrl);
           request.abort();
         } else {
-          request.continue();
+          const requestHeaders = {...request.headers(), ...headers} ;
+          
+          request.continue(requestHeaders);
         }
       });
 
@@ -418,7 +421,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean, proxyUrl?: string }} options
+ * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean, proxyUrl?: string, headers?: Object }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
@@ -432,6 +435,7 @@ const minimalcss = async (options) => {
     );
   }
   const htmlContent = options.htmlContent || null;
+  const headers = options.headers || {};
   const proxyUrl = options.proxyUrl || null;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
@@ -468,6 +472,7 @@ const minimalcss = async (options) => {
         await processPage({
           page,
           htmlContent,
+          headers,
           proxyUrl,
           options,
           pageUrl,
