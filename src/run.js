@@ -9,6 +9,7 @@ const cheerio = require('cheerio');
 const utils = require('./utils');
 const { createTracker } = require('./tracker');
 const url = require('url');
+const useProxy = require('puppeteer-page-proxy');
 
 const isOk = (response) => response.ok() || response.status() === 304;
 
@@ -128,6 +129,7 @@ const processPage = ({
   page,
   htmlContent,
   headers,
+  proxyUrl,
   options,
   pageUrl,
   stylesheetAsts,
@@ -196,10 +198,14 @@ const processPage = ({
       });
 
       await page.setRequestInterception(true);
-      page.on('request', (request) => {
+      page.on('request', async (request) => {
         const resourceType = request.resourceType();
         const requestUrl = request.url();
 
+        if (proxyUrl) {
+          await useProxy(request, proxyUrl);
+        }
+        
         if (/data:image\//.test(requestUrl)) {
           // don't need to download those
           request.abort();
@@ -223,7 +229,6 @@ const processPage = ({
           
           request.continue(requestHeaders);
         }
-
       });
 
       // To build up a map of all downloaded CSS
@@ -416,7 +421,7 @@ const processPage = ({
 
 /**
  *
- * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean, headers?: Object }} options
+ * @param {{ urls: Array<string>, htmlContent: string, url: string, debug: boolean, loadimages: boolean, skippable: function, browser: any, userAgent: string, withoutjavascript: boolean, viewport: any, puppeteerArgs: Array<string>, cssoOptions: Object, ignoreCSSErrors?: boolean, ignoreJSErrors?: boolean, styletags?: boolean, enableServiceWorkers?: boolean, disableJavaScript?: boolean, whitelist?: Array<string>, ignoreRequestErrors?: boolean, proxyUrl?: string, headers?: Object }} options
  * @return Promise<{ finalCss: string, stylesheetContents: { [key: string]: string }, doms: Array<object> }>
  */
 const minimalcss = async (options) => {
@@ -431,6 +436,7 @@ const minimalcss = async (options) => {
   }
   const htmlContent = options.htmlContent || null;
   const headers = options.headers || {};
+  const proxyUrl = options.proxyUrl || null;
   const debug = options.debug || false;
   const cssoOptions = options.cssoOptions || {};
   const enableServiceWorkers = options.enableServiceWorkers || false;
@@ -467,6 +473,7 @@ const minimalcss = async (options) => {
           page,
           htmlContent,
           headers,
+          proxyUrl,
           options,
           pageUrl,
           stylesheetAsts,
