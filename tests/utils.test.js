@@ -18,6 +18,8 @@ test('Test reduceCSSSelector', async () => {
   expect(f('a[href^="javascript:"]:after')).toEqual('a[href^="javascript:"]');
   // Should work with ' instead of " too.
   expect(f("a[href^='javascript:']:after")).toEqual("a[href^='javascript:']");
+  // Should leave the selector as is if escape char is found
+  expect(f(`.md\\:title`)).toEqual(".md\\:title");
 });
 
 test('Test parentSelectors', async () => {

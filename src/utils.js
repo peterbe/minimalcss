@@ -18,17 +18,27 @@ function memoize(fn) {
  * Reduce a CSS selector to be without any pseudo class parts.
  * For example, from `a:hover` return `a`. And from `input::-moz-focus-inner`
  * to `input`.
+ *
  * Also, more advanced ones like `a[href^="javascript:"]:after` to
  * `a[href^="javascript:"]`.
+ *
  * The last example works too if the input was `a[href^='javascript:']:after`
  * instead (using ' instead of ").
+ *
+ * As per CSS spec [1], special characters can be escaped by using a backslash.
+ * For a <h1 class="md:title">Title</h1> element, the corresponding CSS selector
+ * would be .md\:title { font-size: 32px; }. If the negative lookbehind founds the
+ * escape char, this function returns the selector as is. Special thanks to valtzu
+ * for helping to solve the issue.
+ *
+ * [1]: https://www.w3.org/TR/CSS2/syndata.html
  *
  * @param {string} selector
  * @return {string}
  */
 const reduceCSSSelector = memoize((selector) => {
   return selector.split(
-    /:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
+    /(?<!\\):(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
   )[0];
 });
 
