@@ -21,8 +21,7 @@ test('Test reduceCSSSelector', async () => {
 });
 
 test('Test backslash selectors', async () => {
-  const f = utils.reduceCSSSelector;
-  expect(f('foo\\:hover')).toEqual('foo\\:hover');
+  expect(utils.reduceCSSSelector('foo\\:hover')).toEqual('foo\\:hover');
 });
 
 test('Test parentSelectors', async () => {
