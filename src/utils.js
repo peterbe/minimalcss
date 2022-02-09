@@ -27,9 +27,10 @@ function memoize(fn) {
  * @return {string}
  */
 const reduceCSSSelector = memoize((selector) => {
-  return selector.split(
-    /:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g
-  )[0];
+  selector = selector.replace('\\:', '_ESCAPED_COLON_');
+  return selector
+    .split(/:(?=([^"'\\]*(\\.|["']([^"'\\]*\\.)*[^"'\\]*['"]))*[^"']*$)/g)[0]
+    .replace('_ESCAPED_COLON_', '\\:');
 });
 
 /**
