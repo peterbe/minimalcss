@@ -20,6 +20,10 @@ test('Test reduceCSSSelector', async () => {
   expect(f("a[href^='javascript:']:after")).toEqual("a[href^='javascript:']");
 });
 
+test('Test backslash selectors', async () => {
+  expect(utils.reduceCSSSelector('foo\\:hover')).toEqual('foo\\:hover');
+});
+
 test('Test parentSelectors', async () => {
   const f = utils.getParentSelectors;
   // Simplest possible
