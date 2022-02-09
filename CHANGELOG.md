@@ -1,3 +1,8 @@
+# 0.11.3
+
+* Cope with selectors with a `\` character before the `:`
+  [pull#426](https://github.com/peterbe/minimalcss/pull/426)
+
 # 0.11.2
 
 * Add a `.npmignore` to avoid shipping tests and backup files.
