@@ -24,7 +24,7 @@ the URLs styled without having to make it block on CSS.
 
 Under the hood it relies on the excellent
 [puppeteer library](https://github.com/GoogleChrome/puppeteer) which uses
-the Headless Chome Node API. This means it runs (at the time of writing)
+the Headless Chrome Node API. This means it runs (at the time of writing)
 Chrome 62 and this library is maintained by the Google Chrome team.
 
 The CSS to analyze (and hopefully minimize) is downloaded automatically just
